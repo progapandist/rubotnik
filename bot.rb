@@ -5,6 +5,8 @@ require 'httparty'
 require 'json'
 require_relative 'persistent_menu'
 require_relative 'greetings'
+require_relative 'user'
+require_relative 'user_store'
 include Facebook::Messenger
 
 # IMPORTANT! Subcribe your bot to your page
@@ -42,6 +44,7 @@ MENU_REPLIES = [
 
 TYPE_LOCATION = [{ content_type: 'location' }]
 
+
 # Logic for postbacks
 Bot.on :postback do |postback|
   sender_id = postback.sender['id']
@@ -57,6 +60,70 @@ Bot.on :postback do |postback|
     lookup_location(sender_id)
   end
 end
+
+def dispatch
+  Bot.on :message do |message|
+    # create or find user on first connect
+    sender_id = message.sender['id']
+    user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
+    p user
+
+    if user.command.nil?
+      show_replies_menu(user.id, MENU_REPLIES)
+
+      case message.text
+      when /coord/i, /gps/i
+        say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
+        user.set_command(:show_coordinates)
+      else
+        user.set_command(:unknown_command)
+      end
+
+    else
+      command = user.command
+      method(command).call(message, user.id)
+      user.reset_command
+      dispatch
+    end
+  end
+end
+
+dispatch
+
+def unknown_command(message = "", sender_id)
+  say(sender_id, IDIOMS[:unknown_command])
+  show_replies_menu(sender_id, MENU_REPLIES)
+end
+
+# Coordinates lookup
+def show_coordinates(message, id)
+  if message_contains_location?(message)
+    handle_user_location(message)
+  else
+    if !is_text_message?(message)
+      say(id, "Why are you trying to fool me, human?")
+      wait_for_any_input
+    else
+      handle_coordinates_lookup(message, id)
+    end
+  end
+end
+
+def handle_coordinates_lookup(message, id)
+  query = encode_ascii(message.text)
+  parsed_response = get_parsed_response(API_URL, query)
+  message.type # let user know we're doing something
+  if parsed_response
+    coord = extract_coordinates(parsed_response)
+    text = "Latitude: #{coord['lat']} / Longitude: #{coord['lng']}"
+    say(id, text)
+    wait_for_any_input
+  else
+    message.reply(text: IDIOMS[:not_found])
+    show_coordinates(id)
+  end
+end
+
 
 # Logic for quick replies and text commands
 def wait_for_command
@@ -106,7 +173,6 @@ end
 # Display a set of quick replies that serves as a menu
 def show_replies_menu(id, quick_replies)
   say(id, IDIOMS[:menu_greeting], quick_replies)
-  wait_for_command
 end
 
 def message_contains_location?(message)
@@ -142,37 +208,6 @@ def handle_user_location(message)
   address = extract_full_address(parsed)
   message.reply(text: "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
   wait_for_any_input
-end
-
-# Coordinates lookup
-def show_coordinates(id)
-  Bot.on :message do |message|
-    if message_contains_location?(message)
-      handle_user_location(message)
-    else
-      if !is_text_message?(message)
-        say(id, "Why are you trying to fool me, human?")
-        wait_for_any_input
-      else
-        handle_coordinates_lookup(message, id)
-      end
-    end
-  end
-end
-
-def handle_coordinates_lookup(message, id)
-  query = encode_ascii(message.text)
-  parsed_response = get_parsed_response(API_URL, query)
-  message.type # let user know we're doing something
-  if parsed_response
-    coord = extract_coordinates(parsed_response)
-    text = "Latitude: #{coord['lat']} / Longitude: #{coord['lng']}"
-    say(id, text)
-    wait_for_any_input
-  else
-    message.reply(text: IDIOMS[:not_found])
-    show_coordinates(id)
-  end
 end
 
 # Full address lookup
@@ -229,5 +264,5 @@ def extract_full_address(parsed)
   parsed['results'].first['formatted_address']
 end
 
-# launch the loop
-wait_for_any_input
+# # launch the loop
+# wait_for_any_input

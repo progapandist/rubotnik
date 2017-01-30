@@ -67,10 +67,8 @@ def dispatch
     sender_id = message.sender['id']
     user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
     p user
-
     if user.command.nil?
       show_replies_menu(user.id, MENU_REPLIES)
-
       case message.text
       when /coord/i, /gps/i
         say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
@@ -78,7 +76,6 @@ def dispatch
       else
         user.set_command(:unknown_command)
       end
-
     else
       command = user.command
       method(command).call(message, user.id)

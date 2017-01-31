@@ -15,16 +15,6 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 PersistentMenu.enable
 Greetings.enable
 
-API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
-REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
-
-IDIOMS = {
-  not_found: 'There were no results. Type your destination again, please',
-  ask_location: 'Type in any destination or send us your location:',
-  unknown_command: 'Sorry, I did not recognize your command',
-  menu_greeting: 'What do you want to look up?'
-}.freeze
-
 MENU_REPLIES = [
   {
     content_type: 'text',
@@ -43,8 +33,22 @@ MENU_REPLIES = [
   }
 ].freeze
 
+IDIOMS = {
+  not_found: 'There were no results. Type your destination again, please',
+  ask_location: 'Type in any destination or send us your location:',
+  unknown_command: 'Sorry, I did not recognize your command',
+  menu_greeting: 'What do you want to look up?'
+}.freeze
+
 TYPE_LOCATION = [{ content_type: 'location' }]
 
+Bot.on :message do |message|
+  # create or find user on first connect
+  sender_id = message.sender['id']
+  user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
+  dispatcher = MessageDispatcher.new(user, message)
+  dispatcher.dispatch
+end
 
 # Logic for postbacks
 Bot.on :postback do |postback|
@@ -60,13 +64,4 @@ Bot.on :postback do |postback|
   when 'LOCATION'
     lookup_location(sender_id)
   end
-end
-
-
-Bot.on :message do |message|
-  # create or find user on first connect
-  sender_id = message.sender['id']
-  user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-  dispatcher = MessageDispatcher.new(user, message)
-  dispatcher.dispatch
 end

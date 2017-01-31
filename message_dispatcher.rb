@@ -3,6 +3,7 @@ require_relative "commands"
 class MessageDispatcher
   include Facebook::Messenger
   include Commands
+
   def initialize(user, message)
     @user = user
     @message = message

@@ -55,16 +55,14 @@ module Commands
 
   # Lookup based on location data from user's device
   def lookup_location(message, sender_id)
-    if message.sender == sender_id
-      if message_contains_location?(message)
-        handle_user_location(message)
-      else
-        message.reply(text: "Please try your request again and use 'Send location' button")
-      end
+    if message_contains_location?(message)
+      handle_user_location(message, sender_id)
+    else
+      say(sender_id, "Please try your request again and use 'Send location' button")
     end
   end
 
-  def handle_user_location(message)
+  def handle_user_location(message, sender_id)
     coords = message.attachments.first['payload']['coordinates']
     lat = coords['lat']
     long = coords['long']
@@ -72,7 +70,7 @@ module Commands
     # make sure there is no space between lat and lng
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
-    message.reply(text: "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
+    say(sender_id, "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
   end
 
   # Full address lookup

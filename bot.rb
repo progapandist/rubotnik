@@ -67,7 +67,6 @@ Bot.on :message do |message|
   # create or find user on first connect
   sender_id = message.sender['id']
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-
   dispatcher = MessageDispatcher.new(user, message)
   dispatcher.dispatch
 end

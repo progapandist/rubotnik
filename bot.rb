@@ -61,42 +61,39 @@ Bot.on :postback do |postback|
   end
 end
 
-def dispatch
-  Bot.on :message do |message|
-    # create or find user on first connect
-    sender_id = message.sender['id']
-    user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
 
-    show_replies_menu(user.id, MENU_REPLIES) unless user.engaged?
+Bot.on :message do |message|
+  # create or find user on first connect
+  sender_id = message.sender['id']
+  user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
 
-    if user.command
-      command = user.command
-      method(command).call(message, user.id)
-      p "Command #{command} is taken care of"
-      user.reset_command
-      user.disengage
-    else
-      p "User doesn't have any command assigned yet"
-      user.engage
-      case message.text
-      when /coord/i, /gps/i
-        user.set_command(:show_coordinates)
-        p "Command :show_coordinates is set"
-        say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
-      when /full ad/i
-        user.set_command(:show_full_address)
-        p "Command :show_full_address is set"
-        say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
-      when /location/i
-        user.set_command(:lookup_location)
-        p "Command :lookup_location is set"
-        say(sender_id, 'Let me know your location:', TYPE_LOCATION)
-      end
+  show_replies_menu(user.id, MENU_REPLIES) unless user.engaged?
+
+  if user.command
+    command = user.command
+    method(command).call(message, user.id)
+    p "Command #{command} is taken care of"
+    user.reset_command
+    user.disengage
+  else
+    p "User doesn't have any command assigned yet"
+    user.engage
+    case message.text
+    when /coord/i, /gps/i
+      user.set_command(:show_coordinates)
+      p "Command :show_coordinates is set"
+      say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
+    when /full ad/i
+      user.set_command(:show_full_address)
+      p "Command :show_full_address is set"
+      say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
+    when /location/i
+      user.set_command(:lookup_location)
+      p "Command :lookup_location is set"
+      say(sender_id, 'Let me know your location:', TYPE_LOCATION)
     end
   end
 end
-
-dispatch
 
 
 # Coordinates lookup

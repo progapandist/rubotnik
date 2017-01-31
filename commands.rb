@@ -16,7 +16,7 @@ module Commands
   # Coordinates lookup
   def show_coordinates(message, id)
     if message_contains_location?(message)
-      handle_user_location(message)
+      handle_user_location(message, id)
     else
       if !is_text_message?(message)
         say(id, "Why are you trying to fool me, human?")
@@ -54,15 +54,15 @@ module Commands
   end
 
   # Lookup based on location data from user's device
-  def lookup_location(message, sender_id)
+  def lookup_location(message, id)
     if message_contains_location?(message)
-      handle_user_location(message, sender_id)
+      handle_user_location(message, id)
     else
-      say(sender_id, "Please try your request again and use 'Send location' button")
+      say(id, "Please try your request again and use 'Send location' button")
     end
   end
 
-  def handle_user_location(message, sender_id)
+  def handle_user_location(message, id)
     coords = message.attachments.first['payload']['coordinates']
     lat = coords['lat']
     long = coords['long']
@@ -70,13 +70,13 @@ module Commands
     # make sure there is no space between lat and lng
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
-    say(sender_id, "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
+    say(id, "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
   end
 
   # Full address lookup
   def show_full_address(message, id)
     if message_contains_location?(message)
-      handle_user_location(message)
+      handle_user_location(message, id)
     else
       if !is_text_message?(message)
         say(id, "Why are you trying to fool me, human?")

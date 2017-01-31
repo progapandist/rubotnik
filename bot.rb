@@ -66,31 +66,38 @@ def dispatch
     # create or find user on first connect
     sender_id = message.sender['id']
     user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-    p user
-    if user.command.nil?
-      show_replies_menu(user.id, MENU_REPLIES)
-      case message.text
-      when /coord/i, /gps/i
-        say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
-        user.set_command(:show_coordinates)
-      else
-        user.set_command(:unknown_command)
-      end
-    else
+
+    show_replies_menu(user.id, MENU_REPLIES) unless user.engaged?
+
+    if user.command
       command = user.command
       method(command).call(message, user.id)
+      p "Command #{command} is taken care of"
       user.reset_command
-      dispatch
+      user.disengage
+    else
+      p "User doesn't have any command assigned yet"
+      user.engage
+      case message.text
+      when /coord/i, /gps/i
+        user.set_command(:show_coordinates)
+        p "Command :show_coordinates is set"
+        say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
+      when /full ad/i
+        user.set_command(:show_full_address)
+        p "Command :show_full_address is set"
+        say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
+      when /location/i
+        user.set_command(:lookup_location)
+        p "Command :lookup_location is set"
+        say(sender_id, 'Let me know your location:', TYPE_LOCATION)
+      end
     end
   end
 end
 
 dispatch
 
-def unknown_command(message = "", sender_id)
-  say(sender_id, IDIOMS[:unknown_command])
-  show_replies_menu(sender_id, MENU_REPLIES)
-end
 
 # Coordinates lookup
 def show_coordinates(message, id)
@@ -99,7 +106,6 @@ def show_coordinates(message, id)
   else
     if !is_text_message?(message)
       say(id, "Why are you trying to fool me, human?")
-      wait_for_any_input
     else
       handle_coordinates_lookup(message, id)
     end
@@ -114,44 +120,9 @@ def handle_coordinates_lookup(message, id)
     coord = extract_coordinates(parsed_response)
     text = "Latitude: #{coord['lat']} / Longitude: #{coord['lng']}"
     say(id, text)
-    wait_for_any_input
   else
     message.reply(text: IDIOMS[:not_found])
-    show_coordinates(id)
-  end
-end
-
-
-# Logic for quick replies and text commands
-def wait_for_command
-  Bot.on :message do |message|
-    puts "Received '#{message.inspect}' from #{message.sender}" # debug only
-    sender_id = message.sender['id']
-    case message.text
-    when /coord/i, /gps/i
-      say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
-      show_coordinates(sender_id)
-    when /full ad/i # we got the user even the address is misspelled
-      say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
-      show_full_address(sender_id)
-    when /location/i
-      lookup_location(sender_id)
-    else
-      message.reply(text: IDIOMS[:unknown_command])
-      show_replies_menu(sender_id, MENU_REPLIES)
-    end
-  end
-end
-
-# Start conversation loop
-def wait_for_any_input
-  Bot.on :message do |message|
-    puts "Received '#{message.inspect}' from #{message.sender}" # debug only
-    if message_contains_location?(message)
-      handle_user_location(message)
-    else
-      show_replies_menu(message.sender['id'], MENU_REPLIES)
-    end
+    show_coordinates(message, id)
   end
 end
 
@@ -181,16 +152,12 @@ def message_contains_location?(message)
 end
 
 # Lookup based on location data from user's device
-def lookup_location(sender_id)
-  say(sender_id, 'Let me know your location:', TYPE_LOCATION)
-  Bot.on :message do |message|
-    if message.sender == sender_id
-      if message_contains_location?(message)
-        handle_user_location(message)
-      else
-        message.reply(text: "Please try your request again and use 'Send location' button")
-      end
-      wait_for_any_input
+def lookup_location(message, sender_id)
+  if message.sender == sender_id
+    if message_contains_location?(message)
+      handle_user_location(message)
+    else
+      message.reply(text: "Please try your request again and use 'Send location' button")
     end
   end
 end
@@ -204,21 +171,18 @@ def handle_user_location(message)
   parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
   address = extract_full_address(parsed)
   message.reply(text: "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
-  wait_for_any_input
 end
 
 # Full address lookup
-def show_full_address(id)
-  Bot.on :message do |message|
-    if message_contains_location?(message)
-      handle_user_location(message)
+def show_full_address(message, id)
+  if message_contains_location?(message)
+    handle_user_location(message)
+  else
+    if !is_text_message?(message)
+      say(id, "Why are you trying to fool me, human?")
+      wait_for_any_input
     else
-      if !is_text_message?(message)
-        say(id, "Why are you trying to fool me, human?")
-        wait_for_any_input
-      else
-        handle_address_lookup(message, id)
-      end
+      handle_address_lookup(message, id)
     end
   end
 end
@@ -230,10 +194,9 @@ def handle_address_lookup(message, id)
   if parsed_response
     full_address = extract_full_address(parsed_response)
     say(id, full_address)
-    wait_for_any_input
   else
     message.reply(text: IDIOMS[:not_found])
-    show_full_address(id)
+    show_full_address(message, id)
   end
 end
 
@@ -260,6 +223,3 @@ end
 def extract_full_address(parsed)
   parsed['results'].first['formatted_address']
 end
-
-# # launch the loop
-# wait_for_any_input

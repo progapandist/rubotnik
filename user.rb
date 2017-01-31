@@ -3,6 +3,7 @@ class User
   def initialize(id)
     @id = id
     @commands = []
+    @engaged = false
   end
 
   def command
@@ -16,4 +17,17 @@ class User
   def reset_command
     @commands = []
   end
+
+  def engage
+    @engaged = true
+  end
+
+  def disengage
+    @engaged = false
+  end
+
+  def engaged?
+    @engaged
+  end
+
 end

@@ -10,7 +10,7 @@ class User
     @commands.last
   end
 
-  def set_command(command)
+  def set_next_command(command)
     @commands << command
   end
 

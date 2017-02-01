@@ -8,6 +8,8 @@ require_relative 'greetings'
 require_relative 'user'
 require_relative 'user_store'
 require_relative 'message_dispatcher'
+require_relative 'command_parser'
+require_relative 'bot_helpers'
 include Facebook::Messenger
 
 # IMPORTANT! Subcribe your bot to your page

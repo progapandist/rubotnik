@@ -1,6 +1,6 @@
-module Helpers
+module BotHelpers
   include Facebook::Messenger
-  # Place for methods that abstract over facebook-messenger Bot functionality 
+  # Place for methods that abstract over facebook-messenger Bot functionality
 
   # helper function to send messages declaratively and directly
   def say(recipient_id, text, quick_replies = nil)

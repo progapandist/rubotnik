@@ -1,7 +1,7 @@
-require_relative "helpers"
+require_relative "bot_helpers"
 
 module Commands
-  include Helpers
+  include BotHelpers
 
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
@@ -17,6 +17,33 @@ module Commands
         handle_coordinates_lookup(message, id)
       end
     end
+  end
+
+  def show_carousel(id)
+    Bot.deliver(
+    {
+      recipient: { id: id },
+      message: {
+        attachment: {
+          type: 'template',
+          payload: {
+            template_type: 'generic',
+            elements: [
+              {
+                title: 'test title',
+                buttons: [
+                  {
+                    type: "postback",
+                    title: "test button",
+                    payload: "PAYLOAD"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }, access_token: ENV['ACCESS_TOKEN'])
   end
 
   def handle_coordinates_lookup(message, id)

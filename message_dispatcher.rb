@@ -12,8 +12,9 @@ class MessageDispatcher
   end
 
   def dispatch
-    show_replies_menu(@user.id, MENU_REPLIES) unless @user.engaged?
-    @user.engage
+    greet_user(@user) unless @user.greeted?
+    show_replies_menu(@user, MENU_REPLIES) unless @user.engaged?
+
     if @user.next_command
       command = @user.next_command
       method(command).call(@message, @user.id)
@@ -33,15 +34,15 @@ class MessageDispatcher
     when /coord/i, /gps/i
       @user.set_next_command(:show_coordinates)
       p "Command :show_coordinates is set for user #{@user.id}"
-      say(@user.id, IDIOMS[:ask_location], TYPE_LOCATION)
+      say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
     when /full ad/i
       @user.set_next_command(:show_full_address)
       p "Command :show_full_address is set for user #{@user.id}"
-      say(@user.id, IDIOMS[:ask_location], TYPE_LOCATION)
+      say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
     when /location/i
       @user.set_next_command(:lookup_location)
       p "Command :lookup_location is set for user #{@user.id}"
-      say(@user.id, 'Let me know your location:', TYPE_LOCATION)
+      say(@user, 'Let me know your location:', TYPE_LOCATION)
     when /carousel/i
       show_carousel(@user.id)
       @user.disengage

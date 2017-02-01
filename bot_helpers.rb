@@ -3,9 +3,9 @@ module BotHelpers
   # Place for methods that abstract over facebook-messenger Bot functionality
 
   # helper function to send messages declaratively and directly
-  def say(recipient_id, text, quick_replies = nil)
+  def say(user, text, quick_replies = nil)
     message_options = {
-    recipient: { id: recipient_id },
+    recipient: { id: @user.id },
     message: { text: text }
     }
     if quick_replies

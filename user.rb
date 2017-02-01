@@ -4,6 +4,7 @@ class User
     @id = id
     @commands = []
     @engaged = false
+    @greeted = false
   end
 
   def next_command
@@ -28,6 +29,14 @@ class User
 
   def engaged?
     @engaged
+  end
+
+  def greet
+    @greeted = true
+  end
+
+  def greeted?
+    @greeted
   end
 
 end

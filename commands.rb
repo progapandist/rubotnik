@@ -61,8 +61,14 @@ module Commands
   end
 
   # Display a set of quick replies that serves as a menu
-  def show_replies_menu(id, quick_replies)
-    say(id, IDIOMS[:menu_greeting], quick_replies)
+  def show_replies_menu(user, quick_replies)
+    say(user.id, IDIOMS[:menu_greeting], quick_replies)
+    user.engage unless user.engaged? 
+  end
+
+  def greet_user(user)
+    say(user.id, "Hello, dear new user!")
+    user.greet
   end
 
   def message_contains_location?(message)

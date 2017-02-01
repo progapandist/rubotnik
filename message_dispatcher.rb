@@ -13,15 +13,15 @@ class MessageDispatcher
 
   def dispatch
     show_replies_menu(@user.id, MENU_REPLIES) unless @user.engaged?
-    if @user.command
-      command = @user.command
-      method(command).call(@message, @user.id)
+    @user.engage
+    if @user.next_command
+      next_command = @user.next_command
+      method(next_command).call(@message, @user.id)
       puts "Command #{command} is executed for user #{@user.id}"
       @user.reset_command
       @user.disengage
     else
       puts "User #{@user.id} does not have a command assigned yet"
-      @user.engage
       parse_commands
     end
   end

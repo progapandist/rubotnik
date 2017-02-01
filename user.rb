@@ -6,7 +6,7 @@ class User
     @engaged = false
   end
 
-  def command
+  def next_command
     @commands.last
   end
 

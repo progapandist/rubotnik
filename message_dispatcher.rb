@@ -19,7 +19,7 @@ class MessageDispatcher
       command = @user.next_command
       method(command).call(@message, @user.id)
       puts "Command #{command} is executed for user #{@user.id}"
-      @user.reset_command
+      @user.reset_command # should we reset command inside a command object?
       @user.disengage
     else
       puts "User #{@user.id} does not have a command assigned yet"

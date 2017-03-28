@@ -12,6 +12,7 @@ require_relative 'command_parser'
 require_relative 'bot_helpers'
 require_relative 'commands'
 include Facebook::Messenger
+include Commands
 
 # IMPORTANT! Subcribe your bot to your page
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
@@ -57,15 +58,17 @@ end
 Bot.on :postback do |postback|
   sender_id = postback.sender['id']
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
+  user.greet # we don't need a greeting with postbacks
   case postback.payload
-  when 'START' then Commands::show_replies_menu(postback.sender['id'], MENU_REPLIES)
+  when 'START' then show_replies_menu(user, MENU_REPLIES)
   when 'COORDINATES'
     say(user, IDIOMS[:ask_location], TYPE_LOCATION)
-    show_coordinates(sender_id)
+    user.set_command(:show_coordinates)
   when 'FULL_ADDRESS'
     say(user, IDIOMS[:ask_location], TYPE_LOCATION)
-    show_full_address(sender_id)
+    user.set_command(:show_full_address)
   when 'LOCATION'
-    lookup_location(sender_id)
+    say(user, IDIOMS[:ask_location], TYPE_LOCATION)
+    user.set_command(:lookup_location)
   end
 end

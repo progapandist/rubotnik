@@ -1,6 +1,6 @@
 require_relative "../ui_elements"
 
-# Private methods tests
+# TODO: Private methods tests. Get rid of before publishing! 
 RSpec.describe UIElements::FBCarousel do
   let(:carousel) { UIElements::FBCarousel.new }
 

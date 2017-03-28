@@ -5,7 +5,7 @@ require 'json'
 
 module UIElements
 
-  # TODO: Account for square images 
+  # TODO: Account for square images
 
   class FBCarousel
     def initialize(opts = {})
@@ -59,6 +59,9 @@ module UIElements
         elt
       end
     end
+
+    # TODO: Extract button functionality to Button class?
+    # Account for all button types from API or remove type check altogether!
 
     # [{type: :web_url, url: String, title: String}]
     # [{type: :postback, title: String, payload: String}]

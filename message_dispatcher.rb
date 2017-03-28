@@ -2,7 +2,6 @@ require_relative "commands"
 
 
 class MessageDispatcher
-  include Facebook::Messenger
   include Commands
 
   def initialize(user, message)
@@ -15,7 +14,7 @@ class MessageDispatcher
 
     if @user.current_command
       command = @user.current_command
-      method(command).call(@message, @user.id)
+      method(command).call(@message, @user)
       puts "Command #{command} is executed for user #{@user.id}"
       @user.reset_command # should we reset command inside a command object?
       @user.disengage

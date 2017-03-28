@@ -1,5 +1,4 @@
 module BotHelpers
-  include Facebook::Messenger
   # Place for methods that abstract over facebook-messenger Bot functionality
 
   # helper function to send messages declaratively and directly

@@ -9,7 +9,7 @@ module Commands
 
   TEST_HASH = {
               title: "Welcome",
-              image_url: "https://www.placecage.com/500/500",
+              image_url: "https://www.placecage.com/573/300",
               subtitle: "Most welcome",
               buttons: [
                   { type: :web_url,
@@ -27,29 +27,29 @@ module Commands
   end
 
   # Coordinates lookup
-  def show_coordinates(message, id)
+  def show_coordinates(message, user)
     if message_contains_location?(message)
-      handle_user_location(message, id)
+      handle_user_location(message, user)
     else
       if !is_text_message?(message)
         say(id, "Why are you trying to fool me, human?")
       else
-        handle_coordinates_lookup(message, id)
+        handle_coordinates_lookup(message, user)
       end
     end
   end
 
-  def handle_coordinates_lookup(message, id)
+  def handle_coordinates_lookup(message, user)
     query = encode_ascii(message.text)
     parsed_response = get_parsed_response(API_URL, query)
     message.type # let user know we're doing something
     if parsed_response
       coord = extract_coordinates(parsed_response)
       text = "Latitude: #{coord['lat']} / Longitude: #{coord['lng']}"
-      say(id, text)
+      say(user, text)
     else
       message.reply(text: IDIOMS[:not_found])
-      show_coordinates(message, id)
+      show_coordinates(message, user)
     end
   end
 
@@ -93,29 +93,29 @@ module Commands
   end
 
   # Full address lookup
-  def show_full_address(message, id)
+  def show_full_address(message, user)
     if message_contains_location?(message)
-      handle_user_location(message, id)
+      handle_user_location(message, user)
     else
       if !is_text_message?(message)
-        say(id, "Why are you trying to fool me, human?")
+        say(user, "Why are you trying to fool me, human?")
         wait_for_any_input
       else
-        handle_address_lookup(message, id)
+        handle_address_lookup(message, user)
       end
     end
   end
 
-  def handle_address_lookup(message, id)
+  def handle_address_lookup(message, user)
     query = encode_ascii(message.text)
     parsed_response = get_parsed_response(API_URL, query)
     message.type # let user know we're doing something
     if parsed_response
       full_address = extract_full_address(parsed_response)
-      say(id, full_address)
+      say(user, full_address)
     else
       message.reply(text: IDIOMS[:not_found])
-      show_full_address(message, id)
+      show_full_address(message, user)
     end
   end
 

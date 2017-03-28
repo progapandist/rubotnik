@@ -9,7 +9,7 @@ require_relative "ui_elements"
 # - Airline template?
 # - API call involving location sharing
 # - Questionnaire (store bits of data in user model, assign long sequence of commands one after another in a separate module)
-# Double all commands in postbacks 
+# Double all commands in postbacks
 
 module Commands
   include BotHelpers

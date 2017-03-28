@@ -3,6 +3,8 @@ require 'json'
 # Also known as 'generic template'
 # https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template
 
+# Examples for all basic UI elements and content types 
+
 module UIElements
 
   # TODO: Account for square images

@@ -1,6 +1,7 @@
 require_relative "bot_helpers"
 
 module Commands
+  include UIElements
   include BotHelpers
 
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
@@ -17,33 +18,6 @@ module Commands
         handle_coordinates_lookup(message, id)
       end
     end
-  end
-
-  def show_carousel(id)
-    Bot.deliver(
-    {
-      recipient: { id: id },
-      message: {
-        attachment: {
-          type: 'template',
-          payload: {
-            template_type: 'generic',
-            elements: [
-              {
-                title: 'test title',
-                buttons: [
-                  {
-                    type: "postback",
-                    title: "test button",
-                    payload: "PAYLOAD"
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      }
-    }, access_token: ENV['ACCESS_TOKEN'])
   end
 
   def handle_coordinates_lookup(message, id)
@@ -63,7 +37,7 @@ module Commands
   # Display a set of quick replies that serves as a menu
   def show_replies_menu(user, quick_replies)
     say(user.id, IDIOMS[:menu_greeting], quick_replies)
-    user.engage unless user.engaged? 
+    user.engage unless user.engaged?
   end
 
   def greet_user(user)

@@ -1,5 +1,6 @@
 class User
-  attr_reader :id, :commands
+  attr_reader :id
+
   def initialize(id)
     @id = id
     @commands = []
@@ -7,11 +8,11 @@ class User
     @greeted = false
   end
 
-  def next_command
+  def current_command
     @commands.last
   end
 
-  def set_next_command(command)
+  def set_command(command)
     @commands << command
   end
 

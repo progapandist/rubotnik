@@ -10,6 +10,7 @@ require_relative 'user_store'
 require_relative 'message_dispatcher'
 require_relative 'command_parser'
 require_relative 'bot_helpers'
+require_relative 'commands'
 include Facebook::Messenger
 
 # IMPORTANT! Subcribe your bot to your page
@@ -56,7 +57,7 @@ end
 Bot.on :postback do |postback|
   sender_id = postback.sender['id']
   case postback.payload
-  when 'START' then show_replies_menu(postback.sender['id'], MENU_REPLIES)
+  when 'START' then Commands::show_replies_menu(postback.sender['id'], MENU_REPLIES)
   when 'COORDINATES'
     say(sender_id, IDIOMS[:ask_location], TYPE_LOCATION)
     show_coordinates(sender_id)

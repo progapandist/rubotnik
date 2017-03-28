@@ -1,6 +1,5 @@
 require_relative "commands"
 
-
 class MessageDispatcher
   include Commands
 

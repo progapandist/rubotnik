@@ -5,6 +5,8 @@ require 'json'
 
 module UIElements
 
+  # TODO: Account for square images 
+
   class FBCarousel
     def initialize(opts = {})
       @template = {
@@ -15,7 +17,7 @@ module UIElements
             type: 'template',
             payload: {
               template_type: 'generic',
-              elements: parse_elements(opts) || nil
+              elements: parse_elements(opts) || nil # redundant?
             }
           }
         }
@@ -40,7 +42,7 @@ module UIElements
     def parse_elements(elements)
       elements = [elements] if elements.class == Hash
       elements.map do |elt|
-        # TODO: custom error? 
+        # TODO: custom error?
         raise ArgumentError, "Title is a required field" unless elt.key?(:title)
         elt[:buttons] = parse_buttons(elt[:buttons])
         # TODO: default_url doesn't work correctly for now

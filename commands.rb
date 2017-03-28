@@ -1,29 +1,57 @@
 require_relative "bot_helpers"
 require_relative "ui_elements"
 
+# Examples:
+# - API call with quick replies
+# - Carousel with several items (Nic Cage)
+# - Generic template
+# - Receipt template?
+# - Airline template?
+# - API call involving location sharing
+# - Questionnaire (store bits of data in user model, assign long sequence of commands one after another in a separate module)
+# Double all commands in postbacks 
+
 module Commands
   include BotHelpers
 
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
 
-  TEST_HASH = {
-              title: "Welcome",
-              image_url: "https://www.placecage.com/573/300",
-              subtitle: "Most welcome",
-              buttons: [
-                  { type: :web_url,
-                  url: "https://google.com",
-                  title: "Option One" },
-                  { type: :postback,
-                    title: "Option Two",
-                    payload: "PAYLOAD"
-                  }
-                ]
-              }
+  TEST_CAROUSEL_DATA = [
+                          {
+                          title: "Item 1",
+                          # Horizontal image should have 1.91:1 ratio
+                          image_url: "https://www.placecage.com/382/200",
+                          subtitle: "It's a first item!",
+                          buttons: [
+                              { type: :web_url,
+                              url: "https://google.com",
+                              title: "Go to website" },
+                              { type: :postback,
+                                title: "Trigger postback",
+                                payload: "CAROUSEL_PAYLOAD_ONE"
+                              }
+                            ]
+                          },
+                          {
+                          title: "Item 2",
+                          # Horizontal image should have 1.91:1 ratio
+                          image_url: "https://www.placecage.com/470/250",
+                          subtitle: "A second item...",
+                          buttons: [
+                              { type: :web_url,
+                              url: "https://google.com",
+                              title: "Go to website" },
+                              { type: :postback,
+                                title: "Trigger postback",
+                                payload: "CAROUSEL_PAYLOAD_TWO"
+                              }
+                            ]
+                          }
+                        ]
 
   def show_carousel(id)
-    UIElements::FBCarousel.new(TEST_HASH).send(id)
+    UIElements::FBCarousel.new(TEST_CAROUSEL_DATA).send(id)
   end
 
   # Coordinates lookup

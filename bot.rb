@@ -8,7 +8,6 @@ require_relative 'greetings'
 require_relative 'user'
 require_relative 'user_store'
 require_relative 'message_dispatcher'
-require_relative 'command_parser'
 require_relative 'bot_helpers'
 require_relative 'commands'
 include Facebook::Messenger
@@ -49,7 +48,7 @@ TYPE_LOCATION = [{ content_type: 'location' }]
 Bot.on :message do |message|
   # p message
   # p message.quick_reply if message.quick_reply
-  
+
   # create or find user on first connect
   sender_id = message.sender['id']
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))

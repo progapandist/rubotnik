@@ -5,7 +5,7 @@ module BotHelpers
   # helper function to send messages declaratively and directly
   def say(user, text, quick_replies = nil)
     message_options = {
-      recipient: { id: @user.id },
+      recipient: { id: user.id },
       message: { text: text }
     }
     if quick_replies

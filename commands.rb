@@ -1,11 +1,30 @@
 require_relative "bot_helpers"
+require_relative "ui_elements"
 
 module Commands
-  include UIElements
   include BotHelpers
 
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
+
+  TEST_HASH = {
+              title: "Welcome",
+              image_url: "https://www.placecage.com/500/500",
+              subtitle: "Most welcome",
+              buttons: [
+                  { type: :web_url,
+                  url: "https://google.com",
+                  title: "Option One" },
+                  { type: :postback,
+                    title: "Option Two",
+                    payload: "PAYLOAD"
+                  }
+                ]
+              }
+
+  def show_carousel(id)
+    UIElements::FBCarousel.new(TEST_HASH).send(id)
+  end
 
   # Coordinates lookup
   def show_coordinates(message, id)
@@ -36,12 +55,12 @@ module Commands
 
   # Display a set of quick replies that serves as a menu
   def show_replies_menu(user, quick_replies)
-    say(user.id, IDIOMS[:menu_greeting], quick_replies)
+    say(user, IDIOMS[:menu_greeting], quick_replies)
     user.engage unless user.engaged?
   end
 
   def greet_user(user)
-    say(user.id, "Hello, dear new user!")
+    say(user, "Hello, dear new user!")
     user.greet
   end
 

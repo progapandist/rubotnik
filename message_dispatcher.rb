@@ -11,8 +11,6 @@ class MessageDispatcher
       command = @user.current_command
       method(command).call(@message, @user)
       puts "Command #{command} is executed for user #{@user.id}"
-      @user.reset_command # should we reset command inside a command object?
-      @user.disengage
     else
       puts "User #{@user.id} does not have a command assigned yet"
       parse_commands
@@ -37,10 +35,11 @@ class MessageDispatcher
       say(@user, 'Let me know your location:', TYPE_LOCATION)
     when /carousel/i
       show_carousel(@user.id)
-      @user.disengage
+      @user.reset_command
     when /questionnaire/i
       @user.set_command(:start_questionnaire)
-      replies = UIElements::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"], ["No", "STOP_QUESTIONNAIRE"]).build
+      replies = UIElements::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
+                                             ["No", "STOP_QUESTIONNAIRE"]).build
       say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
     else
       show_replies_menu(@user, MENU_REPLIES)

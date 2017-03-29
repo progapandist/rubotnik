@@ -20,6 +20,7 @@ class User
 
   def reset_command
     @commands = []
+    self.disengage
   end
 
   def engage

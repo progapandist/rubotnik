@@ -7,9 +7,10 @@ require_relative "quick_replies"
 require_relative "sample_elements"
 require_relative "questionnaire"
 
-# Rules:
-# commands assigned as part of conversation thread should follow
-# (message, user) convention for arguments ???  
+# RULES:
+# commands assigned as part of conversation thread
+# (through User#set_command in MessageDispatcher)
+# should follow (message, user) convention for arguments ???
 
 # Examples:
 # - API call with a set of quick replies
@@ -47,6 +48,7 @@ module Commands
         handle_coordinates_lookup(message, user)
       end
     end
+    user.reset_command
   end
 
   def handle_coordinates_lookup(message, user)
@@ -89,6 +91,7 @@ module Commands
     else
       say(user, "Please try your request again and use 'Send location' button")
     end
+    user.reset_command # should we reset command inside a command object?
   end
 
   def handle_user_location(message, user)
@@ -114,6 +117,7 @@ module Commands
         handle_address_lookup(message, user)
       end
     end
+    user.reset_command # should we reset command inside a command object?
   end
 
   def handle_address_lookup(message, user)

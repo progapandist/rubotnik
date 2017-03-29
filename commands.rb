@@ -1,3 +1,6 @@
+require 'addressable/uri'
+require 'httparty'
+require 'json'
 require_relative "bot_helpers"
 require_relative "ui_elements"
 

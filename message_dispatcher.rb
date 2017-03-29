@@ -1,8 +1,4 @@
-require_relative "commands"
-
 class MessageDispatcher
-  include Commands
-
   def initialize(user, message)
     @user = user
     @message = message

@@ -1,8 +1,5 @@
 require 'dotenv/load' # comment this line out before pushing to Heroku!
 require 'facebook/messenger'
-require 'addressable/uri'
-require 'httparty'
-require 'json'
 require_relative 'persistent_menu'
 require_relative 'greetings'
 require_relative 'user'
@@ -34,14 +31,14 @@ MENU_REPLIES = [
     title: 'My location',
     payload: 'LOCATION'
   }
-].freeze
+]
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
   ask_location: 'Type in any destination or send us your location:',
   unknown_command: 'Sorry, I did not recognize your command',
   menu_greeting: 'What do you want to look up?'
-}.freeze
+}
 
 TYPE_LOCATION = [{ content_type: 'location' }]
 

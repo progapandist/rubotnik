@@ -32,7 +32,7 @@ module UIElements
     def build_from_hash(reply)
       reply[:content_type] = "text" unless reply.key?(:content_type)
       error_msg = "type 'text' should have a payload"
-      raise ArgumentError, error_msg  unless reply.key?(:payload)
+      raise ArgumentError, error_msg unless reply.key?(:payload)
       reply
     end
 

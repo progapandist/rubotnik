@@ -1,5 +1,3 @@
-require 'json'
-
 # Also known as 'generic template'
 # https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template
 

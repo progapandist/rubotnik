@@ -3,11 +3,13 @@ require 'httparty'
 require 'json'
 require_relative "bot_helpers"
 require_relative "ui_elements"
+require_relative "quick_replies"
 require_relative "sample_elements"
+require_relative "questionnaire"
 
 # Examples:
-# - API call with quick replies
-# - Carousel with several items (Nic Cage)
+# - API call with a set of quick replies
+# + Carousel with several items (Nic Cage)
 # - Generic template
 # - Receipt template?
 # - Airline template?
@@ -17,6 +19,7 @@ require_relative "sample_elements"
 
 module Commands
   include BotHelpers
+  include Questionnaire
 
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze

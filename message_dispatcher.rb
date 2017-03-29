@@ -38,6 +38,9 @@ class MessageDispatcher
     when /carousel/i
       show_carousel(@user.id)
       @user.disengage
+    when /questionnaire/i
+      @user.set_command(:start_questionnaire)
+      say(@user, "Welcome to the sample questionnaire! Are you ready?")
     else
       show_replies_menu(@user, MENU_REPLIES)
     end

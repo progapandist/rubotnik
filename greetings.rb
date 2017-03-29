@@ -1,3 +1,5 @@
+# TODO: refactor with initialization. Allow to pass greeting as an argument 
+
 class Greetings
   def self.enable
     # Set call to action button when user is about to address bot

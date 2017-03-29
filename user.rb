@@ -1,9 +1,11 @@
 class User
   attr_reader :id
+  attr_accessor :answers
 
   def initialize(id)
     @id = id
     @commands = []
+    @answers = []
     @engaged = false
     @greeted = false
   end

@@ -15,23 +15,21 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 PersistentMenu.enable
 Greetings.enable
 
-MENU_REPLIES = [
+replies_for_menu = [
   {
-    content_type: 'text',
-    title: 'GPS for address',
+    title: 'GPS for coordinates',
     payload: 'COORDINATES'
   },
   {
-    content_type: 'text',
     title: 'Full address',
     payload: 'FULL_ADDRESS'
   },
   {
-    content_type: 'text',
     title: 'My location',
     payload: 'LOCATION'
   }
 ]
+MENU_REPLIES = UIElements::QuickReplies.new(replies_for_menu).build
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
@@ -48,17 +46,17 @@ Bot.on :message do |message|
 
   # create or find user on first connect
   sender_id = message.sender['id']
-  # TODO: Refactor as find_or_add_user 
+  # TODO: Refactor as find_or_add_user
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
   dispatcher = MessageDispatcher.new(user, message)
   dispatcher.dispatch
 end
 
-# Logic for postbacks
+# TODO: Implement dispatcher class for postbacks
 Bot.on :postback do |postback|
   sender_id = postback.sender['id']
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-  user.greet # we don't need a greeting with postbacks
+  user.greet # we don't need a greeting with postbacks, so greet by default
   case postback.payload
   when 'START' then show_replies_menu(user, MENU_REPLIES)
   when 'COORDINATES'

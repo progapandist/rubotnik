@@ -7,10 +7,9 @@ require 'json'
 
 module UIElements
 
-  # TODO: Account for square images
-
+  # NOTE: default_action not supported in alpha 
   class FBCarousel
-    def initialize(opts = {})
+    def initialize(elements)
       @template = {
         # TODO: Do we need to provide an id at init?
         recipient: { id: nil},
@@ -19,7 +18,8 @@ module UIElements
             type: 'template',
             payload: {
               template_type: 'generic',
-              elements: parse_elements(opts) || nil # redundant?
+              image_aspect_ratio: 'horizontal',
+              elements: parse_elements(elements)
             }
           }
         }
@@ -37,6 +37,19 @@ module UIElements
       @template
     end
 
+    # set image aspect ratio to 'square'
+    def square_images
+      @template[:message][:attachment][:payload][:image_aspect_ratio] = "square"
+      self
+    end
+
+    # set image aspect ratio to 'square'
+    def horizontal_images
+      @template[:message][:attachment][:payload][:image_aspect_ratio] = "horizontal"
+      self
+    end
+
+    private
 
     # MAKE METHODS BELOW PRIVATE AFTER TESTING
 

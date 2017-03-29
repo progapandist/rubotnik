@@ -48,6 +48,7 @@ Bot.on :message do |message|
 
   # create or find user on first connect
   sender_id = message.sender['id']
+  # TODO: Refactor as find_or_add_user 
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
   dispatcher = MessageDispatcher.new(user, message)
   dispatcher.dispatch
@@ -69,5 +70,11 @@ Bot.on :postback do |postback|
   when 'LOCATION'
     say(user, IDIOMS[:ask_location], TYPE_LOCATION)
     user.set_command(:lookup_location)
+  when 'SQUARE_IMAGES'
+    Commands::show_carousel(sender_id, image_ratio: :square)
+    user.disengage
+  when 'HORIZONTAL_IMAGES'
+    Commands::show_carousel(sender_id)
+    user.disengage
   end
 end

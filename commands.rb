@@ -3,6 +3,7 @@ require 'httparty'
 require 'json'
 require_relative "bot_helpers"
 require_relative "ui_elements"
+require_relative "sample_elements"
 
 # Examples:
 # - API call with quick replies
@@ -20,41 +21,12 @@ module Commands
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
 
-  TEST_CAROUSEL_DATA = [
-                          {
-                          title: "Item 1",
-                          # Horizontal image should have 1.91:1 ratio
-                          image_url: "https://www.placecage.com/382/200",
-                          subtitle: "It's a first item!",
-                          buttons: [
-                              { type: :web_url,
-                              url: "https://google.com",
-                              title: "Go to website" },
-                              { type: :postback,
-                                title: "Trigger postback",
-                                payload: "CAROUSEL_PAYLOAD_ONE"
-                              }
-                            ]
-                          },
-                          {
-                          title: "Item 2",
-                          # Horizontal image should have 1.91:1 ratio
-                          image_url: "https://www.placecage.com/470/250",
-                          subtitle: "A second item...",
-                          buttons: [
-                              { type: :web_url,
-                              url: "https://google.com",
-                              title: "Go to website" },
-                              { type: :postback,
-                                title: "Trigger postback",
-                                payload: "CAROUSEL_PAYLOAD_TWO"
-                              }
-                            ]
-                          }
-                        ]
-
-  def show_carousel(id)
-    UIElements::FBCarousel.new(TEST_CAROUSEL_DATA).send(id)
+  def show_carousel(id, opts = {})
+    if opts.key?(:image_ratio) && opts[:image_ratio] == :square
+      UIElements::FBCarousel.new(SampleElements::CAROUSEL).square_images.send(id)
+    else
+      UIElements::FBCarousel.new(SampleElements::CAROUSEL).send(id)
+    end
   end
 
   # Coordinates lookup

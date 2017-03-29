@@ -8,27 +8,28 @@ require_relative 'message_dispatcher'
 require_relative 'bot_helpers'
 require_relative 'commands'
 include Facebook::Messenger
-include Commands
+include Commands # Do I need this line?
 
 # IMPORTANT! Subcribe your bot to your page
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 PersistentMenu.enable
 Greetings.enable
 
-replies_for_menu = [
-  {
-    title: 'GPS for coordinates',
-    payload: 'COORDINATES'
-  },
-  {
-    title: 'Full address',
-    payload: 'FULL_ADDRESS'
-  },
-  {
-    title: 'My location',
-    payload: 'LOCATION'
-  }
-]
+replies_for_menu =  [
+                      {
+                        title: 'GPS for coordinates',
+                        payload: 'COORDINATES'
+                      },
+                      {
+                        title: 'Full address',
+                        payload: 'FULL_ADDRESS'
+                      },
+                      {
+                        title: 'My location',
+                        payload: 'LOCATION'
+                      }
+                    ]
+
 MENU_REPLIES = UIElements::QuickReplies.new(replies_for_menu).build
 
 IDIOMS = {

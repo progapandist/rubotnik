@@ -2,7 +2,7 @@ module UIElements
 
   class QuickReplies
 
-    # TODO: account for content_type: "location" and "image_url" 
+    # TODO: account for content_type: "location" and "image_url"
 
     # Takes an array of hashes with keys :title, :payload
     # or :content_type (defaults to "text" if omitted)
@@ -31,14 +31,14 @@ module UIElements
 
     def build_from_hash(reply)
       reply[:content_type] = "text" unless reply.key?(:content_type)
-      raise ArgumentError, "type 'text' should have a payload" unless reply.key?(:payload)
+      error_msg = "type 'text' should have a payload"
+      raise ArgumentError, error_msg  unless reply.key?(:payload)
       reply
     end
 
     def build_from_array(reply)
-      if reply.length != 2
-        raise ArgumentError, "Only accepts arrays of two elements"
-      end
+      error_msg = "Only accepts arrays of two elements"
+      raise ArgumentError, error_msg if reply.length != 2
       { content_type: 'text', title: reply[0].to_s, payload: reply[1].to_s }
     end
 

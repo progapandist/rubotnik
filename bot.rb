@@ -30,7 +30,8 @@ replies_for_menu =  [
                       }
                     ]
 
-MENU_REPLIES = UIElements::QuickReplies.new(replies_for_menu).build
+# NOTE: Should be called with a splat operator if a set of quick replies is a pre-formed array 
+MENU_REPLIES = UIElements::QuickReplies.new(*replies_for_menu).build
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',

@@ -40,7 +40,8 @@ class MessageDispatcher
       @user.disengage
     when /questionnaire/i
       @user.set_command(:start_questionnaire)
-      say(@user, "Welcome to the sample questionnaire! Are you ready?")
+      replies = UIElements::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"], ["No", "STOP_QUESTIONNAIRE"]).build
+      say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
     else
       show_replies_menu(@user, MENU_REPLIES)
     end

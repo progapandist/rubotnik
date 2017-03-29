@@ -12,8 +12,8 @@ module UIElements
     # or mixed.
     # Number of quick replies is limited to 11 by Messenger API
 
-    def initialize(array_replies = [], *args_replies)
-      @replies = array_replies unless array_replies.empty?
+    def initialize(*replies)
+      @replies = replies
     end
 
     def build
@@ -44,5 +44,5 @@ module UIElements
 
   end
 
-  # p  QuickReplies.new({title: "Yes", payload: "YES"}, ["No", "NO"]).build
+  # p  QuickReplies.new(["Yes", "YES"], ["No", "NO"]).build
 end

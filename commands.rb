@@ -7,6 +7,10 @@ require_relative "quick_replies"
 require_relative "sample_elements"
 require_relative "questionnaire"
 
+# Rules:
+# commands assigned as part of conversation thread should follow
+# (message, user) convention for arguments ???  
+
 # Examples:
 # - API call with a set of quick replies
 # + Carousel with several items (Nic Cage)

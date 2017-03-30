@@ -16,14 +16,13 @@ require_relative "questionnaire"
 # - API call with a set of quick replies
 # + Carousel with several items (Nic Cage)
 # - Generic template
-# - Receipt template?
-# - Airline template?
+# - List template 
 # - API call involving location sharing
-# - Questionnaire (store bits of data in user model, assign long sequence of commands one after another in a separate module)
-# Double all commands in postbacks
+# + Questionnaire (store bits of data in user model, assign long sequence of commands one after another in a separate module)
+# Double some commands in postbacks
 
 module Commands
-  # Include modules for helpers and separate threads 
+  # Include modules for helpers and separate threads
   include BotHelpers
   include Questionnaire
 

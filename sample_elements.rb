@@ -3,7 +3,7 @@ module SampleElements
               {
                 title: "Nicolas",
                 # Horizontal image should have 1.91:1 ratio
-                image_url: "https://www.placecage.com/300/160",
+                image_url: "https://www.placecage.com/760/400",
                 subtitle: "That's a first card in a carousel",
                 buttons: [
                   { type: :web_url,
@@ -18,7 +18,7 @@ module SampleElements
                 {
                   title: "Steven",
                   # Horizontal image should have 1.91:1 ratio
-                  image_url: "https://www.stevensegallery.com/250/130",
+                  image_url: "https://www.stevensegallery.com/760/400",
                   subtitle: "And here's a second card. You can add up to 10!",
                   buttons: [
                     {

@@ -43,9 +43,6 @@ IDIOMS = {
 TYPE_LOCATION = [{ content_type: 'location' }]
 
 Bot.on :message do |message|
-  # p message
-  # p message.quick_reply if message.quick_reply
-
   # create or find user on first connect
   sender_id = message.sender['id']
   # TODO: Refactor as find_or_add_user

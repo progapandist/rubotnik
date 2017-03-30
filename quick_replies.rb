@@ -1,15 +1,13 @@
 module UIElements
-
   class QuickReplies
 
     # TODO: account for content_type: "location" and "image_url"
 
-    # Takes an array of hashes with keys :title, :payload
-    # or :content_type (defaults to "text" if omitted)
-    # Can also be invoked with a list of arguments
-    # that can be either hashes of the same form,
-    # or arrays of two elements in form ["title", "PAYLOAD"] (simplified syntax),
-    # or mixed.
+    # Takes a list of arguments (splat on a call if passing an array!)
+    # that can be hashes with keys :title, :payload,
+    # :content_type (defaults to "text" if omitted)
+    # OR arrays of two elements in form ["title", "PAYLOAD"] (simplified syntax),
+    # OR both types, mixed.
     # Number of quick replies is limited to 11 by Messenger API
 
     def initialize(*replies)
@@ -43,6 +41,4 @@ module UIElements
     end
 
   end
-
-  # p  QuickReplies.new(["Yes", "YES"], ["No", "NO"]).build
 end

@@ -5,22 +5,29 @@ class MessageDispatcher
   end
 
   def dispatch
+    # We only greet user once for the whole interaction
     greet_user(@user) unless @user.greeted?
 
+    # The main switch happens here:
+    # user either has a threaded command set from previous interaction
+    # or we go back to top level commands
     if @user.current_command
       command = @user.current_command
       method(command).call(@message, @user)
-      puts "Command #{command} is executed for user #{@user.id}"
+      puts "Command #{command} is executed for user #{@user.id}" # log
     else
-      puts "User #{@user.id} does not have a command assigned yet"
+      puts "User #{@user.id} does not have a command assigned yet" # log
       parse_commands
     end
   end
 
   private
 
+  # PARSE INCOMING MESSAGES HERE (TOP LEVEL ONLY) AND ASSIGN COMMANDS
+  # FROM THE COMMANDS MODULE
+
   def parse_commands
-    p @message # debug
+    p @message # log incoming message details
     case @message.text
     when /coord/i, /gps/i
       @user.set_command(:show_coordinates)
@@ -43,6 +50,7 @@ class MessageDispatcher
                                              ["No", "STOP_QUESTIONNAIRE"]).build
       say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
     else
+      # Show a set of options if command is not understood
       show_replies_menu(@user, MENU_REPLIES)
     end
   end

@@ -23,6 +23,7 @@ require_relative "questionnaire"
 # Double all commands in postbacks
 
 module Commands
+  # Include modules for helpers and separate threads 
   include BotHelpers
   include Questionnaire
 

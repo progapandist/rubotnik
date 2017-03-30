@@ -20,6 +20,7 @@ class MessageDispatcher
   private
 
   def parse_commands
+    p @message # debug
     case @message.text
     when /coord/i, /gps/i
       @user.set_command(:show_coordinates)

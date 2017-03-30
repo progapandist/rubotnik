@@ -5,7 +5,7 @@ class User
   def initialize(id)
     @id = id
     @commands = []
-    @answers = []
+    @answers = {}
     @engaged = false
     @greeted = false
   end

@@ -30,7 +30,7 @@ replies_for_menu =  [
                       }
                     ]
 
-# NOTE: Should be called with a splat operator if a set of quick replies is a pre-formed array 
+# NOTE: Should be called with a splat operator if a set of quick replies is a pre-formed array
 MENU_REPLIES = UIElements::QuickReplies.new(*replies_for_menu).build
 
 IDIOMS = {
@@ -70,6 +70,11 @@ Bot.on :postback do |postback|
   when 'LOCATION'
     say(user, IDIOMS[:ask_location], TYPE_LOCATION)
     user.set_command(:lookup_location)
+  when 'QUESTIONNAIRE'
+    user.set_command(:start_questionnaire)
+    replies = UIElements::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
+                                           ["No", "STOP_QUESTIONNAIRE"]).build
+    say(user, "Welcome to the sample questionnaire! Are you ready?", replies)
   when 'SQUARE_IMAGES'
     Commands::show_carousel(sender_id, image_ratio: :square)
     user.disengage

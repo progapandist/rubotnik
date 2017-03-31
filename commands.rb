@@ -31,12 +31,12 @@ module Commands
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
 
-  # TODO: Move to ShowUIExamples module 
-  def show_carousel(id, opts = {})
+  # TODO: Move to ShowUIExamples module
+  def show_carousel(message, user, opts = {})
     if opts.key?(:image_ratio) && opts[:image_ratio] == :square
-      UI::FBCarousel.new(SampleElements::CAROUSEL).square_images.send(id)
+      UI::FBCarousel.new(SampleElements::CAROUSEL).square_images.send(user.id)
     else
-      UI::FBCarousel.new(SampleElements::CAROUSEL).send(id)
+      UI::FBCarousel.new(SampleElements::CAROUSEL).send(user.id)
     end
   end
 

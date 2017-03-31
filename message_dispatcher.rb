@@ -1,3 +1,39 @@
+#Parser.draw(@message, @user) do
+#  assign /carousel/i to: :show_carousel
+#  assign /location/i to: :lookup_location, start_thread: {message: "Message", quick_replies: [{}]}
+#end
+
+
+# DSL ATTEMPT
+class Parser
+  @message = nil
+  @user = nil
+
+  def self.draw(message, user, &block)
+    @message = message
+    @user = user
+    class_eval(&block)
+  end
+
+  def self.assign(pattern, to:, start_thread: {})
+    if start_thread.empty?
+      execute(to) if @message.text =~ pattern
+      @user.reset_command
+    else
+      if @message.text =~ pattern
+        say(@user, start_thread[:message], start_thread[:quick_replies])
+        @user.set_command(to)
+      end
+    end
+  end
+
+  def self.execute(command)
+    method(command).call(@message, @user)
+  end
+
+  private_class_method :assign, :execute
+end
+
 class MessageDispatcher
   def initialize(user, message)
     @user = user
@@ -23,10 +59,17 @@ class MessageDispatcher
 
   private
 
+
   # PARSE INCOMING MESSAGES HERE (TOP LEVEL ONLY) AND ASSIGN COMMANDS
   # FROM THE COMMANDS MODULE
 
   def parse_commands
+
+    Parser.draw(@message, @user) do
+      assign(/carousel/i, to: :show_carousel)
+      assign(/location/i, to: :lookup_location, start_thread: {message: "Le me know your location", quick_replies: TYPE_LOCATION})
+    end
+
     p @message # log incoming message details
     case @message.text
     when /coord/i, /gps/i
@@ -37,13 +80,13 @@ class MessageDispatcher
       @user.set_command(:show_full_address)
       p "Command :show_full_address is set for user #{@user.id}"
       say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
-    when /location/i
-      @user.set_command(:lookup_location)
-      p "Command :lookup_location is set for user #{@user.id}"
-      say(@user, 'Let me know your location:', TYPE_LOCATION)
-    when /carousel/i
-      show_carousel(@user.id)
-      @user.reset_command
+    # when /location/i
+    #   @user.set_command(:lookup_location)
+    #   p "Command :lookup_location is set for user #{@user.id}"
+    #   say(@user, 'Let me know your location:', TYPE_LOCATION)
+    # when /carousel/i
+    #   show_carousel(@message, @user)
+    #   @user.reset_command
     when /button template/i
       show_button_template(@user.id)
       @user.reset_command

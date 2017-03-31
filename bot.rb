@@ -8,7 +8,7 @@ require_relative 'message_dispatcher'
 require_relative 'bot_helpers'
 require_relative 'commands'
 include Facebook::Messenger
-include Commands # Do I need this line?
+include Commands # TODO: Do I need this line?
 
 # IMPORTANT! Subcribe your bot to your page
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])

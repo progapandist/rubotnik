@@ -1,6 +1,6 @@
-require_relative "../ui_elements"
+require_relative "../ui"
 
 
-RSpec.describe UIElements::FBCarousel do
+RSpec.describe UI::FBCarousel do
 
 end

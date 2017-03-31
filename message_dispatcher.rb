@@ -44,9 +44,12 @@ class MessageDispatcher
     when /carousel/i
       show_carousel(@user.id)
       @user.reset_command
+    when /button template/i
+      show_button_template(@user.id)
+      @user.reset_command
     when /questionnaire/i
       @user.set_command(:start_questionnaire)
-      replies = UIElements::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
+      replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
                                              ["No", "STOP_QUESTIONNAIRE"]).build
       say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
     else

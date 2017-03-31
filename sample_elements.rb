@@ -34,4 +34,10 @@ module SampleElements
                 }
               ]
 
+BUTTON_TEMPLATE_TEXT = "Look, I'm a message and I have some buttons attached!"
+BUTTON_TEMPLATE_BUTTONS = [
+  { type: :web_url, url: "https://medium.com/@progapanda", title: "Andy's Medium" },
+  { type: :postback, payload: "BUTTON_TEMPLATE_ACTION", title: "Useful Button"}
+]
+
 end

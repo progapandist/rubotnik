@@ -2,21 +2,22 @@ require 'addressable/uri'
 require 'httparty'
 require 'json'
 require_relative "bot_helpers"
-require_relative "ui_elements"
+require_relative "ui"
 require_relative "quick_replies"
 require_relative "sample_elements"
 require_relative "questionnaire"
+require_relative "show_ui_examples"
 
 # RULES:
 # commands assigned as part of conversation thread
 # (through User#set_command in MessageDispatcher)
-# should follow (message, user) convention for arguments ???
+# should follow (message, user) convention for arguments
 
 # Examples:
 # - API call with a set of quick replies
 # + Carousel with several items (Nic Cage)
 # - Generic template
-# - List template 
+# - List template
 # - API call involving location sharing
 # + Questionnaire (store bits of data in user model, assign long sequence of commands one after another in a separate module)
 # Double some commands in postbacks
@@ -25,15 +26,17 @@ module Commands
   # Include modules for helpers and separate threads
   include BotHelpers
   include Questionnaire
+  include ShowUIExamples
 
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
 
+  # TODO: Move to ShowUIExamples module 
   def show_carousel(id, opts = {})
     if opts.key?(:image_ratio) && opts[:image_ratio] == :square
-      UIElements::FBCarousel.new(SampleElements::CAROUSEL).square_images.send(id)
+      UI::FBCarousel.new(SampleElements::CAROUSEL).square_images.send(id)
     else
-      UIElements::FBCarousel.new(SampleElements::CAROUSEL).send(id)
+      UI::FBCarousel.new(SampleElements::CAROUSEL).send(id)
     end
   end
 

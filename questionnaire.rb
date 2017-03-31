@@ -24,7 +24,7 @@ module Questionnaire
     # Fallback functionality if stop word used or user input is not text
     fall_back(message, user) and return
     user.answers[:name] = message.text
-    say(user, "What's your gender?", UIElements::QuickReplies.new(["Male", "MALE"],
+    say(user, "What's your gender?", UI::QuickReplies.new(["Male", "MALE"],
                                                                   ["Female", "FEMALE"])
                                                                   .build)
     user.set_command(:ask_gender)
@@ -34,7 +34,7 @@ module Questionnaire
     p user.current_command
     fall_back(message, user) and return
     user.answers[:gender] = message.text
-    replies = UIElements::QuickReplies.new(["I'd rather not say", "NO_AGE"]).build
+    replies = UI::QuickReplies.new(["I'd rather not say", "NO_AGE"]).build
     say(user, "Finally, how old are you?", replies)
     user.set_command(:ask_age)
   end
@@ -68,7 +68,7 @@ module Questionnaire
 
   def fall_back(message, user) # sanity check on each step
     say(user, "You tried to fool me, human! Start over!") unless is_text_message?(message)
-    if !is_text_message?(message) || stop_word_used(message, "Stop")
+    if !is_text_message?(message) || stop_word_used?(message, "Stop")
       stop_questionnaire(message, user)
       return true # to trigger return from the caller on 'and return'
     end
@@ -76,7 +76,7 @@ module Questionnaire
   end
 
   # specify stop word
-  def stop_word_used(message, word)
+  def stop_word_used?(message, word)
     !(message.text =~ /#{word.downcase}/i).nil?
   end
 end

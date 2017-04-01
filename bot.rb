@@ -47,7 +47,7 @@ Bot.on :message do |message|
   sender_id = message.sender['id']
   # TODO: Refactor as find_or_add_user
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-  dispatcher = MessageDispatcher.new(user, message) # TODO: Should be a class method? 
+  dispatcher = MessageDispatcher.new(user, message) # TODO: Should be a class method?
   dispatcher.dispatch
 end
 
@@ -75,10 +75,10 @@ Bot.on :postback do |postback|
                                            ["No", "STOP_QUESTIONNAIRE"]).build
     say(user, "Welcome to the sample questionnaire! Are you ready?", replies)
   when 'SQUARE_IMAGES'
-    Commands::show_carousel(sender_id, image_ratio: :square)
+    Commands::show_carousel(postback, user, image_ratio: :square)
     user.disengage
   when 'HORIZONTAL_IMAGES'
-    Commands::show_carousel(sender_id)
+    Commands::show_carousel(postback, user)
     user.disengage
   end
 end

@@ -28,6 +28,7 @@ module UI
     private
 
     def build_from_hash(reply)
+      # TODO: Possible bug not allowing to create location prompt 
       reply[:content_type] = "text" unless reply.key?(:content_type)
       error_msg = "type 'text' should have a payload"
       raise ArgumentError, error_msg unless reply.key?(:payload)

@@ -3,7 +3,6 @@
 #  bind /location/i to: :lookup_location, start_thread: {message: "Message", quick_replies: [{}]}
 #end
 
-
 # DSL ATTEMPT
 class Parser
   @message, @user, @matched = nil
@@ -82,18 +81,23 @@ class MessageDispatcher
 
     # TESTING THE DSL ON SOME COMMANDS
     # NB: Will match multiple triggers in one phrase
-    # TODO: Provide multiple regexps for the same binding 
+    # TODO: Provide multiple regexps for the same binding
     Parser.bind_commands(@message, @user) do
+      # Any string will be turned into case-insensitive regex pattern
+      # You can provide regex directly
 
-      # TODO: bind?
+      # Use with 'to:' syntax to bind to a command found in Commands
       bind "carousel", to: :show_carousel
 
-      # Can also take a block, if you want to provide response behaviour
-      # directly without looking for command in commands modules
+      # Use with block if you want to provide response behaviour
+      # directly without looking for command in Commands
       bind "screw" do
         say(@user, "Screw yourself!")
       end
 
+      # Use with 'to:' and 'start_thread:' to point to the first command in a thread
+      # Provide message asking input for the next command in the nested hash
+      # You can also pass build and pass an array of quick replies
       bind "location", to: :lookup_location,
                        start_thread: {
                          message: "Le me know your location",

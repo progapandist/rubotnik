@@ -1,37 +1,52 @@
-#Parser.draw(@message, @user) do
-#  assign /carousel/i to: :show_carousel
-#  assign /location/i to: :lookup_location, start_thread: {message: "Message", quick_replies: [{}]}
+#Parser.bind_commands(@message, @user) do
+#  bind /carousel/i to: :show_carousel
+#  bind /location/i to: :lookup_location, start_thread: {message: "Message", quick_replies: [{}]}
 #end
 
 
 # DSL ATTEMPT
 class Parser
-  @message = nil
-  @user = nil
+  @message, @user, @matched = nil
 
-  def self.draw(message, user, &block)
+  def self.bind_commands(message, user, &block)
     @message = message
     @user = user
+    @matched = false
     class_eval(&block)
   end
 
-  def self.assign(pattern, to:, start_thread: {})
-    if start_thread.empty?
-      execute(to) if @message.text =~ pattern
-      @user.reset_command
-    else
-      if @message.text =~ pattern
+  def self.bind(regex_string, to: nil, start_thread: {})
+    if @message.text =~ /#{regex_string}/i
+      @matched ||= true
+      if block_given?
+        yield
+        return
+      end
+      if start_thread.empty?
+        execute(to)
+        @user.reset_command
+      else
         say(@user, start_thread[:message], start_thread[:quick_replies])
         @user.set_command(to)
       end
     end
   end
 
+  # TODO: TEST WITHOUT AN ARGUMENT
+  def self.not_recognized
+    unless @matched
+      puts "not_recognized triggered"
+      yield
+      @user.reset_command
+    end
+  end
+
+  # TODO: use "send" instead of "call"?
   def self.execute(command)
     method(command).call(@message, @user)
   end
 
-  private_class_method :assign, :execute
+  private_class_method :bind, :execute, :not_recognized
 end
 
 class MessageDispatcher
@@ -65,39 +80,62 @@ class MessageDispatcher
 
   def parse_commands
 
-    Parser.draw(@message, @user) do
-      assign(/carousel/i, to: :show_carousel)
-      assign(/location/i, to: :lookup_location, start_thread: {message: "Le me know your location", quick_replies: TYPE_LOCATION})
+    # TESTING THE DSL ON SOME COMMANDS
+    # NB: Will match multiple triggers in one phrase
+    # TODO: Provide multiple regexps for the same binding 
+    Parser.bind_commands(@message, @user) do
+
+      # TODO: bind?
+      bind "carousel", to: :show_carousel
+
+      # Can also take a block, if you want to provide response behaviour
+      # directly without looking for command in commands modules
+      bind "screw" do
+        say(@user, "Screw yourself!")
+      end
+
+      bind "location", to: :lookup_location,
+                       start_thread: {
+                         message: "Le me know your location",
+                         quick_replies: TYPE_LOCATION
+                       }
+
+      # Falback action if none of the commands matched the input,
+      # NB: Should always come last. Takes a block.
+      not_recognized do
+        show_replies_menu(@user, MENU_REPLIES)
+      end
+
     end
 
     p @message # log incoming message details
-    case @message.text
-    when /coord/i, /gps/i
-      @user.set_command(:show_coordinates)
-      p "Command :show_coordinates is set for user #{@user.id}"
-      say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
-    when /full ad/i
-      @user.set_command(:show_full_address)
-      p "Command :show_full_address is set for user #{@user.id}"
-      say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
-    # when /location/i
-    #   @user.set_command(:lookup_location)
-    #   p "Command :lookup_location is set for user #{@user.id}"
-    #   say(@user, 'Let me know your location:', TYPE_LOCATION)
-    # when /carousel/i
-    #   show_carousel(@message, @user)
+    # case @message.text
+    # when /coord/i, /gps/i
+    #   @user.set_command(:show_coordinates)
+    #   p "Command :show_coordinates is set for user #{@user.id}"
+    #   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
+    # when /full ad/i
+    #   @user.set_command(:show_full_address)
+    #   p "Command :show_full_address is set for user #{@user.id}"
+    #   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
+    # # when /location/i
+    # #   @user.set_command(:lookup_location)
+    # #   p "Command :lookup_location is set for user #{@user.id}"
+    # #   say(@user, 'Let me know your location:', TYPE_LOCATION)
+    # # when /carousel/i
+    # #   show_carousel(@message, @user)
+    # #   @user.reset_command
+    # when /button template/i
+    #   show_button_template(@user.id)
     #   @user.reset_command
-    when /button template/i
-      show_button_template(@user.id)
-      @user.reset_command
-    when /questionnaire/i
-      @user.set_command(:start_questionnaire)
-      replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
-                                             ["No", "STOP_QUESTIONNAIRE"]).build
-      say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
-    else
-      # Show a set of options if command is not understood
-      show_replies_menu(@user, MENU_REPLIES)
-    end
+    # when /questionnaire/i
+    #   @user.set_command(:start_questionnaire)
+    #   replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
+    #                                          ["No", "STOP_QUESTIONNAIRE"]).build
+    #   say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
+    # else
+    #   # Show a set of options if command is not understood
+    #   show_replies_menu(@user, MENU_REPLIES)
+    # end
   end
 end

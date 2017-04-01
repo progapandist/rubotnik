@@ -94,7 +94,7 @@ module Commands
     else
       say(user, "Please try your request again and use 'Send location' button")
     end
-    user.reset_command # should we reset command inside a command object?
+    user.reset_command 
   end
 
   def handle_user_location(message, user)

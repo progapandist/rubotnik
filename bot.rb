@@ -47,7 +47,7 @@ Bot.on :message do |message|
   sender_id = message.sender['id']
   # TODO: Refactor as find_or_add_user
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-  dispatcher = MessageDispatcher.new(user, message)
+  dispatcher = MessageDispatcher.new(user, message) # TODO: Should be a class method? 
   dispatcher.dispatch
 end
 

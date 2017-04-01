@@ -74,6 +74,7 @@ module Commands
     user.engage unless user.engaged?
   end
 
+  # TODO: follow (message, user) convention 
   def greet_user(user)
     say(user, "Hello, dear new user!")
     user.greet
@@ -94,7 +95,7 @@ module Commands
     else
       say(user, "Please try your request again and use 'Send location' button")
     end
-    user.reset_command 
+    user.reset_command
   end
 
   def handle_user_location(message, user)

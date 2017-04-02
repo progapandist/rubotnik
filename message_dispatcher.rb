@@ -106,6 +106,15 @@ class MessageDispatcher
                          quick_replies: TYPE_LOCATION
                        }
 
+      questionnaire_replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
+                                                   ["No", "STOP_QUESTIONNAIRE"]).build
+
+      bind 'questionnaire', to: :start_questionnaire,
+                            start_thread: {
+                              message: "Welcome to the sample questionnaire! Are you ready?",
+                              quick_replies: questionnaire_replies
+                            }
+
       # Falback action if none of the commands matched the input,
       # NB: Should always come last. Takes a block.
       not_recognized do

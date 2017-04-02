@@ -42,16 +42,20 @@ IDIOMS = {
 
 TYPE_LOCATION = [{ content_type: 'location' }]
 
-# # SYNTAX WE WANT TODO: THINK ABOUT NAMING! 
+# # SYNTAX WE WANT. TODO: THINK ABOUT NAMING!
 # Bot.on :message do |message|
-#   Rubotnik.dispatch_messages(message) do
+#   Rubotnik.dispatch(message) do
 #     bind "hey" do
 #       say("Hey yourself!")
 #     end
 #   end
 # end
 
+# Rubotnik.dispatch should have different behaviour depending on
+# what was passed as an argument: message or postback
+
 Bot.on :message do |message|
+  p message.class # debug
   # create or find user on first connect
   sender_id = message.sender['id']
   # TODO: Refactor as find_or_add_user
@@ -61,6 +65,7 @@ end
 
 # TODO: Implement dispatcher class for postbacks
 Bot.on :postback do |postback|
+  p postback.class # debug
   sender_id = postback.sender['id']
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
   user.greet # we don't need a greeting with postbacks, so greet by default
@@ -84,9 +89,9 @@ Bot.on :postback do |postback|
     say(user, "Welcome to the sample questionnaire! Are you ready?", replies)
   when 'SQUARE_IMAGES'
     Commands::show_carousel(postback, user, image_ratio: :square)
-    user.disengage
+    user.reset_command # UNTESTED
   when 'HORIZONTAL_IMAGES'
     Commands::show_carousel(postback, user)
-    user.disengage
+    user.reset_command # UNTESTED
   end
 end

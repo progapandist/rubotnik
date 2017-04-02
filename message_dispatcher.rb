@@ -34,7 +34,7 @@ class Parser
   # TODO: TEST WITHOUT AN ARGUMENT
   def self.not_recognized
     unless @matched
-      puts "not_recognized triggered"
+      puts "not_recognized triggered" # debug
       yield
       @user.reset_command
     end
@@ -49,12 +49,14 @@ class Parser
 end
 
 class MessageDispatcher
-  def initialize(user, message)
-    @user = user
-    @message = message
-  end
+  # def initialize(user, message)
+  #   @user = user
+  #   @message = message
+  # end
 
-  def dispatch
+  def self.dispatch(user, message)
+    @user = user
+    @message = message 
     # We only greet user once for the whole interaction
     greet_user(@user) unless @user.greeted?
 
@@ -71,13 +73,13 @@ class MessageDispatcher
     end
   end
 
-  private
+  # private
 
 
   # PARSE INCOMING MESSAGES HERE (TOP LEVEL ONLY) AND ASSIGN COMMANDS
   # FROM THE COMMANDS MODULE
 
-  def parse_commands # TESTING THE DSL ON SOME COMMANDS
+  def self.parse_commands # TESTING THE DSL ON SOME COMMANDS
 
     # NB: Will match multiple triggers in one phrase
     # TODO: Provide multiple regexps for the same binding
@@ -97,7 +99,7 @@ class MessageDispatcher
 
       # Use with 'to:' and 'start_thread:' to point to the first command in a thread.
       # Provide message asking input for the next command in the nested hash.
-      # You can also pass build and pass an array of quick replies.
+      # You can also pass an array of quick replies.
       bind "location", to: :lookup_location,
                        start_thread: {
                          message: "Le me know your location",

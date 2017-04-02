@@ -42,6 +42,15 @@ IDIOMS = {
 
 TYPE_LOCATION = [{ content_type: 'location' }]
 
+# # SYNTAX WE WANT TODO: THINK ABOUT NAMING! 
+# Bot.on :message do |message|
+#   Rubotnik.dispatch_messages(message) do
+#     bind "hey" do
+#       say("Hey yourself!")
+#     end
+#   end
+# end
+
 Bot.on :message do |message|
   # create or find user on first connect
   sender_id = message.sender['id']

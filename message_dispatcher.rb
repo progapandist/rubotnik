@@ -56,7 +56,7 @@ class MessageDispatcher
 
   def self.dispatch(user, message)
     @user = user
-    @message = message 
+    @message = message
     # We only greet user once for the whole interaction
     greet_user(@user) unless @user.greeted?
 
@@ -79,7 +79,7 @@ class MessageDispatcher
   # PARSE INCOMING MESSAGES HERE (TOP LEVEL ONLY) AND ASSIGN COMMANDS
   # FROM THE COMMANDS MODULE
 
-  def self.parse_commands # TESTING THE DSL ON SOME COMMANDS
+  private_class_method def self.parse_commands # TESTING THE DSL ON SOME COMMANDS
 
     # NB: Will match multiple triggers in one phrase
     # TODO: Provide multiple regexps for the same binding

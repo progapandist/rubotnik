@@ -40,6 +40,7 @@ IDIOMS = {
   menu_greeting: 'What do you want to look up?'
 }
 
+# Builds a quick reply that prompts location from user
 TYPE_LOCATION = UI::QuickReplies.location
 
 # # SYNTAX WE WANT. TODO: THINK ABOUT NAMING!

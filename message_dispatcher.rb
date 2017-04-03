@@ -24,10 +24,12 @@ class Parser
         @user.set_command(to)
       end
     end
+    puts @matched # DEBUG
   end
 
   # TODO: TEST WITHOUT AN ARGUMENT
   def self.not_recognized
+    puts @matched # DEBUG
     unless @matched
       puts "not_recognized triggered" # debug
       yield
@@ -60,7 +62,7 @@ class MessageDispatcher
       puts "Command #{command} is executed for user #{@user.id}" # log
     else
       puts "User #{@user.id} does not have a command assigned yet" # log
-      # parse_commands
+      parse_commands
     end
   end
 

@@ -48,6 +48,7 @@ class MessageDispatcher
     @user = user
     @message = message
     # We only greet user once for the whole interaction
+    # TODO: This shouldnt' be hardcoded, greeting should be implemented in the DSL
     greet_user(@user) unless @user.greeted?
 
     # The main switch happens here:
@@ -59,7 +60,7 @@ class MessageDispatcher
       puts "Command #{command} is executed for user #{@user.id}" # log
     else
       puts "User #{@user.id} does not have a command assigned yet" # log
-      parse_commands
+      # parse_commands
     end
   end
 
@@ -73,6 +74,7 @@ class MessageDispatcher
 
     # NB: Will match multiple triggers in one phrase
     # TODO: Provide multiple regexps for the same binding
+    # TODO: Implement greet() that takes a block and provides a one-off behaviour for greeting
     Parser.bind_commands(@message, @user) do
       # Any string will be turned into case-insensitive regex pattern.
       # You can also provide regex directly.
@@ -114,28 +116,31 @@ class MessageDispatcher
     end
 
     p @message # log incoming message details
-    # case @message.text
-    # when /coord/i, /gps/i
-    #   @user.set_command(:show_coordinates)
-    #   p "Command :show_coordinates is set for user #{@user.id}"
-    #   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
-    # when /full ad/i
-    #   @user.set_command(:show_full_address)
-    #   p "Command :show_full_address is set for user #{@user.id}"
-    #   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
-    # # when /location/i
-    # #   @user.set_command(:lookup_location)
-    # #   p "Command :lookup_location is set for user #{@user.id}"
-    # #   say(@user, 'Let me know your location:', TYPE_LOCATION)
-    # # when /carousel/i
-    # #   show_carousel(@message, @user)
-    # #   @user.reset_command
-    # when /button template/i
-    #   show_button_template(@user.id)
-    #   @user.reset_command
-    # else
-    #   # Show a set of options if command is not understood
-    #   show_replies_menu(@user, MENU_REPLIES)
-    # end
   end
 end
+
+# OLD IMPLEMENTATION OF DISPATCH BASED ON CASES
+
+# case @message.text
+# when /coord/i, /gps/i
+#   @user.set_command(:show_coordinates)
+#   p "Command :show_coordinates is set for user #{@user.id}"
+#   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
+# when /full ad/i
+#   @user.set_command(:show_full_address)
+#   p "Command :show_full_address is set for user #{@user.id}"
+#   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
+# # when /location/i
+# #   @user.set_command(:lookup_location)
+# #   p "Command :lookup_location is set for user #{@user.id}"
+# #   say(@user, 'Let me know your location:', TYPE_LOCATION)
+# # when /carousel/i
+# #   show_carousel(@message, @user)
+# #   @user.reset_command
+# when /button template/i
+#   show_button_template(@user.id)
+#   @user.reset_command
+# else
+#   # Show a set of options if command is not understood
+#   show_replies_menu(@user, MENU_REPLIES)
+# end

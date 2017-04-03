@@ -10,12 +10,9 @@ module UI
     # OR both types, mixed.
     # Number of quick replies is limited to 11 by Messenger API
 
-    def initialize(*replies)
-      @replies = replies
-    end
 
-    def build
-      @replies.map do |reply|
+    def self.build(*replies)
+      replies.map do |reply|
         case reply
         when Hash then build_from_hash(reply)
         when Array then build_from_array(reply)
@@ -25,17 +22,20 @@ module UI
       end
     end
 
-    private
+    def self.location
+      [{ content_type: "location" }]
+    end
 
-    def build_from_hash(reply)
-      # TODO: Possible bug not allowing to create location prompt 
-      reply[:content_type] = "text" unless reply.key?(:content_type)
-      error_msg = "type 'text' should have a payload"
-      raise ArgumentError, error_msg unless reply.key?(:payload)
+    private_class_method def self.build_from_hash(reply)
+      unless reply.key?(:content_type)
+        reply[:content_type] = "text"
+        error_msg = "type 'text' should have a payload"
+        raise ArgumentError, error_msg unless reply.key?(:payload)
+      end
       reply
     end
 
-    def build_from_array(reply)
+    private_class_method def self.build_from_array(reply)
       error_msg = "Only accepts arrays of two elements"
       raise ArgumentError, error_msg if reply.length != 2
       { content_type: 'text', title: reply[0].to_s, payload: reply[1].to_s }

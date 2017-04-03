@@ -30,8 +30,8 @@ replies_for_menu =  [
                       }
                     ]
 
-# NOTE: Should be called with a splat operator if a set of quick replies is a pre-formed array
-MENU_REPLIES = UI::QuickReplies.new(*replies_for_menu).build
+# NOTE: QuickReplies.build should be called with a splat operator if a set of quick replies is a pre-formed array
+MENU_REPLIES = UI::QuickReplies.build(*replies_for_menu)
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
@@ -40,7 +40,7 @@ IDIOMS = {
   menu_greeting: 'What do you want to look up?'
 }
 
-TYPE_LOCATION = [{ content_type: 'location' }]
+TYPE_LOCATION = UI::QuickReplies.location
 
 # # SYNTAX WE WANT. TODO: THINK ABOUT NAMING!
 # Bot.on :message do |message|
@@ -84,8 +84,8 @@ Bot.on :postback do |postback|
     say(user, "Voila! You triggered an action and got some response!")
   when 'QUESTIONNAIRE'
     user.set_command(:start_questionnaire)
-    replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
-                                           ["No", "STOP_QUESTIONNAIRE"]).build
+    replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
+                                           ["No", "STOP_QUESTIONNAIRE"])
     say(user, "Welcome to the sample questionnaire! Are you ready?", replies)
   when 'SQUARE_IMAGES'
     Commands::show_carousel(postback, user, image_ratio: :square)

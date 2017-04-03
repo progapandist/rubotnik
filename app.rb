@@ -1,4 +1,4 @@
-require 'dotenv/load' # comment this line out before pushing to Heroku! 
+require 'dotenv/load' # comment this line out before pushing to Heroku!
 require 'sinatra'
 
 # NOTE: ENV variables should be set directly in terminal for testing on localhost
@@ -9,5 +9,5 @@ get '/webhook' do
 end
 
 get "/" do
-  "Nothing to see here"
+  "Build a landing page here if you want"
 end

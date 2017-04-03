@@ -1,8 +1,3 @@
-#Parser.bind_commands(@message, @user) do
-#  bind /carousel/i to: :show_carousel
-#  bind /location/i to: :lookup_location, start_thread: {message: "Message", quick_replies: [{}]}
-#end
-
 # ATTEMPT AT DSL
 class Parser
   @message, @user, @matched = nil
@@ -49,11 +44,6 @@ class Parser
 end
 
 class MessageDispatcher
-  # def initialize(user, message)
-  #   @user = user
-  #   @message = message
-  # end
-
   def self.dispatch(user, message)
     @user = user
     @message = message
@@ -106,8 +96,8 @@ class MessageDispatcher
                          quick_replies: TYPE_LOCATION
                        }
 
-      questionnaire_replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
-                                                   ["No", "STOP_QUESTIONNAIRE"]).build
+      questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
+                                                   ["No", "STOP_QUESTIONNAIRE"])
 
       bind 'questionnaire', to: :start_questionnaire,
                             start_thread: {
@@ -143,11 +133,6 @@ class MessageDispatcher
     # when /button template/i
     #   show_button_template(@user.id)
     #   @user.reset_command
-    # when /questionnaire/i
-    #   @user.set_command(:start_questionnaire)
-    #   replies = UI::QuickReplies.new(["Yes", "START_QUESTIONNAIRE"],
-    #                                          ["No", "STOP_QUESTIONNAIRE"]).build
-    #   say(@user, "Welcome to the sample questionnaire! Are you ready?", replies)
     # else
     #   # Show a set of options if command is not understood
     #   show_replies_menu(@user, MENU_REPLIES)

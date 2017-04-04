@@ -32,7 +32,7 @@ replies_for_menu =  [
                     ]
 
 # NOTE: QuickReplies.build should be called with a splat operator if a set of quick replies is a pre-formed array
-MENU_REPLIES = UI::QuickReplies.build(*replies_for_menu)
+COMMANDS_HINTS = UI::QuickReplies.build(*replies_for_menu)
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
@@ -44,8 +44,7 @@ IDIOMS = {
 # Builds a quick reply that prompts location from user
 LOCATION_PROMPT = UI::QuickReplies.location
 
-# Rubotnik.dispatch should have different behaviour depending on
-# what was passed as an argument: message or postback
+# Routing for messages
 Bot.on :message do |message|
   Rubotnik::Router.route(message) do
 
@@ -79,44 +78,67 @@ Bot.on :message do |message|
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     not_recognized do
-      show_replies_menu(MENU_REPLIES)
+      display_hints(COMMANDS_HINTS)
     end
 
   end
 end
 
-# TODO: Implement dispatcher class for postbacks
+# Routing for postbacks
 Bot.on :postback do |postback|
-  p postback.class # debug
-  sender_id = postback.sender['id']
-  user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
-  user.greet # we don't need a greeting with postbacks, so greet by default
-  case postback.payload
-  when 'START' then show_replies_menu(MENU_REPLIES)
-  when 'COORDINATES'
-    say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
-    user.set_command(:show_coordinates)
-  when 'FULL_ADDRESS'
-    say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
-    user.set_command(:show_full_address)
-  when 'LOCATION'
-    say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
-    user.set_command(:lookup_location)
-  when 'BUTTON_TEMPLATE_ACTION'
-    say(user, "Voila! You triggered an action and got some response!")
-  when 'QUESTIONNAIRE'
-    user.set_command(:start_questionnaire)
-    replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
-                                           ["No", "STOP_QUESTIONNAIRE"])
-    say(user, "Welcome to the sample questionnaire! Are you ready?", replies)
-  when 'SQUARE_IMAGES'
-    Commands::show_carousel(postback, user, image_ratio: :square)
-    user.reset_command # UNTESTED
-  when 'HORIZONTAL_IMAGES'
-    Commands::show_carousel(postback, user)
-    user.reset_command # UNTESTED
+  Rubotnik::Router.route(postback) do
+
+    bind "START" do
+      display_hints(COMMANDS_HINTS)
+    end
+
+    bind "LOCATION", to: :lookup_location, start_thread: {
+                                             message: "Le me know your location",
+                                             quick_replies: LOCATION_PROMPT
+                                           }
+
+   questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
+                                                  ["No", "STOP_QUESTIONNAIRE"])
+   questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
+
+    bind "QUESTIONNAIRE", to: :start_questionnaire, start_thread: {
+                                                      message: questionnaire_welcome,
+                                                      quick_replies: questionnaire_replies
+                                                    }
+    
+
   end
 end
+
+# p postback.class # debug
+# sender_id = postback.sender['id']
+# user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
+# user.greet # we don't need a greeting with postbacks, so greet by default
+# case postback.payload
+# when 'START' then display_hints(COMMANDS_HINTS)
+# when 'COORDINATES'
+#   say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
+#   user.set_command(:show_coordinates)
+# when 'FULL_ADDRESS'
+#   say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
+#   user.set_command(:show_full_address)
+# when 'LOCATION'
+#   say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
+#   user.set_command(:lookup_location)
+# when 'BUTTON_TEMPLATE_ACTION'
+#   say(user, "Voila! You triggered an action and got some response!")
+# when 'QUESTIONNAIRE'
+#   user.set_command(:start_questionnaire)
+#   replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
+#                                          ["No", "STOP_QUESTIONNAIRE"])
+#   say(user, "Welcome to the sample questionnaire! Are you ready?", replies)
+# when 'SQUARE_IMAGES'
+#   Commands::show_carousel(postback, user, image_ratio: :square)
+#   user.reset_command # UNTESTED
+# when 'HORIZONTAL_IMAGES'
+#   Commands::show_carousel(postback, user)
+#   user.reset_command # UNTESTED
+# end
 
 # Testing API integration. Works!
 post "/incoming" do

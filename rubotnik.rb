@@ -13,8 +13,8 @@ module Rubotnik
     private_class_method def self.dispatch(message, &block)
       if @user.current_command
         command = @user.current_command
-        # NB: commands should exist in the same namespace as Rubotnik in order to call them
-        method(command).call(message, @user)
+        # NB: commands should exist under the same namespace as Rubotnik in order to call them
+        method(command).call(message, @user) # TODO: Don't need to pass user anymore or make it optional!
         puts "Command #{command} is executed for user #{@user.id}" # log
       else
         # We only greet user once for the whole interaction
@@ -36,7 +36,9 @@ module Rubotnik
     end
 
     private_class_method def self.bind(regex_string, to: nil, start_thread: {})
-      if @message.text =~ /#{regex_string}/i
+      proceed = (@message.respond_to?(:text) && @message.text =~ /#{regex_string}/i) ||
+                (@message.respond_to?(:payload) && @message.payload == regex_string)
+      if proceed
         @matched = true
         if block_given?
           yield
@@ -46,7 +48,7 @@ module Rubotnik
           execute(to)
           @user.reset_command
         else
-          say(@user, start_thread[:message], start_thread[:quick_replies])
+          say(start_thread[:message], quick_replies: start_thread[:quick_replies])
           @user.set_command(to)
         end
       end

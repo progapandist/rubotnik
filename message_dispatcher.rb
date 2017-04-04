@@ -120,7 +120,7 @@ class MessageDispatcher
       # Falback action if none of the commands matched the input,
       # NB: Should always come last. Takes a block.
       not_recognized do
-        show_replies_menu(@user, MENU_REPLIES)
+        display_hints(@user, COMMANDS_HINTS)
       end
 
     end
@@ -152,5 +152,5 @@ end
 #   @user.reset_command
 # else
 #   # Show a set of options if command is not understood
-#   show_replies_menu(@user, MENU_REPLIES)
+#   display_hints(@user, COMMANDS_HINTS)
 # end

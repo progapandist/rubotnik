@@ -9,11 +9,11 @@ module Questionnaire
   def start_questionnaire(message, user)
     if message.quick_reply == "START_QUESTIONNAIRE" || message.text =~ /yes/i
       user.set_command(:ask_name)
-      say(user, "Great! What's your name?")
-      say(user, "(type 'Stop' at any point to exit)")
+      say("Great! What's your name?")
+      say("(type 'Stop' at any point to exit)")
       p user.current_command # debug
     else
-      say(user, "No problem! Let's do it later")
+      say("No problem! Let's do it later")
       user.reset_command
     end
   end
@@ -25,7 +25,7 @@ module Questionnaire
     fall_back(message, user) and return
     user.answers[:name] = message.text
     replies = UI::QuickReplies.build(["Male", "MALE"], ["Female", "FEMALE"])
-    say(user, "What's your gender?", replies)
+    say("What's your gender?", quick_replies: replies)
     user.set_command(:ask_gender)
   end
 
@@ -34,7 +34,7 @@ module Questionnaire
     fall_back(message, user) and return
     user.answers[:gender] = message.text
     reply = UI::QuickReplies.build(["I'd rather not say", "NO_AGE"])
-    say(user, "Finally, how old are you?", reply)
+    say("Finally, how old are you?", quick_replies: reply)
     user.set_command(:ask_age)
   end
 
@@ -56,17 +56,17 @@ module Questionnaire
   end
 
   def show_results(message, user)
-    say(user, "OK. Here's what we now about you so far:")
+    say("OK. Here's what we now about you so far:")
     name, gender, age = user.answers.values
     text = "Name: #{name.nil? ? "N/A" : name}, " +
            "gender: #{gender.nil? ? "N/A" : gender}, " +
            "age: #{age.nil? ? "N/A" : age}"
-    say(user, text)
-    say(user, "Thanks for your time!")
+    say(text)
+    say("Thanks for your time!")
   end
 
   def fall_back(message, user) # sanity check on each step
-    say(user, "You tried to fool me, human! Start over!") unless is_text_message?(message)
+    say("You tried to fool me, human! Start over!") unless is_text_message?(message)
     if !is_text_message?(message) || stop_word_used?(message, "Stop")
       stop_questionnaire(message, user)
       return true # to trigger return from the caller on 'and return'

@@ -46,7 +46,7 @@ module Commands
       handle_user_location(message, user)
     else
       if !is_text_message?(message)
-        say(user, "Why are you trying to fool me, human?")
+        say("Why are you trying to fool me, human?")
       else
         handle_coordinates_lookup(message, user)
       end
@@ -61,7 +61,7 @@ module Commands
     if parsed_response
       coord = extract_coordinates(parsed_response)
       text = "Latitude: #{coord['lat']} / Longitude: #{coord['lng']}"
-      say(user, text)
+      say(text)
     else
       message.reply(text: IDIOMS[:not_found])
       show_coordinates(message, user)
@@ -69,7 +69,7 @@ module Commands
   end
 
   # Display a set of quick replies that serves as a menu
-  def show_replies_menu(quick_replies)
+  def display_hints(quick_replies)
     say(IDIOMS[:menu_greeting], quick_replies: quick_replies)
   end
 
@@ -92,7 +92,7 @@ module Commands
     if message_contains_location?(message)
       handle_user_location(message, user)
     else
-      say(user, "Please try your request again and use 'Send location' button")
+      say("Please try your request again and use 'Send location' button")
     end
     user.reset_command
   end
@@ -105,7 +105,7 @@ module Commands
     # make sure there is no space between lat and lng
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
-    say(user, "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
+    say("Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
   end
 
   # Full address lookup
@@ -114,7 +114,7 @@ module Commands
       handle_user_location(message, user)
     else
       if !is_text_message?(message)
-        say(user, "Why are you trying to fool me, human?")
+        say("Why are you trying to fool me, human?")
         wait_for_any_input
       else
         handle_address_lookup(message, user)
@@ -129,7 +129,7 @@ module Commands
     message.type # let user know we're doing something
     if parsed_response
       full_address = extract_full_address(parsed_response)
-      say(user, full_address)
+      say(full_address)
     else
       message.reply(text: IDIOMS[:not_found])
       show_full_address(message, user)

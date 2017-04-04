@@ -70,13 +70,13 @@ module Commands
 
   # Display a set of quick replies that serves as a menu
   def show_replies_menu(user, quick_replies)
-    say(user, IDIOMS[:menu_greeting], quick_replies)
+    say(IDIOMS[:menu_greeting], quick_replies, user)
     user.engage unless user.engaged?
   end
 
-  # TODO: follow (message, user) convention 
+  # TODO: follow (message, user) convention
   def greet_user(user)
-    say(user, "Hello, dear new user!")
+    say("Hello, dear new user!", nil, user)
     user.greet
   end
 

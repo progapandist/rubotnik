@@ -49,19 +49,26 @@ LOCATION_PROMPT = UI::QuickReplies.location
 Bot.on :message do |message|
   Rubotnik::Router.route(message) do
 
+    # Use with 'to:' syntax to bind to a command found inside Commands
+    # or associated modules.
     bind "carousel", to: :show_carousel
 
+    # Use with block if you want to provide response behaviour
+    # directly without looking for an existing command inside Commands.
     bind "fuck" do
-      say(@user, "Fuck yourself!")
+      say("Fuck yourself!")
     end
 
+    # Use with 'to:' and 'start_thread:' to point to the first command in a thread.
+    # Provide message asking input for the next command in the nested hash.
+    # You can also pass an array of quick replies.
     bind "location", to: :lookup_location, start_thread: {
                                              message: "Le me know your location",
                                              quick_replies: LOCATION_PROMPT
                                            }
 
     questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
-                                                 ["No", "STOP_QUESTIONNAIRE"])
+                                                   ["No", "STOP_QUESTIONNAIRE"])
     questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
     bind 'questionnaire', to: :start_questionnaire, start_thread: {
@@ -77,14 +84,6 @@ Bot.on :message do |message|
 
   end
 end
-
-# Bot.on :message do |message|
-#   p message.class # debug
-#   # create or find user on first connect
-#   sender_id = message.sender['id']
-#   user = UserStore.instance.find_or_create_user(sender_id)
-#   MessageDispatcher.dispatch(user, message)
-# end
 
 # TODO: Implement dispatcher class for postbacks
 Bot.on :postback do |postback|

@@ -1,3 +1,13 @@
+# OLD DISPATCH LOGIC 
+
+# Bot.on :message do |message|
+#   p message.class # debug
+#   # create or find user on first connect
+#   sender_id = message.sender['id']
+#   user = UserStore.instance.find_or_create_user(sender_id)
+#   MessageDispatcher.dispatch(user, message)
+# end
+
 # ATTEMPT AT DSL
 class Parser
   @message, @user, @matched = nil

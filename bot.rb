@@ -46,20 +46,45 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 # Rubotnik.dispatch should have different behaviour depending on
 # what was passed as an argument: message or postback
+Bot.on :message do |message|
+  Rubotnik::Router.route(message) do
+
+    bind "carousel", to: :show_carousel
+
+    bind "fuck" do
+      say(@user, "Fuck yourself!")
+    end
+
+    bind "location", to: :lookup_location, start_thread: {
+                                             message: "Le me know your location",
+                                             quick_replies: LOCATION_PROMPT
+                                           }
+
+    questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
+                                                 ["No", "STOP_QUESTIONNAIRE"])
+    questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
+
+    bind 'questionnaire', to: :start_questionnaire, start_thread: {
+                                                      message: questionnaire_welcome,
+                                                      quick_replies: questionnaire_replies
+                                                    }
+
+    # Falback action if none of the commands matched the input,
+    # NB: Should always come last. Takes a block.
+    not_recognized do
+      show_replies_menu(@user, MENU_REPLIES)
+    end
+
+  end
+end
 
 # Bot.on :message do |message|
-#   Rubotnik::Router.route(message) do
-#
-#   end
+#   p message.class # debug
+#   # create or find user on first connect
+#   sender_id = message.sender['id']
+#   user = UserStore.instance.find_or_create_user(sender_id)
+#   MessageDispatcher.dispatch(user, message)
 # end
-
-Bot.on :message do |message|
-  p message.class # debug
-  # create or find user on first connect
-  sender_id = message.sender['id']
-  user = UserStore.instance.find_or_create_user(sender_id)
-  MessageDispatcher.dispatch(user, message)
-end
 
 # TODO: Implement dispatcher class for postbacks
 Bot.on :postback do |postback|

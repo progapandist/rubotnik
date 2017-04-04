@@ -6,7 +6,6 @@ class User
     @id = id
     @commands = []
     @answers = {}
-    @engaged = false
     @greeted = false
   end
 
@@ -20,19 +19,6 @@ class User
 
   def reset_command
     @commands = []
-    self.disengage
-  end
-
-  def engage
-    @engaged = true
-  end
-
-  def disengage
-    @engaged = false
-  end
-
-  def engaged?
-    @engaged
   end
 
   def greet

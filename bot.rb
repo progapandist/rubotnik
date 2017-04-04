@@ -9,7 +9,7 @@ require_relative 'bot_helpers'
 require_relative 'commands'
 require_relative 'rubotnik' # TESTING
 include Facebook::Messenger
-include Commands # TODO: Do I need this line?
+include Commands
 
 # IMPORTANT! Subcribe your bot to your page
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
@@ -79,7 +79,7 @@ Bot.on :message do |message|
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     not_recognized do
-      show_replies_menu(@user, MENU_REPLIES)
+      show_replies_menu(MENU_REPLIES)
     end
 
   end
@@ -92,7 +92,7 @@ Bot.on :postback do |postback|
   user = UserStore.instance.find(sender_id) || UserStore.instance.add(User.new(sender_id))
   user.greet # we don't need a greeting with postbacks, so greet by default
   case postback.payload
-  when 'START' then show_replies_menu(user, MENU_REPLIES)
+  when 'START' then show_replies_menu(MENU_REPLIES)
   when 'COORDINATES'
     say(user, IDIOMS[:ask_location], LOCATION_PROMPT)
     user.set_command(:show_coordinates)

@@ -37,9 +37,9 @@ class Parser
   end
 
   # TODO: TEST WITHOUT AN ARGUMENT
-  def self.not_recognized
+  def self.unrecognized
     unless @matched
-      puts "not_recognized triggered" # debug
+      puts "unrecognized triggered" # debug
       yield
       @user.reset_command
     end
@@ -50,7 +50,7 @@ class Parser
     method(command).call(@message, @user)
   end
 
-  private_class_method :bind, :execute, :not_recognized
+  private_class_method :bind, :execute, :unrecognized
 end
 
 class MessageDispatcher
@@ -119,7 +119,7 @@ class MessageDispatcher
 
       # Falback action if none of the commands matched the input,
       # NB: Should always come last. Takes a block.
-      not_recognized do
+      unrecognized do
         display_hints(@user, COMMANDS_HINTS)
       end
 

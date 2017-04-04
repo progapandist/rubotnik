@@ -77,7 +77,7 @@ Bot.on :message do |message|
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
-    not_recognized do
+    unrecognized do
       display_hints(COMMANDS_HINTS)
     end
 
@@ -105,7 +105,7 @@ Bot.on :postback do |postback|
                                                       message: questionnaire_welcome,
                                                       quick_replies: questionnaire_replies
                                                     }
-    
+
 
   end
 end

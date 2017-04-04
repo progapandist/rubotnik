@@ -37,7 +37,7 @@ module Rubotnik
 
     private_class_method def self.bind(regex_string, to: nil, start_thread: {})
       proceed = (@message.respond_to?(:text) && @message.text =~ /#{regex_string}/i) ||
-                (@message.respond_to?(:payload) && @message.payload == regex_string)
+                (@message.respond_to?(:payload) && @message.payload == regex_string.upcase) # TODO: .upcase? 
       if proceed
         @matched = true
         if block_given?
@@ -55,9 +55,9 @@ module Rubotnik
     end
 
     # TODO: TEST WITHOUT AN ARGUMENT
-    private_class_method def self.not_recognized
+    private_class_method def self.unrecognized
       unless @matched
-        puts "not_recognized triggered" # debug
+        puts "unrecognized triggered" # debug
         yield
         @user.reset_command
       end

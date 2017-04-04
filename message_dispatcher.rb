@@ -11,7 +11,7 @@ class Parser
 
   def self.bind(regex_string, to: nil, start_thread: {})
     if @message.text =~ /#{regex_string}/i
-      @matched ||= true
+      @matched = true
       if block_given?
         yield
         return
@@ -24,12 +24,10 @@ class Parser
         @user.set_command(to)
       end
     end
-    puts @matched # DEBUG
   end
 
   # TODO: TEST WITHOUT AN ARGUMENT
   def self.not_recognized
-    puts @matched # DEBUG
     unless @matched
       puts "not_recognized triggered" # debug
       yield
@@ -49,9 +47,6 @@ class MessageDispatcher
   def self.dispatch(user, message)
     @user = user
     @message = message
-    # We only greet user once for the whole interaction
-    # TODO: This shouldnt' be hardcoded, greeting should be implemented in the DSL
-    greet_user(@user) unless @user.greeted?
 
     # The main switch happens here:
     # user either has a threaded command set from previous interaction
@@ -61,6 +56,9 @@ class MessageDispatcher
       method(command).call(@message, @user)
       puts "Command #{command} is executed for user #{@user.id}" # log
     else
+      # We only greet user once for the whole interaction
+      # TODO: This shouldnt' be hardcoded, greeting should be implemented in the DSL
+      greet_user(@user) unless @user.greeted?
       puts "User #{@user.id} does not have a command assigned yet" # log
       parse_commands
     end
@@ -97,7 +95,7 @@ class MessageDispatcher
       bind "location", to: :lookup_location,
                        start_thread: {
                          message: "Le me know your location",
-                         quick_replies: TYPE_LOCATION
+                         quick_replies: LOCATION_PROMPT
                        }
 
       questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
@@ -127,15 +125,15 @@ end
 # when /coord/i, /gps/i
 #   @user.set_command(:show_coordinates)
 #   p "Command :show_coordinates is set for user #{@user.id}"
-#   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
+#   say(@user, IDIOMS[:ask_location], LOCATION_PROMPT)
 # when /full ad/i
 #   @user.set_command(:show_full_address)
 #   p "Command :show_full_address is set for user #{@user.id}"
-#   say(@user, IDIOMS[:ask_location], TYPE_LOCATION)
+#   say(@user, IDIOMS[:ask_location], LOCATION_PROMPT)
 # # when /location/i
 # #   @user.set_command(:lookup_location)
 # #   p "Command :lookup_location is set for user #{@user.id}"
-# #   say(@user, 'Let me know your location:', TYPE_LOCATION)
+# #   say(@user, 'Let me know your location:', LOCATION_PROMPT)
 # # when /carousel/i
 # #   show_carousel(@message, @user)
 # #   @user.reset_command

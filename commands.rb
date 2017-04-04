@@ -90,24 +90,23 @@ module Commands
   end
 
   # Lookup based on location data from user's device
-  def lookup_location(message, user)
-    if message_contains_location?(message)
-      handle_user_location(message, user)
+  def lookup_location
+    if message_contains_location?(@message)
+      handle_user_location
     else
       say("Please try your request again and use 'Send location' button")
     end
-    user.reset_command
+    last_command
   end
 
-  def handle_user_location(message, user)
-    coords = message.attachments.first['payload']['coordinates']
+  def handle_user_location
+    coords = @message.attachments.first['payload']['coordinates']
     lat = coords['lat']
     long = coords['long']
-    message.type
-    # make sure there is no space between lat and lng
+    @message.type
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
-    say("Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}")
+    say "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}"
   end
 
   # Full address lookup

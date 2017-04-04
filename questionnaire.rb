@@ -1,32 +1,26 @@
 # Showcases a chained sequence of commands that gather the data
 # and store it in the @answers hash inside User class.
 
-# CONVENTION (TODO: REWRITE COMMENT!):
-# Every chained command should take (message, user) as parameters
-# and either end with user.set_command(:next_method_name) or user.reset_command
-
 module Questionnaire
   def start_questionnaire
     if @message.quick_reply == "START_QUESTIONNAIRE" || @message.text =~ /yes/i
-      @user.set_command(:ask_name)
-      say("Great! What's your name?")
-      say("(type 'Stop' at any point to exit)")
-      p @user.current_command # debug
+      say "Great! What's your name?"
+      say "(type 'Stop' at any point to exit)"
+      next_command :ask_name
     else
-      say("No problem! Let's do it later")
-      @user.reset_command
+      say "No problem! Let's do it later"
+      last_command
     end
   end
 
   # Name
   def ask_name
-    p @user.current_command # debug
     # Fallback functionality if stop word used or user input is not text
     fall_back and return
     @user.answers[:name] = @message.text
     replies = UI::QuickReplies.build(["Male", "MALE"], ["Female", "FEMALE"])
-    say("What's your gender?", quick_replies: replies)
-    @user.set_command(:ask_gender)
+    say "What's your gender?", quick_replies: replies
+    next_command :ask_gender
   end
 
   def ask_gender
@@ -34,12 +28,11 @@ module Questionnaire
     fall_back and return
     @user.answers[:gender] = @message.text
     reply = UI::QuickReplies.build(["I'd rather not say", "NO_AGE"])
-    say("Finally, how old are you?", quick_replies: reply)
-    @user.set_command(:ask_age)
+    say "Finally, how old are you?", quick_replies: reply
+    next_command :ask_age
   end
 
   def ask_age
-    p @user.current_command
     fall_back and return
     if @message.quick_reply == "NO_AGE"
       @user.answers[:age] = "hidden"
@@ -50,23 +43,23 @@ module Questionnaire
   end
 
   def stop_questionnaire
-    @user.reset_command
+    last_command
     show_results
     @user.answers = {}
   end
 
   def show_results
-    say("OK. Here's what we now about you so far:")
+    say "OK. Here's what we now about you so far:"
     name, gender, age = @user.answers.values
     text = "Name: #{name.nil? ? "N/A" : name}, " +
            "gender: #{gender.nil? ? "N/A" : gender}, " +
            "age: #{age.nil? ? "N/A" : age}"
-    say(text)
-    say("Thanks for your time!")
+    say text
+    say "Thanks for your time!"
   end
 
   def fall_back # sanity check on each step
-    say("You tried to fool me, human! Start over!") unless is_text_message?(@message)
+    say "You tried to fool me, human! Start over!" unless is_text_message?(@message)
     if !is_text_message?(@message) || stop_word_used?("Stop")
       stop_questionnaire
       return true # to trigger return from the caller on 'and return'

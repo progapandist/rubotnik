@@ -12,4 +12,13 @@ module BotHelpers
     end
     Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   end
+
+  def next_command(command)
+    @user.set_command(command)
+  end
+
+  def last_command
+    @user.reset_command
+  end
+
 end

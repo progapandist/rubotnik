@@ -1,7 +1,7 @@
 module ShowUIExamples
-  # TODO: Follow (user, message) convention 
-  def show_button_template(id)
+  def show_button_template
     UI::FBButtonTemplate.new(SampleElements::BUTTON_TEMPLATE_TEXT,
-                             SampleElements::BUTTON_TEMPLATE_BUTTONS).send(id)
+                             SampleElements::BUTTON_TEMPLATE_BUTTONS).send(@user.id)
+                             # TODO: send to (@user) directly?
   end
 end

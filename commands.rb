@@ -31,6 +31,8 @@ module Commands
   API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
   REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
 
+  # MAJOR TODO: Refactor all commands for implied user
+
   # TODO: Move to ShowUIExamples module
   def show_carousel(message, user, opts = {})
     if opts.key?(:image_ratio) && opts[:image_ratio] == :square

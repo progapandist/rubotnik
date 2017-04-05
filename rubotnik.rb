@@ -66,7 +66,6 @@ class Rubotnik
     end
   end
 
-  # TODO: TEST WITHOUT AN ARGUMENT
   private_class_method def self.unrecognized
     unless @matched
       puts "unrecognized triggered" # debug
@@ -75,7 +74,6 @@ class Rubotnik
     end
   end
 
-  # TODO: REFACTOR CALL FOR OPTIOAL USER
   private_class_method def self.execute(command)
     method(command).call
   end

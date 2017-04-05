@@ -68,7 +68,7 @@ module Commands
     end
   end
 
-  # TODO: Refactor as helper in BotHelpers 
+  # TODO: Refactor as helper in BotHelpers
   def message_contains_location?(message)
     if attachments = message.attachments
       attachments.first['type'] == 'location'

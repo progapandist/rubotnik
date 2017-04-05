@@ -1,3 +1,8 @@
+require_relative 'user'
+require_relative 'user_store'
+require_relative 'commands'
+include Commands
+
 class Rubotnik
   def self.route(message, &block)
     @message = message
@@ -15,9 +20,6 @@ class Rubotnik
       execute(command)
       puts "Command #{command} is executed for user #{@user.id}" # log
     else
-      # We only greet user once for the whole interaction
-      # TODO: This shouldnt' be hardcoded, greeting should be implemented in the DSL
-      greet_user(@user) unless @user.greeted?
       puts "User #{@user.id} does not have a command assigned yet" # log
       bind_commands(&block)
     end
@@ -28,9 +30,26 @@ class Rubotnik
     class_eval(&block)
   end
 
-  private_class_method def self.bind(regex_string, to: nil, start_thread: {})
-    proceed = (@message.respond_to?(:text) && @message.text =~ /#{regex_string}/i) ||
-              (@message.respond_to?(:payload) && @message.payload == regex_string.upcase) # TODO: .upcase?
+  # We only greet user once for the whole interaction
+  private_class_method def self.greet(text = "Hello")
+    unless @user.greeted?
+      if block_given?
+        yield
+      else
+        say text
+      end
+      @user.greet
+    end
+  end
+
+  private_class_method def self.bind(regex_string, to: nil, start_thread: {}, check_payload: '')
+    proceed = (@message.respond_to?(:payload) && @message.payload == regex_string.upcase) ||
+              (@message.respond_to?(:text) && @message.text =~ /#{regex_string}/i)
+
+    if check_payload.class == String && !check_payload.empty?
+      proceed = proceed && (@message.quick_reply == check_payload.upcase)
+    end
+    
     if proceed
       @matched = true
       if block_given?

@@ -8,16 +8,6 @@ class PersistentMenu
       call_to_actions: [
         {
           type: 'postback',
-          title: 'Coordinates lookup',
-          payload: 'COORDINATES'
-        },
-        {
-          type: 'postback',
-          title: 'Postal address lookup',
-          payload: 'FULL_ADDRESS'
-        },
-        {
-          type: 'postback',
           title: 'Location lookup',
           payload: 'LOCATION'
         },

@@ -25,14 +25,14 @@ module UI
     end
 
     # Sends the valid JSON to Messenger API
-    def send(id)
-      template = build(id)
+    def send(user)
+      template = build(user)
       Bot.deliver(template, access_token: ENV['ACCESS_TOKEN'])
     end
 
     # Use this method to return a valid hash and save it for later
-    def build(id)
-      @template[:recipient][:id] = id
+    def build(user)
+      @template[:recipient][:id] = user.id
       @template
     end
 
@@ -50,7 +50,7 @@ module UI
   ################## GENERIC TEMPLATE (aka CAROUSEL) #######################
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template
 
-  # NOTE: default_action not supported in alpha
+  # NOTE: default_action not supported yet 
   class FBCarousel
     def initialize(elements)
       @template = {
@@ -70,14 +70,14 @@ module UI
     end
 
     # Sends the valid JSON to Messenger API
-    def send(id)
-      template = build(id)
+    def send(user)
+      template = build(user)
       Bot.deliver(template, access_token: ENV['ACCESS_TOKEN'])
     end
 
     # Use this method to return a valid hash and save it for later
-    def build(id)
-      @template[:recipient][:id] = id
+    def build(user)
+      @template[:recipient][:id] = user.id
       @template
     end
 

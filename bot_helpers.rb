@@ -17,8 +17,12 @@ module BotHelpers
     @user.set_command(command)
   end
 
-  def last_command
+  def stop_commands
     @user.reset_command
+  end
+
+  def message_is_text?
+    @message.respond_to?(:text) && !@message.text.nil?
   end
 
 end

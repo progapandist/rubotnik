@@ -1,15 +1,9 @@
 require 'dotenv/load' # comment this line out before pushing to Heroku!
 require 'facebook/messenger'
 require_relative 'persistent_menu'
-require_relative 'greetings'
-require_relative 'user'
-require_relative 'user_store'
-require_relative 'message_dispatcher'
-require_relative 'bot_helpers'
-require_relative 'commands'
+require_relative 'greetings' # TODO: Change name
 require_relative 'rubotnik' # TESTING
 include Facebook::Messenger
-include Commands
 
 # IMPORTANT! Subcribe your bot to your page
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
@@ -20,35 +14,39 @@ Greetings.enable
 
 replies_for_menu =  [
                       {
-                        title: 'GPS for coordinates',
-                        payload: 'COORDINATES'
-                      },
-                      {
-                        title: 'Full address',
-                        payload: 'FULL_ADDRESS'
-                      },
-                      {
-                        title: 'My location',
+                        title: 'Where I am at?',
                         payload: 'LOCATION'
+                      },
+                      {
+                        title: 'Take questionnaire',
+                        payload: 'QUESTIONNAIRE'
                       }
                     ]
 
 # NOTE: QuickReplies.build should be called with a splat operator if a set of quick replies is a pre-formed array
 COMMANDS_HINTS = UI::QuickReplies.build(*replies_for_menu)
 
+# Builds a quick reply that prompts location from user
+LOCATION_PROMPT = UI::QuickReplies.location
+
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
   ask_location: 'Type in any destination or send us your location:',
-  unknown_command: 'Sorry, I did not recognize your command',
-  menu_greeting: 'What do you want to look up?'
+  unknown_command: "Sorry, I did not recognize your command",
+  menu_greeting: 'Here are some suggestions for you:'
 }
 
-# Builds a quick reply that prompts location from user
-LOCATION_PROMPT = UI::QuickReplies.location
+questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
+                                               ["No", "STOP_QUESTIONNAIRE"])
+questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
 # Routing for messages
 Bot.on :message do |message|
   Rubotnik.route(message) do
+
+    # Will only be executed once until user deletes the chat and reconnects.
+    # Use block to provide more complex functionality.
+    greet "Hello and welcome!"
 
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or associated modules.
@@ -67,14 +65,14 @@ Bot.on :message do |message|
     # inside the thread).
     bind "button", to: :show_button_template
 
-    bind "location", to: :lookup_location, start_thread: {
+    # TODO: check_payload: true to check both text AND payload for a quick reply
+    # useful when the binded command is a popular word
+    # If you use that option, your command will ONLY be triggered when
+    # the user hits the quick reply button. 
+    bind "where", to: :lookup_location, check_payload: "LOCATION", start_thread: {
                                              message: "Le me know your location",
                                              quick_replies: LOCATION_PROMPT
                                            }
-
-    questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
-                                                   ["No", "STOP_QUESTIONNAIRE"])
-    questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
     bind 'questionnaire', to: :start_questionnaire, start_thread: {
                                                       message: questionnaire_welcome,
@@ -84,7 +82,7 @@ Bot.on :message do |message|
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     unrecognized do
-      display_hints(COMMANDS_HINTS)
+      say IDIOMS[:menu_greeting], quick_replies: COMMANDS_HINTS
     end
 
   end
@@ -95,23 +93,28 @@ Bot.on :postback do |postback|
   Rubotnik.route(postback) do
 
     bind "START" do
-      display_hints(COMMANDS_HINTS)
+      say IDIOMS[:menu_greeting], quick_replies: COMMANDS_HINTS
     end
+
+    # Use block syntax when a command takes an argument rather
+    # than 'message' or 'user' (which are accessible from everyhwere
+    # as instance variables, no need to pass them around).
+    bind "SQUARE_IMAGES" do
+      show_carousel(image_ratio: :square)
+    end
+
+    # No custom parameter passed, can use simplified syntax
+    bind "HORIZONTAL_IMAGES", to: :show_carousel
 
     bind "LOCATION", to: :lookup_location, start_thread: {
                                              message: "Le me know your location",
                                              quick_replies: LOCATION_PROMPT
                                            }
-   # TODO: Move out of the block for DRY
-   questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
-                                                  ["No", "STOP_QUESTIONNAIRE"])
-   questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
    bind "QUESTIONNAIRE", to: :start_questionnaire, start_thread: {
                                                       message: questionnaire_welcome,
                                                       quick_replies: questionnaire_replies
                                                     }
-
 
   end
 end

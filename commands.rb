@@ -33,14 +33,12 @@ module Commands
 
   # MAJOR TODO: Refactor all commands for implied user
 
-  # TODO: Move to ShowUIExamples module
-  def show_carousel(message, user, opts = {})
-    if opts.key?(:image_ratio) && opts[:image_ratio] == :square
-      UI::FBCarousel.new(SampleElements::CAROUSEL).square_images.send(user.id)
-    else
-      UI::FBCarousel.new(SampleElements::CAROUSEL).send(user.id)
-    end
+  # TODO: follow (message, user) convention
+  def greet_user(user)
+    say("Hello, dear new user!")
+    user.greet
   end
+
 
   # Coordinates lookup
   def show_coordinates(message, user)
@@ -70,17 +68,7 @@ module Commands
     end
   end
 
-  # Display a set of quick replies that serves as a menu
-  def display_hints(quick_replies)
-    say(IDIOMS[:menu_greeting], quick_replies: quick_replies)
-  end
-
-  # TODO: follow (message, user) convention
-  def greet_user(user)
-    say("Hello, dear new user!")
-    user.greet
-  end
-
+  # TODO: Refactor as helper in BotHelpers 
   def message_contains_location?(message)
     if attachments = message.attachments
       attachments.first['type'] == 'location'
@@ -96,7 +84,7 @@ module Commands
     else
       say("Please try your request again and use 'Send location' button")
     end
-    last_command
+    stop_commands
   end
 
   def handle_user_location
@@ -146,10 +134,6 @@ module Commands
 
   def encode_ascii(s)
     Addressable::URI.parse(s).normalize.to_s
-  end
-
-  def is_text_message?(message)
-    !message.text.nil?
   end
 
 

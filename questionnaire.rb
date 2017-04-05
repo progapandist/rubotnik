@@ -9,7 +9,7 @@ module Questionnaire
       next_command :ask_name
     else
       say "No problem! Let's do it later"
-      last_command
+      stop_commands
     end
   end
 
@@ -43,7 +43,7 @@ module Questionnaire
   end
 
   def stop_questionnaire
-    last_command
+    stop_commands
     show_results
     @user.answers = {}
   end
@@ -58,10 +58,12 @@ module Questionnaire
     say "Thanks for your time!"
   end
 
+  # TODO: BUG!
   def fall_back # sanity check on each step
-    say "You tried to fool me, human! Start over!" unless is_text_message?(@message)
-    if !is_text_message?(@message) || stop_word_used?("Stop")
+    say "You tried to fool me, human! Start over!" unless message_is_text?
+    if !message_is_text? || stop_word_used?("Stop")
       stop_questionnaire
+      p "fallback triggered!"
       return true # to trigger return from the caller on 'and return'
     end
     return false

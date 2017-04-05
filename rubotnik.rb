@@ -49,7 +49,7 @@ class Rubotnik
     if check_payload.class == String && !check_payload.empty?
       proceed = proceed && (@message.quick_reply == check_payload.upcase)
     end
-    
+
     if proceed
       @matched = true
       if block_given?

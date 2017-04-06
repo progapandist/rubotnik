@@ -61,6 +61,7 @@ class Rubotnik
 
     if proceed
       @matched = true
+      puts "Matched #{regex_string} to #{to}"
       if block_given?
         yield
         return

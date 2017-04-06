@@ -5,8 +5,10 @@ class User
   def initialize(id)
     @id = id
     @commands = []
-    @answers = {}
     @greeted = false
+    # This hash is used for the sake of example.
+    # Use your own logic to collect data. 
+    @answers = {}
   end
 
   def current_command

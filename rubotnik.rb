@@ -22,6 +22,7 @@ module Rubotnik
     private_class_method def self.bind(regex_string, to: nil, start_thread: {})
       if @postback.payload == regex_string.upcase
         @user.reset_command # Stop any current interaction
+        @user.answers = {} # Reset whatever you stored in the user 
         @matched = true
         puts "Matched #{regex_string} to #{to}"
         if block_given?

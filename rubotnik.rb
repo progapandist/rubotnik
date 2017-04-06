@@ -22,10 +22,8 @@ class Rubotnik
       if @incoming.class == Facebook::Messenger::Incoming::Message
         execute(command)
         puts "Command #{command} is executed for user #{@user.id}" # log
-        @message = nil
         @user.reset_command
       else # we're dealing with a postback sent mid-thread
-        @message = nil
         @user.reset_command
         puts "Command is reset for user #{@user.id}" # log
         bind_commands(&block)

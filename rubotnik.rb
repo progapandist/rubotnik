@@ -17,8 +17,11 @@ class Rubotnik
     if @user.current_command
       command = @user.current_command
       # NB: commands should exist under the same namespace as Rubotnik in order to call them
-      execute(command)
-      puts "Command #{command} is executed for user #{@user.id}" # log
+      # TODO: TESTING 
+      if @message
+        execute(command)
+        puts "Command #{command} is executed for user #{@user.id}" # log
+      end
     else
       puts "User #{@user.id} does not have a command assigned yet" # log
       bind_commands(&block)

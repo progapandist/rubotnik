@@ -4,6 +4,7 @@ require_relative 'commands'
 include Commands
 
 class Rubotnik
+
   def self.route(message, &block)
     @message = message
     p @message.class
@@ -16,8 +17,16 @@ class Rubotnik
     if @user.current_command
       command = @user.current_command
       # NB: commands should exist under the same namespace as Rubotnik in order to call them
-      execute(command)
-      puts "Command #{command} is executed for user #{@user.id}" # log
+      # TODO: TESTING
+      if @incoming.class == Facebook::Messenger::Incoming::Message
+        execute(command)
+        puts "Command #{command} is executed for user #{@user.id}" # log
+        @user.reset_command
+      else # we're dealing with a postback sent mid-thread
+        @user.reset_command
+        puts "Command is reset for user #{@user.id}" # log
+        bind_commands(&block)
+      end
     else
       puts "User #{@user.id} does not have a command assigned yet" # log
       bind_commands(&block)
@@ -51,16 +60,20 @@ class Rubotnik
 
     if proceed
       @matched = true
+      puts "Matched #{regex_string} to #{to}"
       if block_given?
         yield
         return
       end
       if start_thread.empty?
         execute(to)
+        puts "Command #{to} is executed for user #{@user.id}"
         @user.reset_command
+        puts "Command is reset for user #{@user.id}"
       else
         say(start_thread[:message], quick_replies: start_thread[:quick_replies])
         @user.set_command(to)
+        puts "Command #{to} is set for user #{@user.id}"
       end
     end
   end

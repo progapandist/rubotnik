@@ -24,6 +24,7 @@ class Rubotnik
         @message = nil
         @user.reset_command
       else # we're dealing with a postback sent mid-thread
+        @message = nil 
         @user.reset_command
         puts "Command is reset for user #{@user.id}" # log
         bind_commands(&block)

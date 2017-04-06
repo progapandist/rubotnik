@@ -1,4 +1,4 @@
-# require 'dotenv/load' # comment this line out before pushing to Heroku!
+require 'dotenv/load' # comment this line out before pushing to Heroku!
 require 'facebook/messenger'
 require_relative 'persistent_menu'
 require_relative 'greetings' # TODO: Change name
@@ -45,12 +45,12 @@ questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 # Routing for messages
 Bot.on :message do |message|
   # Use DSL inside the block passed to Rubotnik.route(message)
-  Rubotnik.route(message) do
+  Rubotnik::Messages.route(message) do
 
     # Will only be executed once until user deletes the chat and reconnects.
     # Use block to do more than just send a text message.
     greet "Hello and welcome!"
-    
+
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
     bind "carousel", to: :show_carousel
@@ -95,9 +95,11 @@ end
 
 # Routing for postbacks
 Bot.on :postback do |postback|
-  Rubotnik.route(postback) do
+  Rubotnik::Postbacks.route(postback) do
 
     bind "START" do
+      say "Hello and welcome!"
+      @user.greet
       say IDIOMS[:menu_greeting], quick_replies: COMMANDS_HINTS
     end
 

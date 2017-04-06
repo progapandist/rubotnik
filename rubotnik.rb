@@ -5,24 +5,23 @@ include Commands
 
 module Rubotnik
 
-  class Postbacks
-    def self.route(postback, &block)
-      @user = UserStore.instance.find_or_create_user(postback.sender['id'])
+  class PostbackDispatch
+    def initialize(postback)
       @postback = postback
-      p @postback.class
-      p @postback
-      bind_commands(&block)
+      @user = UserStore.instance.find_or_create_user(@postback.sender['id'])
     end
 
-    private_class_method def self.bind_commands(&block)
+    def route(&block)
       @matched = false
       class_eval(&block)
     end
 
-    private_class_method def self.bind(regex_string, to: nil, start_thread: {})
+    private
+
+    def bind(regex_string, to: nil, start_thread: {})
       if @postback.payload == regex_string.upcase
         @user.reset_command # Stop any current interaction
-        @user.answers = {} # Reset whatever you stored in the user 
+        @user.answers = {} # Reset whatever you stored in the user
         @matched = true
         puts "Matched #{regex_string} to #{to}"
         if block_given?
@@ -41,23 +40,20 @@ module Rubotnik
         end
       end
     end
-
-    private_class_method def self.execute(command)
+    def execute(command)
       method(command).call
     end
-
   end
 
-  class Messages
-    def self.route(message, &block)
+  class MessageDispatch
+    def initialize(message)
       @message = message
       p @message.class
       p @message
-      @user = UserStore.instance.find_or_create_user(message.sender['id'])
-      dispatch(&block)
+      @user = UserStore.instance.find_or_create_user(@message.sender['id'])
     end
 
-    private_class_method def self.dispatch(&block)
+    def route(&block)
       if @user.current_command
         command = @user.current_command
         # NB: commands should exist under the same namespace as Rubotnik in order to call them
@@ -68,13 +64,15 @@ module Rubotnik
       end
     end
 
-    private_class_method def self.bind_commands(&block)
+    private
+
+    def bind_commands(&block)
       @matched = false
-      class_eval(&block)
+      instance_eval(&block)
     end
 
     # We only greet user once for the whole interaction
-    private_class_method def self.greet(text = "Hello")
+    def greet(text = "Hello")
       unless @user.greeted?
         if block_given?
           yield
@@ -85,9 +83,7 @@ module Rubotnik
       end
     end
 
-    private_class_method def self.bind(regex_string, to: nil,
-                                       start_thread: {}, check_payload: '')
-
+    def bind(regex_string, to: nil, start_thread: {}, check_payload: '')
       proceed = @message.text =~ /#{regex_string}/i
       if check_payload.class == String && !check_payload.empty?
         proceed = proceed && @message.quick_reply == check_payload.upcase
@@ -109,7 +105,7 @@ module Rubotnik
       end
     end
 
-    private_class_method def self.unrecognized
+    def unrecognized
       unless @matched
         puts "None of the commands were recognized" # log
         yield
@@ -117,7 +113,7 @@ module Rubotnik
       end
     end
 
-    private_class_method def self.execute(command)
+    def execute(command)
       method(command).call
     end
   end

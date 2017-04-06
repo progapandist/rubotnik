@@ -45,7 +45,7 @@ questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 # Routing for messages
 Bot.on :message do |message|
   # Use DSL inside the block passed to Rubotnik.route(message)
-  Rubotnik::Messages.route(message) do
+  Rubotnik::MessageDispatch.new(message).route do
 
     # Will only be executed once until user deletes the chat and reconnects.
     # Use block to do more than just send a text message.
@@ -95,7 +95,7 @@ end
 
 # Routing for postbacks
 Bot.on :postback do |postback|
-  Rubotnik::Postbacks.route(postback) do
+  Rubotnik::PostbackDispatch.new(postback).route do
 
     bind "START" do
       say "Hello and welcome!"

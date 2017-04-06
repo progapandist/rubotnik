@@ -23,9 +23,7 @@ class Rubotnik
         execute(command)
         puts "Command #{command} is executed for user #{@user.id}" # log
         @user.reset_command
-        @postback = nil 
       else # we're dealing with a postback sent mid-thread
-        @message = nil
         @user.reset_command
         puts "Command is reset for user #{@user.id}" # log
         bind_commands(&block)

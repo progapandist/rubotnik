@@ -1,10 +1,7 @@
 require_relative 'user'
 require_relative 'user_store'
-require_relative 'commands'
-include Commands
 
 module Rubotnik
-
   class PostbackDispatch
     def initialize(postback)
       @postback = postback
@@ -13,7 +10,7 @@ module Rubotnik
 
     def route(&block)
       @matched = false
-      class_eval(&block)
+      instance_eval(&block)
     end
 
     private

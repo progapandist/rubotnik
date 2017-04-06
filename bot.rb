@@ -3,14 +3,17 @@ require 'facebook/messenger'
 require_relative 'persistent_menu'
 require_relative 'greetings' # TODO: Change name
 require_relative 'rubotnik' # TESTING
+require_relative 'commands'
 include Facebook::Messenger
+include Commands
+
 
 # IMPORTANT! Subcribe your bot to your page
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
 # THESE TWO SHOULD BE INSIDE Rubotnik module too.
 PersistentMenu.enable
-Greetings.enable
+Rubotnik::Greetings.enable
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
@@ -57,6 +60,10 @@ Bot.on :message do |message|
 
     bind "button", to: :show_button_template
 
+    bind "facebook data" do
+      get_user_info(:first_name, :last_name)
+    end
+
     # Use with block if you want to provide response behaviour
     # directly without looking for an existing command inside Commands.
     bind "knock" do
@@ -99,7 +106,7 @@ Bot.on :postback do |postback|
 
     bind "START" do
       say "Hello and welcome!"
-      @user.greet
+      @user.greet # greet user when she starts from welcome screen
       say IDIOMS[:menu_greeting], quick_replies: COMMANDS_HINTS
     end
 

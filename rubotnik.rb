@@ -17,16 +17,9 @@ class Rubotnik
     if @user.current_command
       command = @user.current_command
       # NB: commands should exist under the same namespace as Rubotnik in order to call them
-      # TODO: TESTING
-      if @incoming.class == Facebook::Messenger::Incoming::Message
-        execute(command)
-        puts "Command #{command} is executed for user #{@user.id}" # log
-        @user.reset_command
-      else # we're dealing with a postback sent mid-thread
-        @user.reset_command
-        puts "Command is reset for user #{@user.id}" # log
-        bind_commands(&block)
-      end
+      execute(command)
+      puts "Command #{command} is executed for user #{@user.id}" # log
+      @user.reset_command
     else
       puts "User #{@user.id} does not have a command assigned yet" # log
       bind_commands(&block)

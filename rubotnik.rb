@@ -4,13 +4,12 @@ require_relative 'commands'
 include Commands
 
 class Rubotnik
-  def self.route(incoming, &block)
-    p incoming
-    p incoming.class
+  def self.route(message, &block)
+    @message = message
+    p @message.class
+    p @message
     @user = UserStore.instance.find_or_create_user(incoming.sender['id'])
     dispatch(&block)
-    @message = incoming if incoming.class == Facebook::Messenger::Incoming::Message
-    @postback = incoming if incoming.class == Facebook::Messenger::Incoming::Postback
   end
 
   private_class_method def self.dispatch(&block)
@@ -43,8 +42,8 @@ class Rubotnik
   end
 
   private_class_method def self.bind(regex_string, to: nil, start_thread: {}, check_payload: '')
-    proceed = (!@postback.nil? && @postback.payload == regex_string.upcase) ||
-              (!@message.nil? && @message.text =~ /#{regex_string}/i)
+    proceed = (@message.respond_to?(:payload) && @message.payload == regex_string.upcase) ||
+              (@message.respond_to?(:text) && @message.text =~ /#{regex_string}/i)
 
     if check_payload.class == String && !check_payload.empty?
       proceed = proceed && (@message.quick_reply == check_payload.upcase)

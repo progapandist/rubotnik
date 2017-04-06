@@ -23,6 +23,8 @@ class Rubotnik
         puts "Command #{command} is executed for user #{@user.id}" # log
       else
         @user.reset_command
+        puts "Command is reset for user #{@user.id}" # log
+        bind_commands(&block)
       end
     else
       puts "User #{@user.id} does not have a command assigned yet" # log

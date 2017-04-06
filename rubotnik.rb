@@ -6,11 +6,17 @@ include Commands
 class Rubotnik
   def self.route(incoming, &block)
     @incoming = incoming
-    p @incoming
     p @incoming.class
+    p @incoming
     @user = UserStore.instance.find_or_create_user(incoming.sender['id'])
-    @message = @incoming if @incoming.class == Facebook::Messenger::Incoming::Message
-    @postback = @incoming if @incoming.class == Facebook::Messenger::Incoming::Postback
+    if @incoming.class == Facebook::Messenger::Incoming::Message
+      @message = @incoming
+      @postback = nil
+    end
+    if @incoming.class == Facebook::Messenger::Incoming::Postback
+      @postback = @incoming
+      @message = nil 
+    end
     dispatch(&block)
   end
 

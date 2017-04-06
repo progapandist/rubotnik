@@ -58,10 +58,13 @@ class Rubotnik
       end
       if start_thread.empty?
         execute(to)
+        puts "Command #{to} is executed for user #{@user.id}"
         @user.reset_command
+        puts "Command is reset for user #{@user.id}"
       else
         say(start_thread[:message], quick_replies: start_thread[:quick_replies])
         @user.set_command(to)
+        puts "Command #{to} is set for user #{@user.id}"
       end
     end
   end

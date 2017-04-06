@@ -21,7 +21,7 @@ module BotHelpers
     @user.reset_command
   end
 
-  def message_is_text?
+  def text_message?
     @message.respond_to?(:text) && !@message.text.nil?
   end
 

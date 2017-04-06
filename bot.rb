@@ -50,7 +50,7 @@ Bot.on :message do |message|
     # Will only be executed once until user deletes the chat and reconnects.
     # Use block to do more than just send a text message.
     greet "Hello and welcome!"
-
+    
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
     bind "carousel", to: :show_carousel
@@ -59,8 +59,8 @@ Bot.on :message do |message|
 
     # Use with block if you want to provide response behaviour
     # directly without looking for an existing command inside Commands.
-    bind "fuck" do
-      say("Fuck yourself!")
+    bind "knock" do
+      say "Who's there?"
     end
 
     # Use with 'to:' and 'start_thread:' to point to the first command in a thread.
@@ -124,7 +124,7 @@ Bot.on :postback do |postback|
   end
 end
 
-# Testing API integration. Use regular Sintatra syntax to define endpoints. 
+# Testing API integration. Use regular Sintatra syntax to define endpoints.
 post "/incoming" do
   begin
     sender_id = params['id']

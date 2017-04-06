@@ -1,5 +1,5 @@
 # Showcases a chained sequence of commands that gather the data
-# and store it in the @answers hash inside User class.
+# and store it in the answers hash inside the User instance       .
 
 module Questionnaire
   def start_questionnaire
@@ -60,8 +60,8 @@ module Questionnaire
 
   # TODO: BUG!
   def fall_back # sanity check on each step
-    say "You tried to fool me, human! Start over!" unless message_is_text?
-    if !message_is_text? || stop_word_used?("Stop")
+    say "You tried to fool me, human! Start over!" unless text_message?
+    if !text_message? || stop_word_used?("Stop")
       stop_questionnaire
       p "fallback triggered!"
       return true # to trigger return from the caller on 'and return'

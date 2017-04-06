@@ -18,13 +18,13 @@ class Rubotnik
       command = @user.current_command
       # NB: commands should exist under the same namespace as Rubotnik in order to call them
       # TODO: TESTING
-      if @message
+      if incoming.class == Facebook::Messenger::Incoming::Message
         execute(command)
         puts "Command #{command} is executed for user #{@user.id}" # log
         @message = nil
         @user.reset_command
       else # we're dealing with a postback sent mid-thread
-        @message = nil 
+        @message = nil
         @user.reset_command
         puts "Command is reset for user #{@user.id}" # log
         bind_commands(&block)

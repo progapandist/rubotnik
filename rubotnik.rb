@@ -24,6 +24,7 @@ class Rubotnik
       else
         @user.reset_command
         puts "Command is reset for user #{@user.id}" # log
+        @message = nil 
         bind_commands(&block)
       end
     else

@@ -6,10 +6,10 @@ include Commands
 class Rubotnik
 
   def self.route(message, &block)
+    @user = UserStore.instance.find_or_create_user(message.sender['id'])
     @message = message
     p @message.class
     p @message
-    @user = UserStore.instance.find_or_create_user(incoming.sender['id'])
     dispatch(&block)
   end
 

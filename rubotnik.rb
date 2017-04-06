@@ -21,7 +21,6 @@ class Rubotnik
       puts "Command #{command} is executed for user #{@user.id}" # log
       @user.reset_command
     else
-      puts "User #{@user.id} does not have a command assigned yet" # log
       bind_commands(&block)
     end
   end
@@ -73,7 +72,7 @@ class Rubotnik
 
   private_class_method def self.unrecognized
     unless @matched
-      puts "unrecognized triggered" # debug
+      puts "None of the commands were recognized" # log
       yield
       @user.reset_command
     end

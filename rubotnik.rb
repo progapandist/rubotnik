@@ -5,11 +5,12 @@ include Commands
 
 class Rubotnik
   def self.route(incoming, &block)
-    p incoming
-    p incoming.class
+    @incoming = incoming
+    p @incoming
+    p @incoming.class
     @user = UserStore.instance.find_or_create_user(incoming.sender['id'])
-    @message = incoming if incoming.class == Facebook::Messenger::Incoming::Message
-    @postback = incoming if incoming.class == Facebook::Messenger::Incoming::Postback
+    @message = @incoming if @incoming.class == Facebook::Messenger::Incoming::Message
+    @postback = @incoming if @incoming.class == Facebook::Messenger::Incoming::Postback
     dispatch(&block)
   end
 
@@ -18,7 +19,7 @@ class Rubotnik
       command = @user.current_command
       # NB: commands should exist under the same namespace as Rubotnik in order to call them
       # TODO: TESTING
-      if incoming.class == Facebook::Messenger::Incoming::Message
+      if @incoming.class == Facebook::Messenger::Incoming::Message
         execute(command)
         puts "Command #{command} is executed for user #{@user.id}" # log
         @message = nil

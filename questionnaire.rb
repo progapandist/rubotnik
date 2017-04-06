@@ -24,7 +24,6 @@ module Questionnaire
   end
 
   def ask_gender
-    p @user.current_command
     fall_back and return
     @user.answers[:gender] = @message.text
     reply = UI::QuickReplies.build(["I'd rather not say", "NO_AGE"])
@@ -63,7 +62,7 @@ module Questionnaire
     say "You tried to fool me, human! Start over!" unless text_message?
     if !text_message? || stop_word_used?("Stop")
       stop_questionnaire
-      p "fallback triggered!"
+      puts "Fallback triggered!"
       return true # to trigger return from the caller on 'and return'
     end
     return false

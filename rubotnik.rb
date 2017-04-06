@@ -27,14 +27,8 @@ class Rubotnik
         bind_commands(&block)
       end
     else
-      if @message
-        puts "User #{@user.id} does not have a command assigned yet" # log
-        bind_commands(&block)
-      else
-        @user.reset_command
-        puts "Command is reset for user #{@user.id}" # log
-        bind_commands(&block)
-      end
+      puts "User #{@user.id} does not have a command assigned yet" # log
+      bind_commands(&block)
     end
   end
 

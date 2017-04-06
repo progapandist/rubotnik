@@ -8,9 +8,9 @@ class Rubotnik
     p incoming
     p incoming.class
     @user = UserStore.instance.find_or_create_user(incoming.sender['id'])
-    dispatch(&block)
     @message = incoming if incoming.class == Facebook::Messenger::Incoming::Message
     @postback = incoming if incoming.class == Facebook::Messenger::Incoming::Postback
+    dispatch(&block)
   end
 
   private_class_method def self.dispatch(&block)

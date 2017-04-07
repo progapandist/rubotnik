@@ -8,11 +8,6 @@ require_relative "sample_elements"
 require_relative "questionnaire"
 require_relative "show_ui_examples"
 
-# RULES:
-# commands assigned as part of conversation thread
-# (through User#set_command in MessageDispatcher)
-# should follow (message, user) convention for arguments
-
 # Examples:
 # - API call with a set of quick replies
 # + Carousel with several items (Nic Cage)

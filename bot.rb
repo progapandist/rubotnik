@@ -62,8 +62,15 @@ Bot.on :message do |message|
 
     bind "button", to: :show_button_template
 
-    bind "facebook data" do
-      get_user_info(:first_name, :last_name)
+    # bind takes regex directly
+    bind(/my name/) do
+      user_info = get_user_info(:first_name)
+      if user_info
+        user_name = user_info["first_name"]
+        say "Your name is #{user_name}!"
+      else
+        say "I could not get your name, sorry :("
+      end
     end
 
     # Use with block if you want to provide response behaviour

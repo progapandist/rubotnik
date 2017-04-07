@@ -17,8 +17,10 @@ module Rubotnik
       # Set greeting (for first contact)
       Facebook::Messenger::Thread.set({
         setting_type: 'greeting',
+        # NOTE: You can user {{user_last_name}} or {{user_full_name}} to
+        # personalize greeting. 
         greeting: {
-          text: 'Coordinator welcomes you!'
+          text: "Hello {{user_first_name}}"
         },
       }, access_token: ENV['ACCESS_TOKEN'])
     end

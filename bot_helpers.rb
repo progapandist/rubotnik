@@ -1,4 +1,5 @@
 require 'httparty'
+require 'json'
 
 # Place for methods that abstract over facebook-messenger API
 module BotHelpers
@@ -28,7 +29,6 @@ module BotHelpers
     @message.respond_to?(:text) && !@message.text.nil?
   end
 
-  # TODO: In progress
   # Get user info from Graph API. Takes names of required fields as symbols
   # https://developers.facebook.com/docs/graph-api/reference/v2.2/user
   def get_user_info(*fields)
@@ -37,11 +37,25 @@ module BotHelpers
           ENV["ACCESS_TOKEN"]
     begin
       response = HTTParty.get(url)
-      # TODO: Switch on response.code
-      puts response.body, response.code, response.message, response.headers.inspect
+      case response.code
+      when 200
+        puts "User data received from Graph API: #{response.body}"
+        return JSON.parse(response.body)
+      else
+        return false
+      end
     rescue
       puts "Couldn't access URL" # logging
-      return ""
+      return false
+    end
+  end
+
+  def get_user_first_name
+    user_info = get_user_info(:first_name)
+    if user_info
+      user_info["first_name"]
+    else
+      ""
     end
   end
 

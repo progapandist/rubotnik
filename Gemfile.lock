@@ -11,6 +11,7 @@ GEM
       multi_xml (>= 0.5.2)
     multi_xml (0.6.0)
     public_suffix (2.0.5)
+    puma (3.8.2)
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
@@ -28,7 +29,7 @@ DEPENDENCIES
   dotenv
   facebook-messenger
   httparty
-  rack (~> 1.5)
+  puma
   sinatra
 
 BUNDLED WITH

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'sinatra'
-gem 'rack', '~> 1.5'
+gem 'puma'
 gem 'facebook-messenger'
 gem 'httparty'
 gem 'addressable'

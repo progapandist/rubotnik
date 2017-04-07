@@ -1,10 +1,12 @@
-require 'dotenv/load' # comment this line out before pushing to Heroku!
+require 'dotenv/load' # NOTE: comment this line out before pushing to Heroku!
 require 'facebook/messenger'
 require_relative 'persistent_menu'
-require_relative 'greetings' # TODO: Change name
-require_relative 'rubotnik' # TESTING
+require_relative 'greetings' # TODO: Change name. no need to require separately from Rubotnik module?
+require_relative 'rubotnik'
 require_relative 'commands'
 include Facebook::Messenger
+# Include Commands on top level to mix commands, threads and helpers
+# into common namespace.
 include Commands
 
 

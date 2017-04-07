@@ -29,7 +29,7 @@ module BotHelpers
   end
 
   # TODO: In progress
-  # Get user info from Graph API
+  # Get user info from Graph API. Takes names of required fields as symbols
   # https://developers.facebook.com/docs/graph-api/reference/v2.2/user
   def get_user_info(*fields)
     str_fields = fields.map(&:to_s).join(",")
@@ -37,7 +37,7 @@ module BotHelpers
           ENV["ACCESS_TOKEN"]
     begin
       response = HTTParty.get(url)
-      # TODO: Switch on response.code 
+      # TODO: Switch on response.code
       puts response.body, response.code, response.message, response.headers.inspect
     rescue
       puts "Couldn't access URL" # logging

@@ -36,6 +36,7 @@ module BotHelpers
     url = GRAPH_URL + @user.id + "?fields=" + str_fields + "&access_token=" +
           ENV["ACCESS_TOKEN"]
     begin
+      @message.type 
       response = HTTParty.get(url)
       case response.code
       when 200

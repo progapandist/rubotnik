@@ -2,6 +2,9 @@ require_relative 'user'
 require_relative 'user_store'
 
 module Rubotnik
+
+  # POSTBACKS
+
   class PostbackDispatch
     def initialize(postback)
       @postback = postback
@@ -42,6 +45,8 @@ module Rubotnik
     end
   end
 
+  # MESSAGES
+
   class MessageDispatch
     def initialize(message)
       @message = message
@@ -53,7 +58,6 @@ module Rubotnik
     def route(&block)
       if @user.current_command
         command = @user.current_command
-        # NB: commands should exist under the same namespace as Rubotnik in order to call them
         execute(command)
         puts "Command #{command} is executed for user #{@user.id}" # log
       else
@@ -68,7 +72,7 @@ module Rubotnik
       instance_eval(&block)
     end
 
-    # TODO: Call the user by name 
+    # TODO: Call the user by name
     # We only greet user once for the whole interaction
     def greet(text = "Hello")
       unless @user.greeted?
@@ -81,8 +85,15 @@ module Rubotnik
       end
     end
 
-    def bind(regex_string, to: nil, start_thread: {}, check_payload: '')
-      proceed = @message.text =~ /#{regex_string}/i
+    def bind(*regex_strings, all: false, to: nil, start_thread: {}, check_payload: '')
+      regexps = regex_strings.map { |rs| /#{rs}/i }
+
+      if all == true
+        proceed = regexps.all? { |regex| @message.text =~ regex }
+      elsif all == false
+        proceed = regexps.any? { |regex| @message.text =~ regex }
+      end
+
       if check_payload.class == String && !check_payload.empty?
         proceed = proceed && @message.quick_reply == check_payload.upcase
       end

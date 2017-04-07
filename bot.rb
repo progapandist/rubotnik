@@ -58,12 +58,16 @@ Bot.on :message do |message|
 
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
-    bind "carousel", to: :show_carousel
 
-    bind "button", to: :show_button_template
+    # All strings will be turned into case insensitive regular expressions
+    # You can pass a number of strings, any match will trigger a command,
+    # unless all: true flag is set. In that case, all patterns should be
+    # present in a message.
+    bind "carousel", "generic", to: :show_carousel
+    bind "button", "template", all: true, to: :show_button_template
 
-    # bind takes regex directly
-    bind(/my name/) do
+    # bind also takes regexps directly
+    bind(/my name/, /mon nom/) do
       user_info = get_user_info(:first_name)
       if user_info
         user_name = user_info["first_name"]
@@ -84,6 +88,7 @@ Bot.on :message do |message|
     # Include nested hash to provide a message asking user for input to the next command.
     # You can also pass an array of quick replies (you will have to process them
     # inside the thread).
+
     bind 'questionnaire', to: :start_questionnaire, start_thread: {
                                                       message: questionnaire_welcome,
                                                       quick_replies: questionnaire_replies

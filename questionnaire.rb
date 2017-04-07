@@ -9,7 +9,7 @@ module Questionnaire
       next_command :ask_name
     else
       say "No problem! Let's do it later"
-      stop_commands
+      stop_thread
     end
   end
 
@@ -42,7 +42,7 @@ module Questionnaire
   end
 
   def stop_questionnaire
-    stop_commands
+    stop_thread
     show_results
     @user.answers = {}
   end
@@ -57,7 +57,6 @@ module Questionnaire
     say "Thanks for your time!"
   end
 
-  # TODO: BUG!
   def fall_back # sanity check on each step
     say "You tried to fool me, human! Start over!" unless text_message?
     if !text_message? || stop_word_used?("Stop")

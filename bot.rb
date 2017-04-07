@@ -97,7 +97,7 @@ Bot.on :message do |message|
     # Use check_payload: "STRING" option to check both text AND payload
     # tied to  quick reply. Useful when the binded command is a popular word
     # If you use that option, your command will ONLY be triggered when
-    # the user hits the quick reply button.
+    # the user hits the quick reply button and never parsed from input. 
     bind "where", to: :lookup_location,
                   check_payload: "LOCATION",
                   start_thread: {
@@ -134,7 +134,7 @@ Bot.on :postback do |postback|
     bind "SAMPLE_UI_ELEMENTS" do
       say "Here's a carousel for you, also called Generic Template in FB documentation:"
       show_carousel
-      say "And here is a Button Template"
+      say "And here is a Button Template:"
       show_button_template
     end
 

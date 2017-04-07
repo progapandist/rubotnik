@@ -5,15 +5,13 @@ require_relative 'greetings' # TODO: Change name. no need to require separately 
 require_relative 'rubotnik'
 require_relative 'commands'
 include Facebook::Messenger
-# Include Commands on top level to mix commands, threads and helpers
-# into common namespace.
-include Commands
+include Commands # mixing commands and helpers into the common namespace
 
 
-# IMPORTANT! Subcribe your bot to your page
+# NOTE: IMPORTANT! Subcribe your bot to your page here.
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
-# THESE TWO SHOULD BE INSIDE Rubotnik module too.
+# TODO: THESE TWO SHOULD BE INSIDE Rubotnik module too.
 Rubotnik::Greetings.enable
 PersistentMenu.enable
 
@@ -97,7 +95,7 @@ Bot.on :message do |message|
     # Use check_payload: "STRING" option to check both text AND payload
     # tied to  quick reply. Useful when the binded command is a popular word
     # If you use that option, your command will ONLY be triggered when
-    # the user hits the quick reply button and never parsed from input. 
+    # the user hits the quick reply button and never parsed from input.
     bind "where", to: :lookup_location,
                   check_payload: "LOCATION",
                   start_thread: {
@@ -146,7 +144,7 @@ Bot.on :postback do |postback|
                                              quick_replies: LOCATION_PROMPT
                                            }
 
-   bind "QUESTIONNAIRE", to: :start_questionnaire, start_thread: {
+    bind "QUESTIONNAIRE", to: :start_questionnaire, start_thread: {
                                                       message: questionnaire_welcome,
                                                       quick_replies: questionnaire_replies
                                                     }

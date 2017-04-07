@@ -1,7 +1,8 @@
 require 'httparty'
 require 'json'
 
-# Place for methods that abstract over facebook-messenger API
+# Place for methods that make your life easier.
+# They can be called from anywhere inside the common namespace. 
 module BotHelpers
   GRAPH_URL = "https://graph.facebook.com/v2.8/"
 

@@ -1,1 +1,1 @@
-web: bundle exec puma -p 5000
+web: bundle exec puma

@@ -1,4 +1,4 @@
-require 'dotenv/load' # NOTE: comment this line out before pushing to Heroku!
+# require 'dotenv/load' # NOTE: comment this line out before pushing to Heroku!
 require 'facebook/messenger'
 require_relative 'persistent_menu'
 require_relative 'greetings' # TODO: Change name. no need to require separately from Rubotnik module?

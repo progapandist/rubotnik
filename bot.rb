@@ -14,8 +14,8 @@ include Commands
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
 # THESE TWO SHOULD BE INSIDE Rubotnik module too.
-PersistentMenu.enable
 Rubotnik::Greetings.enable
+PersistentMenu.enable
 
 IDIOMS = {
   not_found: 'There were no results. Type your destination again, please',
@@ -124,6 +124,13 @@ Bot.on :postback do |postback|
     # as instance variables, no need to pass them around).
     bind "SQUARE_IMAGES" do
       show_carousel(image_ratio: :square)
+    end
+
+    bind "SAMPLE_UI_ELEMENTS" do
+      say "Here's a carousel for you, also called Generic Template in FB documentation:"
+      show_carousel
+      say "And here is a Button Template"
+      show_button_template
     end
 
     # No custom parameter passed, can use simplified syntax

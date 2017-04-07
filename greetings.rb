@@ -1,4 +1,3 @@
-# TODO: refactor with initialization. Allow to pass greeting as an argument
 module Rubotnik
   class Greetings
     def self.enable
@@ -18,7 +17,7 @@ module Rubotnik
       Facebook::Messenger::Thread.set({
         setting_type: 'greeting',
         # NOTE: You can user {{user_last_name}} or {{user_full_name}} to
-        # personalize greeting. 
+        # personalize greeting.
         greeting: {
           text: "Hello {{user_first_name}}"
         },
@@ -26,3 +25,7 @@ module Rubotnik
     end
   end
 end
+
+# base_uri "https://graph.facebook.com/v2.6/me/messenger_profile?access_token="
+#
+# post(ENV["ACCESS_TOKEN"], { get_started: { payload: "TEST" } })

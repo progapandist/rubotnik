@@ -12,12 +12,24 @@ class UserStore
     self.find(id) || self.add(User.new(id))
   end
 
+  # TODO: Remove debug statements
+
   def add(user)
     @users << user
-    @users.last
+    user = @users.last
+    if user
+      p "user #{user.inspect} added to store"
+      p "we got #{@users.count} users: #{@users}"
+    else
+      p "user not found in store yet"
+    end
+    user
   end
 
   def find(id)
-    @users.find { |u| u.id == id }
+    user = @users.find { |u| u.id == id }
+    p "user #{user} found in store" if user
+    p "we got #{@users.count} users: #{@users}" if user 
+    user
   end
 end

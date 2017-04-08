@@ -2,7 +2,7 @@ require 'httparty'
 require 'json'
 
 # Place for methods that make your life easier.
-# They can be called from anywhere inside the common namespace. 
+# They can be called from anywhere inside the common namespace.
 module BotHelpers
   GRAPH_URL = "https://graph.facebook.com/v2.8/"
 
@@ -41,7 +41,7 @@ module BotHelpers
       response = HTTParty.get(url)
       case response.code
       when 200
-        puts "User data received from Graph API: #{response.body}"
+        puts "User data received from Graph API: #{response.body}" # logging 
         return JSON.parse(response.body)
       else
         return false

@@ -1,4 +1,3 @@
-require_relative 'user'
 require_relative 'user_store'
 
 module Rubotnik
@@ -23,7 +22,7 @@ module Rubotnik
         @user.reset_command # Stop any current interaction
         @user.answers = {} # Reset whatever you stored in the user
         @matched = true
-        puts "Matched #{regex_string} to #{to}"
+        puts "Matched #{regex_string} to #{to.nil? ? 'block' : to}"
         if block_given?
           yield
           return

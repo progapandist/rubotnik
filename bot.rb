@@ -47,7 +47,7 @@ questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
 # Routing for messages
 Bot.on :message do |message|
-  # Use DSL inside the block passed to Rubotnik.route(message)
+  # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
 
     # Will only be executed once until user deletes the chat and reconnects.
@@ -86,7 +86,6 @@ Bot.on :message do |message|
     # Include nested hash to provide a message asking user for input to the next command.
     # You can also pass an array of quick replies (you will have to process them
     # inside the thread).
-
     bind 'questionnaire', to: :start_questionnaire, start_thread: {
                                                       message: questionnaire_welcome,
                                                       quick_replies: questionnaire_replies

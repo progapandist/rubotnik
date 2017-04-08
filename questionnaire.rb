@@ -57,7 +57,8 @@ module Questionnaire
     say "Thanks for your time!"
   end
 
-  def fall_back # sanity check on each step
+  # NOTE: A way to enforce sanity checks (repeat for each sequential command)
+  def fall_back
     say "You tried to fool me, human! Start over!" unless text_message?
     if !text_message? || stop_word_used?("Stop")
       stop_questionnaire

@@ -65,7 +65,7 @@ Bot.on :message do |message|
     bind "button", "template", all: true, to: :show_button_template
 
     # bind also takes regexps directly
-    bind(/my name/, /mon nom/) do
+    bind(/my name/i, /mon nom/i) do
       user_info = get_user_info(:first_name)
       if user_info
         user_name = user_info["first_name"]

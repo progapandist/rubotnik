@@ -1,11 +1,10 @@
-# require 'dotenv/load' # NOTE: comment this line out before pushing to Heroku!
+# require 'dotenv/load' # leave it commented if you're using 'heroku local' for testing
 require 'facebook/messenger'
-require_relative 'persistent_menu'
-require_relative 'greetings' # TODO: Change name. no need to require separately from Rubotnik module?
-require_relative 'rubotnik'
-require_relative 'commands'
+require 'sinatra'
+require_relative 'rubotnik/rubotnik'
+require_relative 'helpers/helpers'
 include Facebook::Messenger
-include Commands # mixing commands and helpers into the common namespace
+include Helpers # mixing helpers into the common namespace
 
 
 # NOTE: IMPORTANT! Subcribe your bot to your page here.
@@ -13,14 +12,7 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
 # TODO: THESE TWO SHOULD BE INSIDE Rubotnik module too.
 Rubotnik::Greetings.enable
-PersistentMenu.enable
-
-IDIOMS = {
-  not_found: 'There were no results. Type your destination again, please',
-  ask_location: 'Type in any destination or send us your location:',
-  unknown_command: "Sorry, I did not recognize your command",
-  menu_greeting: 'Here are some suggestions for you:'
-}
+Rubotnik::PersistentMenu.enable
 
 replies_for_menu =  [
                       {
@@ -105,7 +97,7 @@ Bot.on :message do |message|
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     unrecognized do
-      say IDIOMS[:menu_greeting], quick_replies: COMMANDS_HINTS
+      say "Here are some suggestions for you:", quick_replies: COMMANDS_HINTS
     end
 
   end
@@ -118,7 +110,7 @@ Bot.on :postback do |postback|
     bind "START" do
       say "Hello and welcome!"
       @user.greet # greet user when she starts from welcome screen
-      say IDIOMS[:menu_greeting], quick_replies: COMMANDS_HINTS
+      say "Here are some suggestions for you:", quick_replies: COMMANDS_HINTS
     end
 
     # Use block syntax when a command takes an argument rather
@@ -160,4 +152,8 @@ post "/incoming" do
   rescue
     p "User not recognized or not available at the time"
   end
+end
+
+get "/" do
+  "Build a landing page here if you want"
 end

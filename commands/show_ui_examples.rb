@@ -1,4 +1,10 @@
+require_relative '../demo/sample_elements.rb'
+
 module ShowUIExamples
+  # State 'module_function' before any method definitions so
+  # commands are mixed into Dispatch classes as private methods.
+  module_function
+
   # Commands that showcase main UI elements
   def show_button_template
     UI::FBButtonTemplate.new(SampleElements::BUTTON_TEMPLATE_TEXT,

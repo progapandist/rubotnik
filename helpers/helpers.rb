@@ -3,7 +3,11 @@ require 'json'
 
 # Place for methods that make your life easier.
 # They can be called from anywhere inside the common namespace.
-module BotHelpers
+module Helpers
+  # State 'module_function' before any method definitions so
+  # commands are mixed into Dispatch classes as private methods.
+  module_function
+
   GRAPH_URL = "https://graph.facebook.com/v2.8/"
 
   # abstraction over Bot.deliver to send messages declaratively and directly
@@ -30,6 +34,14 @@ module BotHelpers
     @message.respond_to?(:text) && !@message.text.nil?
   end
 
+  def message_contains_location?
+    if attachments = @message.attachments
+      attachments.first['type'] == 'location'
+    else
+      false
+    end
+  end
+
   # Get user info from Graph API. Takes names of required fields as symbols
   # https://developers.facebook.com/docs/graph-api/reference/v2.2/user
   def get_user_info(*fields)
@@ -41,7 +53,7 @@ module BotHelpers
       response = HTTParty.get(url)
       case response.code
       when 200
-        puts "User data received from Graph API: #{response.body}" # logging 
+        puts "User data received from Graph API: #{response.body}" # logging
         return JSON.parse(response.body)
       else
         return false
@@ -60,5 +72,4 @@ module BotHelpers
       ""
     end
   end
-
 end

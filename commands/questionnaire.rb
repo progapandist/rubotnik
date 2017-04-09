@@ -2,6 +2,10 @@
 # and store it in the answers hash inside the User instance       .
 
 module Questionnaire
+  # State 'module_function' before any method definitions so
+  # commands are mixed into Dispatch classes as private methods.
+  module_function
+
   def start_questionnaire
     if @message.quick_reply == "START_QUESTIONNAIRE" || @message.text =~ /yes/i
       say "Great! What's your name?"

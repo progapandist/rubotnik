@@ -1,4 +1,4 @@
-require 'dotenv/load' # comment this line out before pushing to Heroku!
+# require 'dotenv/load' # comment this line out before pushing to Heroku!
 require 'sinatra'
 
 

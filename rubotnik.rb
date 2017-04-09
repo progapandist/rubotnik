@@ -84,13 +84,13 @@ module Rubotnik
       end
     end
 
-    # TODO: Refactor for readability and shortness 
+    # TODO: Refactor for readability and shortness
     def bind(*regex_strings, all: false, to: nil, start_thread: {}, check_payload: '')
       regexps = regex_strings.map { |rs| /#{rs}/i }
 
-      if all == true
+      if all
         proceed = regexps.all? { |regex| @message.text =~ regex }
-      elsif all == false
+      else
         proceed = regexps.any? { |regex| @message.text =~ regex }
       end
 

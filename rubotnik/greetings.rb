@@ -1,4 +1,6 @@
 module Rubotnik
+
+  # TODO: Change name 
   class Greetings
     def self.enable
       # Set call to action button when user is about to address bot

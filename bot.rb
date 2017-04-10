@@ -1,4 +1,7 @@
-# require 'dotenv/load' # leave it commented if you're using 'heroku local' for testing
+# require 'dotenv/load'
+# leave the line above commented out if you're using 'heroku local' for testing
+# should also be commented out before pushing to Heroku.
+
 require 'facebook/messenger'
 require 'sinatra'
 require_relative 'rubotnik/rubotnik'
@@ -7,26 +10,16 @@ include Facebook::Messenger
 include Helpers # mixing helpers into the common namespace
 
 
-# NOTE: IMPORTANT! Subcribe your bot to your page here.
+# IMPORTANT! Subcribe your bot to your page here.
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
-# TODO: THESE TWO SHOULD BE INSIDE Rubotnik module too.
+# TODO: Use new FB profiles
 Rubotnik::Greetings.enable
 Rubotnik::PersistentMenu.enable
 
-replies_for_menu =  [
-                      {
-                        title: 'Where I am at?',
-                        payload: 'LOCATION'
-                      },
-                      {
-                        title: 'Take questionnaire',
-                        payload: 'QUESTIONNAIRE'
-                      }
-                    ]
-
-# NOTE: QuickReplies.build should be called with a splat operator if a set of quick replies is a pre-formed array
-COMMANDS_HINTS = UI::QuickReplies.build(*replies_for_menu)
+# NOTE: QuickReplies.build should be called with a splat operator if a set of quick replies is an array of arrays: UI::QuickReplies.build(*replies)
+HINTS = UI::QuickReplies.build(["Where am I?", "LOCATION"],
+                               ["Take questionnaire", "QUESTIONNAIRE"])
 
 # Build a quick reply that prompts location from user
 LOCATION_PROMPT = UI::QuickReplies.location
@@ -97,7 +90,7 @@ Bot.on :message do |message|
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     unrecognized do
-      say "Here are some suggestions for you:", quick_replies: COMMANDS_HINTS
+      say "Here are some suggestions for you:", quick_replies: HINTS
     end
 
   end
@@ -110,7 +103,7 @@ Bot.on :postback do |postback|
     bind "START" do
       say "Hello and welcome!"
       @user.greet # greet user when she starts from welcome screen
-      say "Here are some suggestions for you:", quick_replies: COMMANDS_HINTS
+      say "Here are some suggestions for you:", quick_replies: HINTS
     end
 
     # Use block syntax when a command takes an argument rather
@@ -143,7 +136,9 @@ Bot.on :postback do |postback|
   end
 end
 
-# Testing API integration. Use regular Sintatra syntax to define endpoints.
+##### USE STANDARD SINATRA TO IMPLEMENT WEBHOOKS FOR OTHER SERVICES #######
+
+# Example of API integration. Use regular Sintatra syntax to define endpoints.
 post "/incoming" do
   begin
     sender_id = params['id']
@@ -155,5 +150,5 @@ post "/incoming" do
 end
 
 get "/" do
-  "Build a landing page here if you want"
+  "Nothing to look at"
 end

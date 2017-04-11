@@ -8,6 +8,7 @@ require_relative 'rubotnik/rubotnik'
 require_relative 'helpers/helpers'
 include Facebook::Messenger
 include Helpers # mixing helpers into the common namespace
+# so the can be used outside of Dispatches
 
 
 # IMPORTANT! Subcribe your bot to your page here.
@@ -30,7 +31,8 @@ questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
                                                ["No", "STOP_QUESTIONNAIRE"])
 questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
-# Routing for messages
+###################### ROUTE MESSAGES HERE ################################
+
 Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
@@ -46,7 +48,7 @@ Bot.on :message do |message|
     # You can pass a number of strings, any match will trigger a command,
     # unless all: true flag is set. In that case, all patterns should be
     # present in a message.
-    bind "carousel", "generic", to: :show_carousel
+    bind "carousel", "generic template", to: :show_carousel
     bind "button", "template", all: true, to: :show_button_template
 
     # bind also takes regexps directly
@@ -96,7 +98,8 @@ Bot.on :message do |message|
   end
 end
 
-# Routing for postbacks
+############### ROUTE POSTBACKS HERE #################################
+
 Bot.on :postback do |postback|
   Rubotnik::PostbackDispatch.new(postback).route do
 

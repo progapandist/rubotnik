@@ -6,6 +6,10 @@ module Rubotnik
         persistent_menu: [
           {
             locale: 'default',
+            # If this option is set to true,
+            # user will only be able to interact with bot
+            # through the persistent menu
+            # (composing a message will be disabled)
             composer_input_disabled: false,
             call_to_actions: [
               {

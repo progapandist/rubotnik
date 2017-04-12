@@ -22,8 +22,8 @@ module UI
 
     # Sends the valid JSON to Messenger API
     def send(user)
-      template = build(user)
-      Bot.deliver(template, access_token: ENV['ACCESS_TOKEN'])
+      formed = build(user)
+      Bot.deliver(formed, access_token: ENV['ACCESS_TOKEN'])
     end
 
     # Use this method to return a valid hash and save it for later

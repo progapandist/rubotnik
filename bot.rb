@@ -52,6 +52,11 @@ Bot.on :message do |message|
     bind "carousel", "generic template", to: :show_carousel
     bind "button", "template", all: true, to: :show_button_template
 
+    # TODO: TESTING IMAGES
+    bind "peppa" do
+      UI::ImageAttachment.new("http://i.dailymail.co.uk/i/pix/2015/03/03/04D5AAF90000044D-2966958-image-a-4_1425375252836.jpg").send(@user)
+    end
+
     # bind also takes regexps directly
     bind(/my name/i, /mon nom/i) do
       user_info = get_user_info(:first_name)

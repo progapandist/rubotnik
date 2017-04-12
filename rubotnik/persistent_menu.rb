@@ -1,8 +1,7 @@
 module Rubotnik
   class PersistentMenu
     def self.enable
-      # Create persistent menu
-      # TODO: Intoduce nesting for UI elements examples
+      # Set itemts of persistent menu
       Facebook::Messenger::Profile.set({
         persistent_menu: [
           {

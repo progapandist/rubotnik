@@ -6,7 +6,6 @@ module UI
   class FBCarousel
     def initialize(elements)
       @template = {
-        # TODO: Do we need to provide an id at init?
         recipient: { id: nil},
         message: {
           attachment: {

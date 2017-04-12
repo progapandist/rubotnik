@@ -9,7 +9,6 @@ module ShowUIExamples
   def show_button_template
     UI::FBButtonTemplate.new(SampleElements::BUTTON_TEMPLATE_TEXT,
                              SampleElements::BUTTON_TEMPLATE_BUTTONS).send(@user)
-                             # TODO: send to (@user) directly?
   end
 
   def show_carousel(image_ratio: nil)

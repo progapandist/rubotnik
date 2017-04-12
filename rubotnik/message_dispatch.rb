@@ -1,4 +1,4 @@
-module Rubotnik 
+module Rubotnik
   class MessageDispatch
     include Commands
 
@@ -26,8 +26,6 @@ module Rubotnik
       instance_eval(&block)
     end
 
-    # TODO: Call the user by name
-    # We only greet user once for the whole interaction
     def greet(text = "Hello")
       unless @user.greeted?
         if block_given?

@@ -1,7 +1,7 @@
 module UI
   class QuickReplies
 
-    # TODO: account for content_type: "location" and "image_url"
+    # TODO: custom errors? 
 
     # Takes a list of arguments (splat on a call if passing an array!)
     # that can be hashes with keys :title, :payload,

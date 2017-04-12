@@ -116,6 +116,10 @@ Bot.on :postback do |postback|
     # Use block syntax when a command takes an argument rather
     # than 'message' or 'user' (which are accessible from everyhwere
     # as instance variables, no need to pass them around).
+    bind "BUTTON_TEMPLATE_ACTION" do
+      say "I don't really do anything useful"
+    end
+
     bind "SQUARE_IMAGES" do
       show_carousel(image_ratio: :square)
     end

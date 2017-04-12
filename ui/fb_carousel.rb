@@ -47,22 +47,14 @@ module UI
 
     private
 
-    # [{title: String, image_url: String, subtitle: String, default_url: String, buttons: []}]
     def parse_elements(elements)
       elements = [elements] if elements.class == Hash
       elements.map do |elt|
-        # TODO: custom error?
-        raise ArgumentError, "Title is a required field" unless elt.key?(:title)
         elt[:buttons] = parse_buttons(elt[:buttons])
         elt
       end
     end
 
-    # TODO: Extract button functionality to Button class?
-    # Account for all button types from API or remove type check altogether!
-
-    # [{type: :web_url, url: String, title: String}]
-    # [{type: :postback, title: String, payload: String}]
     def parse_buttons(buttons)
       return [] if buttons.nil? || buttons.empty?
       buttons.map do |button|

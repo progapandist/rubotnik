@@ -5,10 +5,14 @@ module SampleElements
                 # Horizontal image should have 1.91:1 ratio
                 image_url: "https://www.placecage.com/760/400",
                 subtitle: "That's a first card in a carousel",
+                default_action: {
+                                  type: "web_url",
+                                  url: "https://placecage.com"
+                                },
                 buttons: [
-                  { type: :web_url,
-                    url: "https://www.placecage.com",
-                    title: "More Nicolas" },
+                    { type: :web_url,
+                      url: "https://www.placecage.com",
+                      title: "More Nicolas" },
                     { type: :postback,
                       title: "Square Images",
                       payload: "SQUARE_IMAGES"
@@ -20,6 +24,10 @@ module SampleElements
                   # Horizontal image should have 1.91:1 ratio
                   image_url: "https://www.stevensegallery.com/760/400",
                   subtitle: "And here's a second card. You can add up to 10!",
+                  default_action: {
+                                    type: "web_url",
+                                    url: "https://www.stevensegallery.com/"
+                                  },
                   buttons: [
                     {
                       type: :web_url,

@@ -1,7 +1,6 @@
 # require 'dotenv/load'
 # leave the line above commented out if you're using 'heroku local' for testing
 # should also be commented out before pushing to Heroku.
-
 require 'facebook/messenger'
 require 'sinatra'
 require_relative 'rubotnik/rubotnik'
@@ -14,11 +13,13 @@ include Helpers # mixing helpers into the common namespace
 # IMPORTANT! Subcribe your bot to your page here.
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
-# TODO: Use new FB profiles
-Rubotnik::Greetings.enable
+# Enabling "Get Started" button, greeting and persistent menu for your bot
+Rubotnik::BotProfile.enable
 Rubotnik::PersistentMenu.enable
 
-# NOTE: QuickReplies.build should be called with a splat operator if a set of quick replies is an array of arrays: UI::QuickReplies.build(*replies)
+# NOTE: QuickReplies.build should be called with a splat operator
+# if a set of quick replies is an array of arrays.
+# e.g. UI::QuickReplies.build(*replies)
 HINTS = UI::QuickReplies.build(["Where am I?", "LOCATION"],
                                ["Take questionnaire", "QUESTIONNAIRE"])
 
@@ -37,17 +38,17 @@ Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
 
+    # All strings will be turned into case insensitive regular expressions
+    # You can pass a number of strings, any match will trigger a command,
+    # unless all: true flag is set. In that case, all patterns should be
+    # present in a message.
+
     # Will only be executed once until user deletes the chat and reconnects.
     # Use block to do more than just send a text message.
     greet "Hello and welcome!"
 
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
-
-    # All strings will be turned into case insensitive regular expressions
-    # You can pass a number of strings, any match will trigger a command,
-    # unless all: true flag is set. In that case, all patterns should be
-    # present in a message.
     bind "carousel", "generic template", to: :show_carousel
     bind "button", "template", all: true, to: :show_button_template
 
@@ -109,18 +110,14 @@ Bot.on :postback do |postback|
       say "Here are some suggestions for you:", quick_replies: HINTS
     end
 
+    bind "CAROUSEL", to: :show_carousel
+    bind "BUTTON_TEMPLATE", to: :show_button_template
+
     # Use block syntax when a command takes an argument rather
     # than 'message' or 'user' (which are accessible from everyhwere
     # as instance variables, no need to pass them around).
     bind "SQUARE_IMAGES" do
       show_carousel(image_ratio: :square)
-    end
-
-    bind "SAMPLE_UI_ELEMENTS" do
-      say "Here's a carousel for you, also called Generic Template in FB documentation:"
-      show_carousel
-      say "And here is a Button Template:"
-      show_button_template
     end
 
     # No custom parameter passed, can use simplified syntax

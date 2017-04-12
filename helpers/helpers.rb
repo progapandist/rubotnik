@@ -49,7 +49,7 @@ module Helpers
     url = GRAPH_URL + @user.id + "?fields=" + str_fields + "&access_token=" +
           ENV["ACCESS_TOKEN"]
     begin
-      @message.type
+      @message.typing_on
       response = HTTParty.get(url)
       case response.code
       when 200

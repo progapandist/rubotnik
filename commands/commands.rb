@@ -30,7 +30,7 @@ module Commands
     coords = @message.attachments.first['payload']['coordinates']
     lat = coords['lat']
     long = coords['long']
-    @message.type
+    @message.typing_on
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
     say "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}"

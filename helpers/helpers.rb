@@ -51,6 +51,7 @@ module Helpers
     begin
       @message.typing_on
       response = HTTParty.get(url)
+      @message.typing_off
       case response.code
       when 200
         puts "User data received from Graph API: #{response.body}" # logging

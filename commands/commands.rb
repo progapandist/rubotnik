@@ -34,6 +34,7 @@ module Commands
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
     say "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}"
+    @message.typing_off
   end
 
   # Talk to API

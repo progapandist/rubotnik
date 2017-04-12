@@ -10,7 +10,7 @@ module Questionnaire
     if @message.quick_reply == "START_QUESTIONNAIRE" || @message.text =~ /yes/i
       say "Great! What's your name?"
       say "(type 'Stop' at any point to exit)"
-      next_command :ask_name
+      next_command :handle_name_and_ask_gender
     else
       say "No problem! Let's do it later"
       stop_thread
@@ -18,24 +18,24 @@ module Questionnaire
   end
 
   # Name
-  def ask_name
+  def handle_name_and_ask_gender
     # Fallback functionality if stop word used or user input is not text
     fall_back and return
     @user.answers[:name] = @message.text
     replies = UI::QuickReplies.build(["Male", "MALE"], ["Female", "FEMALE"])
     say "What's your gender?", quick_replies: replies
-    next_command :ask_gender
+    next_command :handle_gender_and_ask_age
   end
 
-  def ask_gender
+  def handle_gender_and_ask_age
     fall_back and return
     @user.answers[:gender] = @message.text
     reply = UI::QuickReplies.build(["I'd rather not say", "NO_AGE"])
     say "Finally, how old are you?", quick_replies: reply
-    next_command :ask_age
+    next_command :handle_age_and_stop
   end
 
-  def ask_age
+  def handle_age_and_stop
     fall_back and return
     if @message.quick_reply == "NO_AGE"
       @user.answers[:age] = "hidden"

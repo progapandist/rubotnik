@@ -31,12 +31,12 @@ You can provide hints to the user in the form of quick replies:
 ```ruby
 
 replies = UI::QuickReplies.build(["Yes", "YES"], ["No", "NO"])
-# Builds an array of Hashes:
+# Builds an array of hashes:
 # [{:content_type=>"text", :title=>"Yes", :payload=>"YES"},
 # {:content_type=>"text", :title=>"No", :payload=>"NO"}]
 
 say "Do you want to see more?", quick_replies: replies
-# Creates and sends this Hash through Facebook Messenger Platform API:
+# Creates and sends this hash through Facebook Messenger Platform API:
 #  {
 #   recipient: {
 #     id: "USER_ID"
@@ -59,32 +59,35 @@ say "Do you want to see more?", quick_replies: replies
 # }
 
 ```
-Implementing conversation threads is like composing a movie script. Your bot is in constant dialogue with the user: each command starts by handling user's answer to your previous question and ends with posing a new one:
+**Implementing conversation threads** is like composing a movie script. Your bot is in constant dialogue with the user: each command starts by handling user's answer to your previous question and ends with posing a new one:
 
 ```ruby
 # bot.rb
-bind "questionnaire", to: :start_questionnaire, start_thread: {
+bind "nice to meet you", to: :handle_name_and_ask_age, start_thread: {
                                                   message: "What's your name?"
                                                 }
 
 # commands.rb
-def start_questionnaire
-  # Assuming that the @message is user's answer to your previous message
-  say "Hello, #{@message.text}"
-  say "How old a are you?"
-  next_command :handle_age_and_ask_more
+def handle_name_and_ask_age
+  # @message references an incoming message from the user
+  # We assume it's a reaction to your previous message
+  name = @message.text
+  # ... do something with the data ...
+  say "Hello, #{name}!"
+  say "How old are you?"
+  next_command :handle_age_and_ask_smth_else
 end
 
-def handle_age_and_ask_more
+def handle_age_and_ask_smth_else
   # ...
 end
 ```
 
-**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as a completely separate web app (100% prepped for [Heroku](https://heroku.com)) that can be easily extended to work with your main project through the REST API. The default server is Puma, but you can use any other Rack webserver for production or development (just note the minimal in-memory storage and dispatch for users does not support parallelism through processes, and a Puma server can only run with **one "worker"**, but multiple threads).
+**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as a completely separate web app (primed for [Heroku](https://heroku.com)). It can be easily extended to work with your main project through the REST API. The default server is Puma, but you can use any other Rack webserver for production or development (note that the minimal in-memory user store and message dispatch does not support parallelism through processes, a Puma server can only run with **one "worker"**, multiple *threads* are fine).
 
-[Sinatra](http://www.sinatrarb.com/) is also enabled by default, and you can use its familiar syntax to define new webhooks for incoming API calls.  
+[Sinatra](http://www.sinatrarb.com/) is enabled inside the boilerplate by default, and you can use its familiar syntax to define new webhooks for incoming API calls.  
 
-A buil-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).   
+A built-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).   
 
 *DISCLAIMER:* *I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on.*  
 

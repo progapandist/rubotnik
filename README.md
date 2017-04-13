@@ -83,11 +83,13 @@ def handle_age_and_ask_smth_else
 end
 ```
 
-**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as a completely separate web app (primed for [Heroku](https://heroku.com)). It can be easily extended to work with your main project through the REST API. The default server is Puma, but you can use any other Rack webserver for production or development (note that the minimal in-memory user store and message dispatch does not support parallelism through processes, a Puma server can only run with **one "worker"**, multiple *threads* are fine).
+**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as an **independent web app** (primed for [Heroku](https://heroku.com)). It can be easily extended to work with your main project through the REST API. The default server is Puma, but you can use any other Rack webserver for production or development (note that the minimal in-memory user store and message dispatch does not support parallelism through processes, a Puma server can only run with **one "worker"**, multiple *threads* are fine).
 
 [Sinatra](http://www.sinatrarb.com/) is enabled inside the boilerplate by default, and you can use its familiar syntax to define new webhooks for incoming API calls.  
 
-A built-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).   
+A built-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).
+
+# Happy scripting!    
 
 *DISCLAIMER:* *I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on.*  
 

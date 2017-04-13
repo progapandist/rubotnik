@@ -29,7 +29,7 @@ The main promise of **Rubotnik** is to speed up bot development in Ruby.
 
 A buil-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).   
 
-*DISCLAIMER:* *I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness.*  
+*DISCLAIMER:* *I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on.*  
 
 ## Installation
 Assuming you are going to use this boilerplare as a starting point for your own bot:
@@ -58,19 +58,22 @@ Now open the boilerplate in your favorite text editor and let's take a look at t
 ├── Procfile
 ├── README.md # this readme
 ├── bot.rb # your main starting point  
-├── commands # everything in this folder will become private methods for MessageDispatch and PostbackDispatch
-│   ├── commands.rb # write your commands here
+├── commands # everything in this folder will become
+             #private methods for Dispatch classes
+│   ├── commands.rb # write your commands as methods here
 │   ├── questionnaire.rb # or in one of associated modules
 │   └── show_ui_examples.rb
 ├── config
-│   └── puma.rb
+│   └── puma.rb # a configuration file for Puma
 ├── config.ru
-├── demo
+├── demo # Constants for UI elements used in the demo.
+         # you are free to delete this folder.  
 │   └── sample_elements.rb
-├── helpers
+├── helpers # general helpers mixed into bot.rb
+            # and accessible from everywhere inside the boilerplate   
 │   └── helpers.rb
 ├── privacy_policy.pdf  # replace with your own for FB approval
-├── rubotnik
+├── rubotnik # an embryo for the framework
 │   ├── bot_profile.rb
 │   ├── message_dispatch.rb
 │   ├── persistent_menu.rb
@@ -93,10 +96,10 @@ Now open the boilerplate in your favorite text editor and let's take a look at t
 
 ## Routing
 
-## Conventions for commands
+## Conventions for commands. @user and @message.
 
 ## UI convenience classes
 
 ## Deployment
 
-## Missing features (for now)
+## Missing and planned features

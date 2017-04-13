@@ -1,7 +1,7 @@
+*"We are the robots / Ya tvoi sluga / Ya tvoi rabotnik"  — Kraftwerk*
+
 #  Rubotnik
 ### All you need to launch your own Ruby bot for Facebook Messenger right now.
-
-*"We are the robots / Ya tvoi sluga / Ya tvoi rabotnik"  — Kraftwerk*
 
 **Rubotnik is a minimalistic boilerplate** and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers.
 
@@ -58,7 +58,7 @@ Now open the boilerplate in your favorite text editor and let's take a look at t
 ├── Procfile
 ├── README.md # this readme
 ├── bot.rb # your main starting point  
-├── commands # everything in this folder will become private methods for MessageDispatch and PostbackDispatch 
+├── commands # everything in this folder will become private methods for MessageDispatch and PostbackDispatch
 │   ├── commands.rb # write your commands here
 │   ├── questionnaire.rb # or in one of associated modules
 │   └── show_ui_examples.rb

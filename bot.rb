@@ -38,10 +38,10 @@ Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
 
-    # All strings will be turned into case insensitive regular expressions
-    # You can pass a number of strings, any match will trigger a command,
-    # unless all: true flag is set. In that case, all patterns should be
-    # present in a message.
+    # All strings will be turned into case insensitive regular expressions.
+    # If you pass a number of strings, any match will trigger a command,
+    # unless 'all: true' flag is present. In that case, MessageDispatch
+    # will expect all words to be present in a single message. 
 
     # Will only be executed once until user deletes the chat and reconnects.
     # Use block to do more than just send a text message.

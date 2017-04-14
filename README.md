@@ -62,7 +62,7 @@ say "Do you want to see more?", quick_replies: replies
 # }
 
 ```
-**Implementing conversation threads** is like composing a movie script. Your bot is in constant dialogue with the user: **each command starts by handling user's answer to your previous question and ends with posing a new one**:
+**Implementing conversation threads** is like composing a movie script. Your bot is in constant dialogue with the user: each command starts by handling user's answer to your previous question and ends with posing a new one:
 
 ```ruby
 # bot.rb

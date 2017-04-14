@@ -17,7 +17,6 @@ module Questionnaire
     end
   end
 
-  # Name
   def handle_name_and_ask_gender
     # Fallback functionality if stop word used or user input is not text
     fall_back and return

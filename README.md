@@ -20,7 +20,7 @@ bind "ACTION_BUTTON", to: :action_for_button
 
 ```
 
-"Talking" to the connected user is as obvious as:
+"Talking" to the connected user is as straightforward as it gets:
 
 ```ruby
 say "Hello!"
@@ -59,7 +59,7 @@ say "Do you want to see more?", quick_replies: replies
 # }
 
 ```
-**Implementing conversation threads** is like composing a movie script. Your bot is in constant dialogue with the user: each command starts by handling user's answer to your previous question and ends with posing a new one:
+**Implementing conversation threads** is like composing a movie script. Your bot is in constant dialogue with the user: **each command starts by handling user's answer to your previous question and ends with posing a new one**:
 
 ```ruby
 # bot.rb
@@ -87,9 +87,7 @@ end
 
 [Sinatra](http://www.sinatrarb.com/) is enabled inside the boilerplate by default, and you can use its familiar syntax to define new webhooks for incoming API calls.  
 
-A built-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).
-
-# Happy scripting!    
+A built-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).  
 
 *DISCLAIMER:* *I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on.*  
 
@@ -152,11 +150,15 @@ Now open the boilerplate in your favorite text editor and let's take a look at t
 
 ```
 
-# Set up
+# Setup
 
-## Facebook set up pt. 1. Tokens and environment variables.
+## Facebook setup pt. 1. Tokens and environment variables.
 
-## Develop and test on localhost
+**Rubotnik** stores its environment variables (aka config vars) locally in .env file (here goes the standard reminder to never check this file into remote repository) `heroku local` loads its contents automatically, so you don't need to worry about setting them manually. If you don't want to use `heroku local` and prefer an old good `rackup`, make sure to uncomment `require 'dotenv/load'` on top of `bot.rb` so variables will be loaded in your local environment by [dotenv](https://github.com/bkeepers/dotenv) gem. If you do so, don't forget to comment it out again before pushing to Heroku for production.  
+
+**Note!** In production, you will have to set your config variables by hand, either in your dashboard, or by using `heroku config:set VARIABLE_NAME=value` command in the terminal.
+
+## Development and testing on localhost
 
 Make sure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). Run `heroku local` to start bot server on localhost. By default, it will run on port 5000. Run [ngrok](https://ngrok.com/) on the same port:
 
@@ -165,9 +167,9 @@ ngrok http 5000
 ```
 This will expose your localhost for external connections through an URL like `https://92832de0.ngrok.io` (the name will change every time you restart ngrok, so better keep it running in a separate terminal tab)
 
-## Facebook set up pt. 2. Webhook.
+## Facebook setup pt. 2. Webhooks.
 
-# Working with boilerplate
+# Working with Boilerplate
 
 ## Helpers
 

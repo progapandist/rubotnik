@@ -86,7 +86,7 @@ def handle_age_and_ask_smth_else
 end
 ```
 
-**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as an **independent web app** (primed for [Heroku](https://heroku.com)). It can be easily extended to work with your main project through the REST API. The default server is Puma, but you can use any other Rack webserver for production or development (note that the minimal in-memory user store and message dispatch does not support parallelism through processes, a Puma server can only run with **one "worker"**, multiple *threads* are fine).
+**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as a **self-contained web app** (primed for [Heroku](https://heroku.com)). It can work with your main project through the REST API and use its database for persistence. The default server is Puma, but you can use any other Rack webserver for production or development (note that the minimal in-memory user store and message dispatch does not support parallelism through processes, a Puma server can only run with **one "worker"**, multiple *threads* are fine).
 
 [Sinatra](http://www.sinatrarb.com/) is enabled inside the boilerplate by default, and you can use its familiar syntax to define new webhooks for incoming API calls.  
 

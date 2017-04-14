@@ -1,5 +1,5 @@
 # Showcases a chained sequence of commands that gather the data
-# and store it in the answers hash inside the User instance       .
+# and store it in the answers hash inside the User instance.
 
 module Questionnaire
   # State 'module_function' before any method definitions so
@@ -52,10 +52,12 @@ module Questionnaire
 
   def show_results
     say "OK. Here's what we now about you so far:"
-    name, gender, age = @user.answers.values
-    text = "Name: #{name.nil? ? "N/A" : name}, " +
-           "gender: #{gender.nil? ? "N/A" : gender}, " +
-           "age: #{age.nil? ? "N/A" : age}"
+    name = @user.answers.fetch(:name, "N/A")
+    gender = @user.answers.fetch(:gender, "N/A")
+    age = @user.answers.fetch(:age, "N/A")
+    text = "Name: #{name}, " +
+           "gender: #{gender}, " +
+           "age: #{age}"
     say text
     say "Thanks for your time!"
   end

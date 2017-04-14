@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/BlockLength
+
 # require 'dotenv/load'
 # leave the line above commented out if you're using 'heroku local' for testing
 # should also be commented out before pushing to Heroku.
@@ -9,12 +11,12 @@ include Facebook::Messenger
 include Helpers # mixing helpers into the common namespace
 # so the can be used outside of Dispatches
 
-############# START YOUR BOT AND SETUP GREETING AND MENU ###################
+############# START UP YOUR BOT, SET UP GREETING AND MENU ###################
 
-# IMPORTANT! Subcribe your bot to your page here.
+# NB: Subcribe your bot to your page here.
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 
-# Enabling "Get Started" button, greeting and persistent menu for your bot
+# Enable "Get Started" button, greeting and persistent menu for your bot
 Rubotnik::BotProfile.enable
 Rubotnik::PersistentMenu.enable
 
@@ -23,24 +25,23 @@ Rubotnik::PersistentMenu.enable
 # NOTE: QuickReplies.build should be called with a splat operator
 # if a set of quick replies is an array of arrays.
 # e.g. UI::QuickReplies.build(*replies)
-HINTS = UI::QuickReplies.build(["Where am I?", "LOCATION"],
-                               ["Take questionnaire", "QUESTIONNAIRE"])
+HINTS = UI::QuickReplies.build(['Where am I?', 'LOCATION'],
+                               ['Take questionnaire', 'QUESTIONNAIRE'])
 
 # Build a quick reply that prompts location from user
 LOCATION_PROMPT = UI::QuickReplies.location
 
 # Define vartiables you want to use for both messages and postbacks
 # outside both Bot.on method calls.
-questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
-                                               ["No", "STOP_QUESTIONNAIRE"])
-questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
+questionnaire_replies = UI::QuickReplies.build(%w[Yes START_QUESTIONNAIRE],
+                                               %w[No STOP_QUESTIONNAIRE])
+questionnaire_welcome = 'Welcome to the sample questionnaire! Are you ready?'
 
 ####################### ROUTE MESSAGES HERE ################################
 
 Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
-
     # All strings will be turned into case insensitive regular expressions.
     # If you pass a number of strings, any match will trigger a command,
     # unless 'all: true' flag is present. In that case, MessageDispatch
@@ -48,56 +49,57 @@ Bot.on :message do |message|
 
     # Greeting will only be executed once until user reconnects.
     # Use block to do more than just send a text message.
-    greet with: "Hello and welcome!"
+    greet with: 'Hello and welcome!'
 
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
-    bind "carousel", "generic template", to: :show_carousel
-    bind "button", "template", all: true, to: :show_button_template
+    bind 'carousel', 'generic template', to: :show_carousel
+    bind 'button', 'template', all: true, to: :show_button_template
 
-    # TODO: TESTING IMAGES
-    bind "peppa" do
-      UI::ImageAttachment.new("http://i.dailymail.co.uk/i/pix/2015/03/03/04D5AAF90000044D-2966958-image-a-4_1425375252836.jpg").send(@user)
+    # TODO: TESTING IMAGES. REPLACE WITH OTHER EXAMPLE
+    bind 'peppa' do
+      img = 'https://goo.gl/UTSH2g'
+      UI::ImageAttachment.new(img).send(@user)
     end
 
     # bind also takes regexps directly
     bind(/my name/i, /mon nom/i) do
       user_info = get_user_info(:first_name)
       if user_info
-        user_name = user_info["first_name"]
+        user_name = user_info['first_name']
         say "Your name is #{user_name}!"
       else
-        say "I could not get your name, sorry :("
+        say 'I could not get your name, sorry :('
       end
     end
 
     # Use with block if you want to provide response behaviour
     # directly without looking for an existing command inside Commands.
-    bind "knock" do
+    bind 'knock' do
       say "Who's there?"
     end
 
-    # Use with 'to:' and 'start_thread:' to point to the first command in a thread.
-    # Thread should be located in Commands or a separate module mixed into Commands.
-    # Include nested hash to provide a message asking user for input to the next command.
-    # You can also pass an array of quick replies (you process them inside the thread).
+    # Use with 'to:' and 'start_thread:' to point to the first
+    # command of a thread. Thread should be located in Commands
+    # or a separate module mixed into Commands.
+    # Include nested hash to provide a message asking user
+    # for input to the next command. You can also pass an array of
+    # quick replies (and process them inside the thread).
     bind 'questionnaire', to: :start_questionnaire, start_thread: {
-                                                      message: questionnaire_welcome,
-                                                      quick_replies: questionnaire_replies
-                                                    }
+      message: questionnaire_welcome,
+      quick_replies: questionnaire_replies
+    }
 
-    bind "where", "am", "I", all: true, to: :lookup_location,
-                            start_thread: {
-                              message: "Let me know your location",
-                              quick_replies: LOCATION_PROMPT
-                            }
+    bind 'where', 'am', 'I', all: true, to: :lookup_location, start_thread: {
+      message: 'Let me know your location',
+      quick_replies: LOCATION_PROMPT
+    }
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     unrecognized do
-      say "Here are some suggestions for you:", quick_replies: HINTS
+      say 'Here are some suggestions for you:', quick_replies: HINTS
     end
-
   end
 end
 
@@ -105,56 +107,54 @@ end
 
 Bot.on :postback do |postback|
   Rubotnik::PostbackDispatch.new(postback).route do
-
-    bind "START" do
-      say "Hello and welcome!"
+    bind 'START' do
+      say 'Hello and welcome!'
       @user.greet # greet user when she starts from welcome screen
-      say "Here are some suggestions for you:", quick_replies: HINTS
+      say 'Here are some suggestions for you:', quick_replies: HINTS
     end
 
-    bind "CAROUSEL", to: :show_carousel
-    bind "BUTTON_TEMPLATE", to: :show_button_template
+    bind 'CAROUSEL', to: :show_carousel
+    bind 'BUTTON_TEMPLATE', to: :show_button_template
 
     # Use block syntax when a command takes an argument rather
     # than 'message' or 'user' (which are accessible from everyhwere
     # as instance variables, no need to pass them around).
-    bind "BUTTON_TEMPLATE_ACTION" do
+    bind 'BUTTON_TEMPLATE_ACTION' do
       say "I don't really do anything useful"
     end
 
-    bind "SQUARE_IMAGES" do
+    bind 'SQUARE_IMAGES' do
       show_carousel(image_ratio: :square)
     end
 
     # No custom parameter passed, can use simplified syntax
-    bind "HORIZONTAL_IMAGES", to: :show_carousel
+    bind 'HORIZONTAL_IMAGES', to: :show_carousel
 
-    bind "LOCATION", to: :lookup_location, start_thread: {
-                                             message: "Let me know your location",
-                                             quick_replies: LOCATION_PROMPT
-                                           }
+    bind 'LOCATION', to: :lookup_location, start_thread: {
+      message: 'Let me know your location',
+      quick_replies: LOCATION_PROMPT
+    }
 
-    bind "QUESTIONNAIRE", to: :start_questionnaire, start_thread: {
-                                                      message: questionnaire_welcome,
-                                                      quick_replies: questionnaire_replies
-                                                    }
-
+    bind 'QUESTIONNAIRE', to: :start_questionnaire, start_thread: {
+      message: questionnaire_welcome,
+      quick_replies: questionnaire_replies
+    }
   end
 end
 
 ##### USE STANDARD SINATRA TO IMPLEMENT WEBHOOKS FOR OTHER SERVICES #######
 
 # Example of API integration. Use regular Sintatra syntax to define endpoints.
-post "/incoming" do
+post '/incoming' do
   begin
     sender_id = params['id']
     user = UserStore.instance.find_or_create_user(sender_id)
     say("You got a message: #{params['message']}", user: user)
   rescue
-    p "User not recognized or not available at the time"
+    p 'User not recognized or not available at the time'
   end
 end
 
-get "/" do
-  "Nothing to look at"
+get '/' do
+  'Nothing to look at'
 end

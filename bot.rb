@@ -9,6 +9,7 @@ include Facebook::Messenger
 include Helpers # mixing helpers into the common namespace
 # so the can be used outside of Dispatches
 
+############# START YOUR BOT AND SETUP GREETING AND MENU ###################
 
 # IMPORTANT! Subcribe your bot to your page here.
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
@@ -16,6 +17,8 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV['ACCESS_TOKEN'])
 # Enabling "Get Started" button, greeting and persistent menu for your bot
 Rubotnik::BotProfile.enable
 Rubotnik::PersistentMenu.enable
+
+############################################################################
 
 # NOTE: QuickReplies.build should be called with a splat operator
 # if a set of quick replies is an array of arrays.
@@ -32,7 +35,7 @@ questionnaire_replies = UI::QuickReplies.build(["Yes", "START_QUESTIONNAIRE"],
                                                ["No", "STOP_QUESTIONNAIRE"])
 questionnaire_welcome = "Welcome to the sample questionnaire! Are you ready?"
 
-###################### ROUTE MESSAGES HERE ################################
+####################### ROUTE MESSAGES HERE ################################
 
 Bot.on :message do |message|
   # Use DSL inside the following block:
@@ -43,7 +46,7 @@ Bot.on :message do |message|
     # unless 'all: true' flag is present. In that case, MessageDispatch
     # will expect all words to be present in a single message.
 
-    # Will only be executed once until user deletes the chat and reconnects.
+    # Greeting will only be executed once until user reconnects.
     # Use block to do more than just send a text message.
     greet with: "Hello and welcome!"
 
@@ -77,17 +80,17 @@ Bot.on :message do |message|
     # Use with 'to:' and 'start_thread:' to point to the first command in a thread.
     # Thread should be located in Commands or a separate module mixed into Commands.
     # Include nested hash to provide a message asking user for input to the next command.
-    # You can also pass an array of quick replies (you will have to process them
-    # inside the thread).
+    # You can also pass an array of quick replies (you process them inside the thread).
     bind 'questionnaire', to: :start_questionnaire, start_thread: {
                                                       message: questionnaire_welcome,
                                                       quick_replies: questionnaire_replies
                                                     }
 
-    bind "where", "am", "I", to: :lookup_location, start_thread: {
-                                    message: "Let me know your location",
-                                    quick_replies: LOCATION_PROMPT
-                                  }
+    bind "where", "am", "I", all: true, to: :lookup_location,
+                            start_thread: {
+                              message: "Let me know your location",
+                              quick_replies: LOCATION_PROMPT
+                            }
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
@@ -98,7 +101,7 @@ Bot.on :message do |message|
   end
 end
 
-############### ROUTE POSTBACKS HERE #################################
+######################## ROUTE POSTBACKS HERE ###############################
 
 Bot.on :postback do |postback|
   Rubotnik::PostbackDispatch.new(postback).route do

@@ -1,7 +1,5 @@
 # rubocop:disable Metrics/BlockLength
-# require 'dotenv/load'
-# leave the line above commented out if you're using 'heroku local' for testing
-# should also be commented out before pushing to Heroku.
+# require 'dotenv/load' # leave this line commented while working with heroku
 require 'facebook/messenger'
 require 'sinatra'
 require_relative 'rubotnik/rubotnik'

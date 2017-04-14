@@ -1,5 +1,4 @@
 # rubocop:disable Metrics/BlockLength
-
 # require 'dotenv/load'
 # leave the line above commented out if you're using 'heroku local' for testing
 # should also be commented out before pushing to Heroku.

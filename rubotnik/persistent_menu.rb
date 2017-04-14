@@ -1,7 +1,7 @@
 module Rubotnik
   class PersistentMenu
     def self.enable
-      # Design your persistent menu here: 
+      # Design your persistent menu here:
       Facebook::Messenger::Profile.set({
         persistent_menu: [
           {
@@ -17,7 +17,7 @@ module Rubotnik
                 title: 'Sample UI elements',
                 call_to_actions: [
                   {
-                    title: "Generic Template",
+                    title: 'Generic Template',
                     type: 'postback',
                     payload: 'CAROUSEL'
                   },

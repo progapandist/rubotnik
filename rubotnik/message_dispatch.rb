@@ -52,12 +52,15 @@ module Rubotnik
 
     def handle_command(to, start_thread)
       if start_thread.empty?
+        puts "Command #{to} is executed for user #{@user.id}"
         execute(to)
         @user.reset_command
+        puts "Command is reset for user #{@user.id}"
       else
-        # say definition is located in Helpers module mixed into bot.rb 
+        # say definition is located in Helpers module mixed into bot.rb
         say(start_thread[:message], quick_replies: start_thread[:quick_replies])
         @user.set_command(to)
+        puts "Command #{to} is set for user #{@user.id}"
       end
     end
 

@@ -1,6 +1,6 @@
 require 'singleton'
 require_relative 'user'
-
+# In-memory storage for users
 class UserStore
   include Singleton
   attr_reader :users
@@ -9,7 +9,7 @@ class UserStore
   end
 
   def find_or_create_user(id)
-    self.find(id) || self.add(User.new(id))
+    find(id) || add(User.new(id))
   end
 
   # TODO: Remove debug statements
@@ -21,7 +21,7 @@ class UserStore
       p "user #{user.inspect} added to store"
       p "we got #{@users.count} users: #{@users}"
     else
-      p "user not found in store yet"
+      p 'user not found in store yet'
     end
     user
   end
@@ -29,7 +29,7 @@ class UserStore
   def find(id)
     user = @users.find { |u| u.id == id }
     p "user #{user} found in store" if user
-    p "we got #{@users.count} users: #{@users}" if user 
+    p "we got #{@users.count} users: #{@users}" if user
     user
   end
 end

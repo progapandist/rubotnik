@@ -1,4 +1,6 @@
+# rubocop:disable all 
 module Rubotnik
+  # Enables persistent menu for your bot
   class PersistentMenu
     def self.enable
       # Design your persistent menu here:

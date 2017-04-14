@@ -1,4 +1,7 @@
+# rubocop:disable all
+
 module Rubotnik
+  # Sets up greeting screen for the bot
   class BotProfile
     def self.enable
       # Set call to action button when user is about to address bot

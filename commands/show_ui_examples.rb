@@ -1,5 +1,5 @@
 require_relative '../demo/sample_elements.rb'
-
+# An example of commands submodule.
 module ShowUIExamples
   # State 'module_function' before any method definitions so
   # commands are mixed into Dispatch classes as private methods.
@@ -8,7 +8,8 @@ module ShowUIExamples
   # Commands that showcase main UI elements
   def show_button_template
     UI::FBButtonTemplate.new(SampleElements::BUTTON_TEMPLATE_TEXT,
-                             SampleElements::BUTTON_TEMPLATE_BUTTONS).send(@user)
+                             SampleElements::BUTTON_TEMPLATE_BUTTONS)
+                        .send(@user)
   end
 
   def show_carousel(image_ratio: nil)

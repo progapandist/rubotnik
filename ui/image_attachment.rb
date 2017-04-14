@@ -1,13 +1,15 @@
+# rubocop:disable Metrics/MethodLength
 module UI
+  # https://developers.facebook.com/docs/messenger-platform/send-api-reference/image-attachment
   class ImageAttachment
     def initialize(url)
       @template = {
         recipient: {
           id: nil
         },
-        message:{
+        message: {
           attachment: {
-            type: "image",
+            type: 'image',
             payload: {
               url: url
             }

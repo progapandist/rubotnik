@@ -1,3 +1,4 @@
+# A model for the user
 class User
   attr_reader :id
   attr_accessor :answers
@@ -7,7 +8,7 @@ class User
     @commands = []
     @greeted = false
     # This hash is used for the sake of example.
-    # Use your own logic to collect data. 
+    # Use your own logic to collect data.
     @answers = {}
   end
 
@@ -15,7 +16,7 @@ class User
     @commands.last
   end
 
-  def set_command(command)
+  def assign_command(command)
     @commands << command
   end
 
@@ -30,5 +31,4 @@ class User
   def greeted?
     @greeted
   end
-
 end

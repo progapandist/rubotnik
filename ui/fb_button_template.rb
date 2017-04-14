@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/MethodLength
+
 module UI
   ########################### BUTTON TEMPLATE #############################
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/button-template
@@ -7,11 +9,11 @@ module UI
         recipient: {
           id: nil
         },
-        message:{
+        message: {
           attachment: {
-            type: "template",
+            type: 'template',
             payload: {
-              template_type: "button",
+              template_type: 'button',
               text: text,
               buttons: parse_buttons(buttons)
             }

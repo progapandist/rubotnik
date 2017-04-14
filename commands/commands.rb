@@ -3,7 +3,8 @@ require 'json'
 require_relative '../ui/ui'
 require_relative 'questionnaire'
 require_relative 'show_ui_examples'
-
+# Everything in this module will become private methods for Dispatch classes
+# and will exist in a shared namespace.
 module Commands
   # Mix-in sub-modules for threads
   include Questionnaire
@@ -33,7 +34,8 @@ module Commands
     @message.typing_on
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed)
-    say "Coordinates of your location: Latitude #{lat}, Longitude #{long}. Looks like you're at #{address}"
+    say "Coordinates of your location: Latitude #{lat}, Longitude #{long}. " \
+        "Looks like you're at #{address}"
     @message.typing_off
   end
 

@@ -37,7 +37,7 @@ module Rubotnik
         puts "Command is reset for user #{@user.id}"
       else
         say(start_thread[:message], quick_replies: start_thread[:quick_replies])
-        @user.set_command(to)
+        @user.assign_command(to)
         puts "Command #{to} is set for user #{@user.id}"
       end
     end

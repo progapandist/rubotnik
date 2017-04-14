@@ -1,12 +1,11 @@
+# rubocop:disable Metrics/MethodLength
 module UI
   ################## GENERIC TEMPLATE (aka CAROUSEL) #######################
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template
-
-  # NOTE: default_action not supported yet
   class FBCarousel
     def initialize(elements)
       @template = {
-        recipient: { id: nil},
+        recipient: { id: nil },
         message: {
           attachment: {
             type: 'template',
@@ -34,13 +33,14 @@ module UI
 
     # set image aspect ratio to 'square'
     def square_images
-      @template[:message][:attachment][:payload][:image_aspect_ratio] = "square"
+      @template[:message][:attachment][:payload][:image_aspect_ratio] = 'square'
       self
     end
 
     # set image aspect ratio to 'square'
     def horizontal_images
-      @template[:message][:attachment][:payload][:image_aspect_ratio] = "horizontal"
+      hrz = 'horizontal'
+      @template[:message][:attachment][:payload][:image_aspect_ratio] = hrz
       self
     end
 

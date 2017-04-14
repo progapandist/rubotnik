@@ -55,6 +55,7 @@ module Rubotnik
         execute(to)
         @user.reset_command
       else
+        # say definition is located in Helpers module mixed into bot.rb 
         say(start_thread[:message], quick_replies: start_thread[:quick_replies])
         @user.set_command(to)
       end

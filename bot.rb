@@ -45,7 +45,7 @@ Bot.on :message do |message|
 
     # Will only be executed once until user deletes the chat and reconnects.
     # Use block to do more than just send a text message.
-    greet "Hello and welcome!"
+    greet with: "Hello and welcome!"
 
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
@@ -84,16 +84,10 @@ Bot.on :message do |message|
                                                       quick_replies: questionnaire_replies
                                                     }
 
-    # Use check_payload: "STRING" option to check both text AND payload
-    # tied to  quick reply. Useful when the binded command is a popular word
-    # If you use that option, your command will ONLY be triggered when
-    # the user hits the quick reply button and never parsed from input.
-    bind "where", to: :lookup_location,
-                  check_payload: "LOCATION",
-                  start_thread: {
-                                  message: "Let me know your location",
-                                  quick_replies: LOCATION_PROMPT
-                                }
+    bind "where", "am", "I", to: :lookup_location, start_thread: {
+                                    message: "Let me know your location",
+                                    quick_replies: LOCATION_PROMPT
+                                  }
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.

@@ -99,7 +99,7 @@ end
 
 A built-in set of convenience classes makes working with Messenger Platform less tedious (you don't need to hardcode huge nested JSONs/hashes anymore to use basic interface features, just call one of the builder classes inside **UI** module).  
 
-*DISCLAIMER:* *I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on.*  
+_**DISCLAIMER:** I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on._
 
 ## Installation
 Assuming you are going to use this boilerplare as a starting point for your own bot:
@@ -179,11 +179,11 @@ Create a file named `.env` on the root level of the boilerplate. Create another 
 ```
 .env
 ```
-Save the `.gitignore` file. Now open your `.env` and put two tokens there, like so:
+Save the `.gitignore` file. Now open your `.env` and put two tokens (one you've just generated and another you need to come up with and save for later) inside:
 
 ```ruby
 ACCESS_TOKEN=your_page_access_token_from_the_dashboard
-VERIFY_TOKEN=come_up_with_any_string_you_will_use_it_later
+VERIFY_TOKEN=come_up_with_any_string_you_will_use_at_next_step
 
 ```
 
@@ -194,14 +194,26 @@ From now on, they can be referenced inside your program as `ENV['ACCESS_TOKEN']`
 
 ## Running on localhost
 
-Make sure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). Run `heroku local` to start bot server on localhost. By default, it will run on port 5000. Run [ngrok](https://ngrok.com/) on the same port:
+Make sure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). Run `heroku local` to start bot server on localhost. Provided you set up your token correctly, you should see something like this:
+
+![server starts](./docs/server_start.png)
+
+By default, bot will run on port 5000. Start [ngrok](https://ngrok.com/) on the same port:
 
 ```
 ngrok http 5000
 ```
-This will expose your localhost for external connections through an URL like `https://92832de0.ngrok.io` (the name will change every time you restart ngrok, so better keep it running in a separate terminal tab)
+This will expose your localhost for external connections through an URL like `https://92832de0.ngrok.io` (the name will change every time you restart ngrok, so better keep it running in a separate terminal tab). Make note of the URL that start with `https://`, you will give to Facebook in the next step.
+
+![ngrok running](./docs/ngrok.png)
 
 ## Facebook setup pt. 2. Webhooks.
+
+Now that your bot is running on your machine, we need to connect it to the Messenger Platform. Go back to your dashboard. Right under **Token Generation** find **Webhooks** and click "Setup Webhooks". In the URL field put your HTTPS ngrok address ending with `/webhook`, provide the verify token you came up with earlier and under Subscription Fields tick *messages* and *messaging_postbacks*. Click **"Verify and Save"**.
+
+![webhook setup](./docs/webhook_setup.png)
+
+Congrats! Your bot is connected to Facebook! You can start working on it.  
 
 # Working with Boilerplate
 
@@ -220,7 +232,7 @@ Your starting point is `bot.rb` file that serves your bot, enables its persisten
 ## Missing and planned features
 
 - [ ] Support for other types of Messenger Platform events like *optins* and *referrals*
-- [ ] Support for other UI elements, like *List Template*
+- [ ] Support for other Messenger UI elements like *List Template*
 - [ ] Integration with NLU services like Wit.ai and API.ai
 
 Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and other grown-up things.

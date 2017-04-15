@@ -57,7 +57,7 @@ module Helpers
     case response.code
     when 200
       puts "User data received from Graph API: #{response.body}" # logging
-      return JSON.parse(response.body)
+      return JSON.parse(response.body, symbolize_names: true)
     else
       return false
     end

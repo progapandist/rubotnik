@@ -63,7 +63,7 @@ Bot.on :message do |message|
     bind(/my name/i, /mon nom/i) do
       user_info = get_user_info(:first_name)
       if user_info
-        user_name = user_info['first_name']
+        user_name = user_info[:first_name]
         say "Your name is #{user_name}!"
       else
         say 'I could not get your name, sorry :('

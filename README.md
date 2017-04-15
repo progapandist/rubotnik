@@ -221,15 +221,76 @@ Congrats! Your bot is connected to Facebook! You can start working on it.
 
 Your starting point is `bot.rb` file that serves your bot, enables its persistent menu and a greeting screen, and provides top-level routing for messages and postbacks.
 
+Messages and postbacks (referenced inside the common namespace as `@message` and `@postback`) are `Facebook::Messenger::Incoming::Message` and `Facebook::Messenger::Incoming::Postback` objects of [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and have all the properties defined in its README. The only difference being, in Rubotnik `message` is always an instance variable prepended with `@`
+
+```ruby
+
+@message.id         # => 'mid.1457764197618:41d102a3e1ae206a38'
+@message.sender     # => { 'id' => '1008372609250235' }
+@message.seq         # => 73
+@message.sent_at     # => 2016-04-22 21:30:36 +0200
+@message.text        # => 'Hello, bot!'
+@message.attachments # => [ { 'type' => 'image', 'payload' => { 'url' => 'https://www.example.com/1.jpg' } } ]
+
+```
+
 **Greeting screen** (the one with 'Get Started' button and a welcome message) can be configured inside `rubotnik/bot_profile.rb`.
 
 **Persistent menu** (note it supports nesting) can be defined inside `rubotnik/persistent_menu.rb`.
 
 Follow the logic of the provided examples, you can also refer to Facebook documentation (just note that all the examples there are raw JSONs as the API accepts them, some parts of them have already been abstracted out on facebook-messenger gem level).  
 
-The most important thing in `bot.rb` happens inside of blocks fed to `Bot.on :messages` and `Bot.on :postbacks` call
+The most important thing in `bot.rb` happens inside of blocks fed to `Bot.on :messages` and `Bot.on :postbacks` method calls.
+
+Every incoming message or postback creates an instance of respective `Dispatch` class (either `MesssageDispatch` or `PostbackDispatch`). These classes provide DSL for routing and track users' state inside the threads, ensuring messages from different users never overlap.
+
+Routing DSL is used inside blocks passed to `Rubotnik::MessageDispatch.new(message).route` or `Rubotnik::PostbackDispatch.new(postback).route`. More on that later.
 
 ## Helpers
+
+Inside `helpers/helpers.rb` there are some pre-defined helper methods (you can write your own!) that are made available globally by mixing in the module inside the `bot.rb` namespace.
+
+---
+
+Most important of them is `say` that lets you send a plain message to a connected user. It defaults to  `@user` instance variable that is set automatically for you on each message or postback received, but you can pass an optional `user:` argument to send something to a different user).  
+
+The syntax is straightforward:
+
+```ruby
+say 'Nice to meet you!'
+```
+
+`say` can take an array of quick replies (a maximum of 11) that will be appear at the bottom of the message:
+
+![quick replies](./docs/quick_replies.PNG)
+
+In order to do that, you first define an array of replies either by hand, following [Facebook's example](https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies) or by using `UI::QuickReplies.build` class method that allows you to build quick replies by passing arrays of two strings in the form of `['title', 'POSTBACK']` as arguments.
+
+```ruby
+# Achieves the same result as on the screenshot above
+replies = UI::QuickReplies.build(['Yes', 'YES'], ['No', 'NO'])
+say 'Welcome to the sample questionnaire! Are you ready?', quick_replies: replies
+```
+
+---
+
+`text_message?` allows you to check if the message received from the user contains text (and isn't a GIF, a sticker or anything else). Useful for implementing sanity checks.
+
+---
+
+`message_contains_location?` checks if the user has shared a location with your bot. Then you can access its coordinates.
+
+---
+
+`get_user_info(*fields)` takes a list of fields good for [Graph API User](https://developers.facebook.com/docs/graph-api/reference/v2.2/user) and makes a call to the Graph referencing connected user's id. Returns a hash with user data. Keys are symbols. That way you can address your user by real name and generally know more about him. 
+
+```ruby
+get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Doe" }  
+```   
+
+---
+
+`next_command` and `stop_thread` are used to chain commands together in order to create conversation threads. More on that later.
 
 ## Routing
 

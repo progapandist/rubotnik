@@ -1,7 +1,7 @@
 *"We are the robots / Ya tvoi sluga / Ya tvoi rabotnik"  — Kraftwerk*
 
 # Rubotnik
-### All you need to launch your own functional Ruby bot for Facebook Messenger fast
+### All you need to launch your own functional Ruby bot for Facebook Messenger FAST
 
 It's as easy as:
 
@@ -11,6 +11,8 @@ It's as easy as:
 4. You're live!
 
 **Rubotnik is a minimalistic boilerplate** and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers. The main promise of **Rubotnik** is to speed up bot development in Ruby and provide a more natural mental model for bot-user interactions.
+
+**Rubotnik** is also **very** beginner friendly :baby: :baby_bottle: 
 
 **Rubotnik** comes with a bare-bones architecture that ensures multiple users are served without delays or overlaps. It also provides a single shared namespace for everything your bot can do, so your bot's "commands" can be easily bound to incoming messages (or [postbacks](https://developers.facebook.com/docs/messenger-platform/webhook-reference/postback)) through intuitive DSL, like so (strings are treated as case-insensitive regexps):
 
@@ -218,6 +220,14 @@ Congrats! Your bot is connected to Facebook! You can start working on it.
 # Working with Boilerplate
 
 Your starting point is `bot.rb` file that serves your bot, enables its persistent menu and a greeting screen, and provides top-level routing for messages and postbacks.
+
+**Greeting screen** (the one with 'Get Started' button and a welcome message) can be configured inside `rubotnik/bot_profile.rb`.
+
+**Persistent menu** (note it supports nesting) can be defined inside `rubotnik/persistent_menu.rb`.
+
+Follow the logic of the provided examples, you can also refer to Facebook documentation (just note that all the examples there are raw JSONs as the API accepts them, some parts of them have already been abstracted out on facebook-messenger gem level).  
+
+The most important thing in `bot.rb` happens inside of blocks fed to `Bot.on :messages` and `Bot.on :postbacks` call
 
 ## Helpers
 

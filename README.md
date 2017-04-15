@@ -297,7 +297,9 @@ get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Do
 **Rubotnik** comes with a simple DSL to bind messages and postbacks to respective commands. The DSL is enabled inside a block passed to `Rubotnik::MessageDispatch.new(message).route` or `Rubotnik::PostbackDispatch.new(postback).route`. The basic syntax is:
 
 ```ruby
-bind "word", "synonym", to: :command_name # a method command_name should be found inside Commands module or any other module mixed into it.   
+bind "word", "synonym", to: :command_name
+# a method command_name should be found inside Commands module
+# or any other module mixed into it.   
 ```
 
 Note that you reference a method to execute (we call it **'command'** in this README) by providing its name **as a symbol**
@@ -309,35 +311,44 @@ Note that you reference a method to execute (we call it **'command'** in this RE
 Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
-    bind "hey", to: :hey_yourself
+    bind "hey", "hi", to: :hey_yourself
   end
 end
 
 # commands.rb
 def hey_yourself
-  say 'Hey yourself!'
+  say "#{@message.text} yourself!"
 end
 
 ```
 
-Any message from any user containing 'hey' (case insensitive) will trigger `hey_yourself` command **immediately** and reset user's state.
+Any message from any user containing 'hey' (case insensitive) OR 'hi' will trigger `hey_yourself` command **immediately** and reset user's state.
 
-In this particular case your command does not do much, so it's probably easier to define behaviour direcly inside the routing block. Any `bind` statement will also take a block.
+In this particular case your command does not do much, so it's probably easier to define behavior directly inside the routing block. Any `bind` statement will also take a block.
+
+This will achieve the same result:
 
 ```ruby
 # bot.rb
 Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
-    bind "hey" do
-      say 'Hey yourself!'
+    bind "hey", "hi" do
+      say "#{@message.text} yourself!"
     end
   end
 end
 
 ```
 
-`all: true`
+You can set `all: true` flag to match not ANY of the trigger words in the message, but all of them. The order doesn't matter.
+
+```ruby
+bind "eat", "shoot", "leave", to: :about_panda
+# will match 'Panda eats, shoots and leaves'
+# but won't match "Don't leave me now"
+```
+
 
 `start_thread`
 

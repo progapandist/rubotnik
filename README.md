@@ -1,7 +1,7 @@
 *"We are the robots / Ya tvoi sluga / Ya tvoi rabotnik"  — Kraftwerk*
 
 # Rubotnik
-### All you need to launch your own Ruby bot for Facebook Messenger right now
+### All you need to launch your own functional Ruby bot for Facebook Messenger fast
 
 It's as easy as:
 
@@ -205,6 +205,8 @@ This will expose your localhost for external connections through an URL like `ht
 
 # Working with Boilerplate
 
+Your starting point is `bot.rb` file that serves your bot, enables its persistent menu and a greeting screen, and provides top-level routing for messages and postbacks.
+
 ## Helpers
 
 ## Routing
@@ -216,3 +218,33 @@ This will expose your localhost for external connections through an URL like `ht
 # Deployment
 
 ## Missing and planned features
+
+- [ ] Support for other types of Messenger Platform events like *optins* and *referrals*
+- [ ] Support for other UI elements, like *List Template*
+- [ ] Integration with NLU services like Wit.ai and API.ai
+
+Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and other grown-up things.
+
+---
+
+MIT License
+
+Copyright (c) 2016-2017 Andrei Baranov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -215,7 +215,7 @@ Now that your bot is running on your machine, we need to connect it to the Messe
 
 ![webhook setup](./docs/webhook_setup.png)
 
-Congrats! Your bot is connected to Facebook! You can start working on it.  
+> :tada: Congrats! Your bot is connected to Facebook! You can start working on it.  
 
 # Working with Boilerplate
 

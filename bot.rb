@@ -94,7 +94,7 @@ Bot.on :message do |message|
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
-    unrecognized do
+    default do
       say 'Here are some suggestions for you:', quick_replies: HINTS
     end
   end

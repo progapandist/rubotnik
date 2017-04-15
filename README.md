@@ -250,9 +250,7 @@ Routing DSL is used inside blocks passed to `Rubotnik::MessageDispatch.new(messa
 
 Inside `helpers/helpers.rb` there are some pre-defined helper methods (you can write your own!) that are made available globally by mixing in the module inside the `bot.rb` namespace.
 
----
-
-Most important of them is `say` that lets you send a plain message to a connected user. It defaults to  `@user` instance variable that is set automatically for you on each message or postback received, but you can pass an optional `user:` argument to send something to a different user).  
+**Most important of them** is `say` that lets you send a plain message to a connected user. It defaults to  `@user` instance variable that is set automatically for you on each message or postback received, but you can pass an optional `user:` argument to send something to a different user.  
 
 The syntax is straightforward:
 
@@ -260,7 +258,7 @@ The syntax is straightforward:
 say 'Nice to meet you!'
 ```
 
-`say` can take an array of quick replies (a maximum of 11) that will be appear at the bottom of the message:
+`say` can take an array of quick replies (a maximum of 11) that will appear at the bottom of the message and will remove any guesswork for your user regarding her further actions:
 
 ![quick replies](./docs/quick_replies.PNG)
 
@@ -272,6 +270,8 @@ replies = UI::QuickReplies.build(['Yes', 'YES'], ['No', 'NO'])
 say 'Welcome to the sample questionnaire! Are you ready?', quick_replies: replies
 ```
 
+There are two ways to catch user's selection of a quick reply later in the program: either by looking at next `@message`'s `.text` or by accessing its `.quick_reply` property that will contain a string you defined as a payload for a given reply. (**Note:** it's a convention to define *payload* in CAPITAL_CASE). See the example of that in `questionnaire.rb`.
+
 ---
 
 `text_message?` allows you to check if the message received from the user contains text (and isn't a GIF, a sticker or anything else). Useful for implementing sanity checks.
@@ -282,7 +282,7 @@ say 'Welcome to the sample questionnaire! Are you ready?', quick_replies: replie
 
 ---
 
-`get_user_info(*fields)` takes a list of fields good for [Graph API User](https://developers.facebook.com/docs/graph-api/reference/v2.2/user) and makes a call to the Graph referencing connected user's id. Returns a hash with user data. Keys are symbols. That way you can address your user by real name and generally know more about him. 
+`get_user_info(*fields)` takes a list of fields good for [Graph API User](https://developers.facebook.com/docs/graph-api/reference/v2.2/user) and makes a call to the Graph referencing connected user's id. Returns a hash with user data. Keys are symbols. That way you can address your user by real name and generally know more about him.
 
 ```ruby
 get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Doe" }  

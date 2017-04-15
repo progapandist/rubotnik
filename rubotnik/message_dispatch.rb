@@ -64,7 +64,7 @@ module Rubotnik
       end
     end
 
-    def unrecognized
+    def default
       return if @matched
       puts 'None of the commands were recognized' # log
       yield

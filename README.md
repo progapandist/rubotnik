@@ -12,7 +12,7 @@ It's as easy as:
 
 **Rubotnik is a minimalistic boilerplate** and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers. The main promise of **Rubotnik** is to speed up bot development in Ruby and provide a more natural mental model for bot-user interactions.
 
-**Rubotnik** is also **very** beginner friendly :baby: :baby_bottle:
+**Rubotnik** is also **very** beginner friendly :baby: :baby_bottle: and can be used in class to teach programming students about bots.
 
 **Rubotnik** comes with a bare-bones architecture that ensures multiple users are served without delays or overlaps. It also provides a single shared namespace for everything your bot can do, so your bot's "commands" can be easily bound to incoming messages (or [postbacks](https://developers.facebook.com/docs/messenger-platform/webhook-reference/postback)) through intuitive DSL, like so (strings are treated as case-insensitive regexps):
 
@@ -294,7 +294,54 @@ get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Do
 
 ## Routing
 
-## Conventions for commands. @user and @message. Threads.
+**Rubotnik** comes with a simple DSL to bind messages and postbacks to respective commands. The DSL is enabled inside a block passed to `Rubotnik::MessageDispatch.new(message).route` or `Rubotnik::PostbackDispatch.new(postback).route`. The basic syntax is:
+
+```ruby
+bind "word", "synonym", to: :command_name # a method command_name should be found inside Commands module or any other module mixed into it.   
+```
+
+Note that you reference a method to execute (we call it **'command'** in this README) by providing its name **as a symbol**
+
+**Example:**
+
+```ruby
+# bot.rb
+Bot.on :message do |message|
+  # Use DSL inside the following block:
+  Rubotnik::MessageDispatch.new(message).route do
+    bind "hey", to: :hey_yourself
+  end
+end
+
+# commands.rb
+def hey_yourself
+  say 'Hey yourself!'
+end
+
+```
+
+Any message from any user containing 'hey' (case insensitive) will trigger `hey_yourself` command **immediately** and reset user's state.
+
+In this particular case your command does not do much, so it's probably easier to define behaviour direcly inside the routing block. Any `bind` statement will also take a block.
+
+```ruby
+# bot.rb
+Bot.on :message do |message|
+  # Use DSL inside the following block:
+  Rubotnik::MessageDispatch.new(message).route do
+    bind "hey" do
+      say 'Hey yourself!'
+    end
+  end
+end
+
+```
+
+`all: true`
+
+`start_thread`
+
+## Threads
 
 ## UI convenience classes
 
@@ -306,7 +353,9 @@ get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Do
 - [ ] Support for other Messenger UI elements like *List Template*
 - [ ] Integration with NLU services like Wit.ai and API.ai
 
-Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and other grown-up things.
+Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and **other grown-up things.**
+
+You're welcome to fork the project and create a PR or you can email me and I'll add you as a collaborator. Let's be friends.
 
 ---
 

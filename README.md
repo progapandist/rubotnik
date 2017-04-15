@@ -1,7 +1,14 @@
 *"We are the robots / Ya tvoi sluga / Ya tvoi rabotnik"  — Kraftwerk*
 
 # Rubotnik
-### All you need to launch your own Ruby bot for Facebook Messenger right now.
+### All you need to launch your own Ruby bot for Facebook Messenger right now
+
+It's as easy as:
+
+1. Clone the boilerplate.
+2. Customize message bindings and commands for your bot.
+3. Push your bot to Heroku and review it with Facebook.
+4. You're live!
 
 **Rubotnik is a minimalistic boilerplate** and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers. The main promise of **Rubotnik** is to speed up bot development in Ruby and provide a more natural mental model for bot-user interactions.
 
@@ -157,11 +164,35 @@ Now open the boilerplate in your favorite text editor and let's take a look at t
 
 ## Facebook setup pt. 1. Tokens and environment variables.
 
-**Rubotnik** stores its environment variables (aka config vars) locally in .env file (here goes the standard reminder to never check this file into remote repository) `heroku local` loads its contents automatically, so you don't need to worry about setting them manually. If you don't want to use `heroku local` and prefer an old good `rackup`, make sure to uncomment `require 'dotenv/load'` on top of `bot.rb` so variables will be loaded in your local environment by [dotenv](https://github.com/bkeepers/dotenv) gem. If you do so, don't forget to comment it out again before pushing to Heroku for production.  
+Login to [Facebook For Developers](https://developers.facebook.com/). In the top right corner, click on your avatar and select **"Add a new app"**
 
-**Note!** In production, you will have to set your config variables by hand, either in your dashboard, or by using `heroku config:set VARIABLE_NAME=value` command in the terminal.
+![create app](./docs/fb_app_create.png)
 
-## Development and testing on localhost
+In the resulting dashboard, under PRODUCTS/Messenger/Settings, scroll to **"Token Generation"** and either select an existing page for your bot (if you happen to have one) or create a new one.
+
+![generate token](./docs/token_generation.png)
+
+Copy **Page Access Token** and keep it at hand.
+
+Create a file named `.env` on the root level of the boilerplate. Create another file called `.gitignore` and add this single line of code:
+
+```
+.env
+```
+Save the `.gitignore` file. Now open your `.env` and put two tokens there, like so:
+
+```ruby
+ACCESS_TOKEN=your_page_access_token_from_the_dashboard
+VERIFY_TOKEN=come_up_with_any_string_you_will_use_it_later
+
+```
+
+From now on, they can be referenced inside your program as `ENV['ACCESS_TOKEN']` and `ENV['VERIFY_TOKEN']`.
+
+**Note:**
+*Rubotnik stores its environment variables (aka config vars) locally in .env file (here goes the standard reminder to never check this file into remote repository) `heroku local` loads its contents automatically, so you don't need to worry about setting them manually. If you don't want to use `heroku local` and prefer an old good `rackup`, make sure to uncomment `require 'dotenv/load'` on top of `bot.rb` so variables will be loaded in your local environment by [dotenv](https://github.com/bkeepers/dotenv) gem. If you do so, don't forget to comment it out again before pushing to Heroku for production. In production, you will have to set your config variables by hand, either in your dashboard, or by using `heroku config:set VARIABLE_NAME=value` command in the terminal.*
+
+## Running on localhost
 
 Make sure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). Run `heroku local` to start bot server on localhost. By default, it will run on port 5000. Run [ngrok](https://ngrok.com/) on the same port:
 

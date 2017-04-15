@@ -8,11 +8,11 @@ It's as easy as:
 1. Clone the boilerplate.
 2. Customize message bindings and commands for your bot.
 3. Push your bot to Heroku and review it with Facebook.
-4. You're live!
+4. You're live! :speech_balloon:
 
 **Rubotnik is a minimalistic boilerplate** and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers. The main promise of **Rubotnik** is to speed up bot development in Ruby and provide a more natural mental model for bot-user interactions.
 
-**Rubotnik** is also **very** beginner friendly :baby: :baby_bottle: 
+**Rubotnik** is also **very** beginner friendly :baby: :baby_bottle:
 
 **Rubotnik** comes with a bare-bones architecture that ensures multiple users are served without delays or overlaps. It also provides a single shared namespace for everything your bot can do, so your bot's "commands" can be easily bound to incoming messages (or [postbacks](https://developers.facebook.com/docs/messenger-platform/webhook-reference/postback)) through intuitive DSL, like so (strings are treated as case-insensitive regexps):
 

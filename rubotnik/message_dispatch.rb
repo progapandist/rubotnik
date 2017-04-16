@@ -27,16 +27,6 @@ module Rubotnik
       instance_eval(&block)
     end
 
-    def greet(with: 'Hello')
-      return if @user.greeted?
-      if block_given?
-        yield
-      else
-        say with
-      end
-      @user.greet
-    end
-
     def bind(*regex_strings, all: false, to: nil, start_thread: {})
       regexps = regex_strings.map { |rs| /#{rs}/i }
       proceed = regexps.any? { |regex| @message.text =~ regex }

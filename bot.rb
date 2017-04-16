@@ -44,10 +44,6 @@ Bot.on :message do |message|
     # unless 'all: true' flag is present. In that case, MessageDispatch
     # will expect all words to be present in a single message.
 
-    # Greeting will only be executed once until user reconnects.
-    # Use block to do more than just send a text message.
-    greet with: 'Hello and welcome!'
-
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
     bind 'carousel', 'generic template', to: :show_carousel
@@ -106,7 +102,6 @@ Bot.on :postback do |postback|
   Rubotnik::PostbackDispatch.new(postback).route do
     bind 'START' do
       say 'Hello and welcome!'
-      @user.greet # greet user when she starts from welcome screen
       say 'Here are some suggestions for you:', quick_replies: HINTS
     end
 

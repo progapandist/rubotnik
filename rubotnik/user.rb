@@ -6,7 +6,6 @@ class User
   def initialize(id)
     @id = id
     @commands = []
-    @greeted = false
     # This hash is used for the sake of example.
     # Use your own logic to collect data.
     @answers = {}
@@ -22,13 +21,5 @@ class User
 
   def reset_command
     @commands = []
-  end
-
-  def greet
-    @greeted = true
-  end
-
-  def greeted?
-    @greeted
   end
 end

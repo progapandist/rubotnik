@@ -433,27 +433,41 @@ If the user agreed to continue, we ask him his name and queue up the next comman
 
 The process repeats until the thread is over and we stop it with `stop_thread`.
 
-This concept ensures that all user's actions are completely independent of each other and your bot is not bothered with tracking state until the user sends a next message (it may happen after a long interruption, for instance).
+This concept ensures that all user's actions are completely independent of each other and your bot is not bothered with tracking state until a user sends her next message (it may happen after a long interruption, for instance).
 
-Certainly, this approach breaks the Single Responsibility Principle in a way that each command actually does **two things**: handles a reaction to last message and moves the dialogue forward, but I would argue that in case with bot design, this particular logic is justified.
+Certainly, this approach breaks the Single Responsibility Principle in a way that each command actually does **two things**: handles a reaction to new message received and sets the stage for the next one, but I tend to think that in case with bot design, this particular logic is justified.
 
 ## UI convenience classes
 
+You can use classes defined inside the `UI` module to build common Messenger UI elements and send them to the user.
+
 **Quick Replies**
 
-splat operator
+`QuickReplies.build` takes either a list of hashes of the form `{ title: "string", payload: "STRING" }` or an list of two-element arrays, where the first item is a title and the second is a payload:
 
-.location
+```ruby
+UI::QuickReplies.build ["Yes", "POSITIVE"], ["No", "NEGATIVE"]
+```
 
-build from Hash
+When the user selects a quick reply, `@message.text` will contain the first element of the array (same as the `title:` key) and `@message.quick_reply` will contain the second element (or `payload:` key). You can then pass the result of a call to `.build` to the `say` helper.
 
-build from Arrays
+**Note:** If you want to create a large array of quick replies as a constant and pass it to the builder method, you must call it with a splat operator:
+
+```ruby
+MY_REPLIES = [{...}, {...}, {...} ... ]
+replies = UI::QuickReplies.build(*MY_REPLIES)
+say "Here you go", quick_replies: replies
+```
+
+`QuickReplies.location` creates a special type of quick reply that prompts user to share her location.
+
+![location prompt](./docs/location.png)
 
 **Button Template**
 
 **Generic Template**
 
-**Image Attachment***
+**Image Attachment**
 
 ## Other events
 
@@ -461,7 +475,7 @@ Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/
 
 # Deployment
 
-## Missing feature planned features
+# Planned features
 
 - [ ] Support for other Messenger UI elements like *List Template*
 - [ ] Integration with NLU services like Wit.ai and API.ai

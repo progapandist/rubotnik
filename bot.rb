@@ -6,7 +6,7 @@ require_relative 'rubotnik/rubotnik'
 require_relative 'helpers/helpers'
 include Facebook::Messenger
 include Helpers # mixing helpers into the common namespace
-# so the can be used outside of Dispatches
+# so they can be used outside of Dispatches
 
 ############# START UP YOUR BOT, SET UP GREETING AND MENU ###################
 

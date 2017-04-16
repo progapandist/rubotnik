@@ -441,7 +441,7 @@ Certainly, this approach breaks the Single Responsibility Principle in a way tha
 
 You can use classes defined inside the `UI` module to build common Messenger UI elements and send them to the user.
 
-**Quick Replies**
+### Quick Replies
 
 `QuickReplies.build` takes either a list of hashes of the form `{ title: "string", payload: "STRING" }` or an list of two-element arrays, where the first item is a title and the second is a payload:
 
@@ -463,11 +463,13 @@ say "Here you go", quick_replies: replies
 
 ![location prompt](./docs/location.png)
 
-**Button Template**
+### Button Template
 
-**Generic Template**
 
-**Image Attachment**
+
+### Generic Template
+
+### Image Attachment
 
 ## Other events
 
@@ -482,7 +484,7 @@ Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/
 
 Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for new projects and **other grown-up things**.
 
-You're welcome to fork the project and create a PR or you can just email me and I'll add you as a collaborator. Let's be friends. Bot power!
+You're welcome to fork the project and create a PR or you can just email me and I'll add you as a collaborator. Let's be friends. Bot power! 🤖
 
 ---
 

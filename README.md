@@ -465,8 +465,6 @@ say "Here you go", quick_replies: replies
 
 ### Button Template
 
-![button template](./docs/button_template.png)
-
 `FBButtonTemplate` takes two arguments: string for the text message and an array of hashes for buttons. See the [type of buttons available](https://developers.facebook.com/docs/messenger-platform/send-api-reference/buttons) in Messenger Platform docs. Calling `.send(@user)` on the instance of `FBButtonTemplate` delivers the template to the
 
 **Example:**
@@ -488,6 +486,9 @@ BUTTONS = [
 # builds an element and sends it to the user
 UI::FBButtonTemplate.new(TEXT, BUTTONS).send(@user)
 ```
+
+![button template](./docs/button_template.png)
+
 
 ### Generic Template
 

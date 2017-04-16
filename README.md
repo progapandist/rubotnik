@@ -19,7 +19,7 @@ It's as easy as:
 ```ruby
 
 # Will match any of the words
-bind "hello", "hi", "bonjour", to: :my_method_for_greeting
+bind "hello", "hi", "bonjour", "привет" to: :my_method_for_greeting
 
 # Will match only if all words are present (ignoring order)
 bind "what", "time", "is", all: true, to: :tell_time
@@ -248,7 +248,7 @@ Routing DSL is used inside blocks passed to `Rubotnik::MessageDispatch.new(messa
 
 ## Helpers
 
-Inside `helpers/helpers.rb` there are some pre-defined helper methods (you can write your own!) that are made available globally by mixing in the module inside the `bot.rb` namespace.
+Inside `helpers/helpers.rb` there are some pre-defined helper methods (you can write your own!) that are made available globally by mixing in the module into the `bot.rb` namespace.
 
 **Most important of them** is `say` that lets you send a plain message to a connected user. It defaults to  `@user` instance variable that is set automatically for you on each message or postback received, but you can pass an optional `user:` argument to send something to a different user.  
 
@@ -262,7 +262,7 @@ say 'Nice to meet you!'
 
 ![quick replies](./docs/quick_replies.PNG)
 
-In order to do that, you first define an array of replies either by hand, following [Facebook's example](https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies) or by using `UI::QuickReplies.build` class method that allows you to build quick replies by passing arrays of two strings in the form of `['title', 'POSTBACK']` as arguments.
+In order to do that, you either define an array of replies either by hand, following [Facebook's example](https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies) or by using `UI::QuickReplies.build` class method that allows you to build quick replies by passing arrays of two strings in the form of `['title', 'POSTBACK']` as arguments. Than you pass the result as a `quick_replies` argument to `say` method.
 
 ```ruby
 # Achieves the same result as on the screenshot above
@@ -270,7 +270,7 @@ replies = UI::QuickReplies.build(['Yes', 'YES'], ['No', 'NO'])
 say 'Welcome to the sample questionnaire! Are you ready?', quick_replies: replies
 ```
 
-There are two ways to catch user's selection of a quick reply later in the program: either by looking at next `@message`'s `.text` or by accessing its `.quick_reply` property that will contain a string you defined as a payload for a given reply. (**Note:** it's a convention to define *payload* in CAPITAL_CASE). See the example of that in `questionnaire.rb`.
+There are two ways to catch user's selection of a quick reply later in the program: either by looking at next `@message`'s `.text` or by accessing its `.quick_reply` property that will contain a string you defined as a payload for a given reply. (**Note:** it's a convention to define payload in CAPITAL_CASE). See the example of that in `questionnaire.rb`.
 
 ---
 
@@ -282,7 +282,7 @@ There are two ways to catch user's selection of a quick reply later in the progr
 
 ---
 
-`get_user_info(*fields)` takes a list of fields good for [Graph API User](https://developers.facebook.com/docs/graph-api/reference/v2.2/user) and makes a call to the Graph referencing connected user's id. Returns a hash with user data. Keys are symbols. That way you can address your user by real name and generally know more about him.
+`get_user_info(*fields)` takes a list of fields good for [Graph API User](https://developers.facebook.com/docs/graph-api/reference/v2.2/user) and makes a call to the Graph referencing connected user's id and requesting specified fields. Returns a hash with user data. Keys are symbols.
 
 ```ruby
 get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Doe" }  
@@ -293,6 +293,8 @@ get_user_info(:first_name, :last_name) # => { first_name: "John", last_name: "Do
 `next_command` and `stop_thread` are used to chain commands together in order to create conversation threads. More on that later.
 
 ## Routing
+
+### Binding messages to commands
 
 **Rubotnik** comes with a simple DSL to bind messages and postbacks to respective commands. The DSL is enabled inside a block passed to `Rubotnik::MessageDispatch.new(message).route` or `Rubotnik::PostbackDispatch.new(postback).route`. The basic syntax is:
 
@@ -344,29 +346,90 @@ end
 You can set `all: true` flag to match not ANY of the trigger words in the message, but all of them. The order doesn't matter.
 
 ```ruby
-bind "eat", "shoot", "leave", to: :about_panda
-# will match 'Panda eats, shoots and leaves'
+bind "eat", "shoot", "leave", all: true, to: :about_panda
+# will match 'Who eats shoots and leaves?'
 # but won't match "Don't leave me now"
 ```
 
+Sometimes user's message will prompt your bot to ask additional questions, in Rubotnik's terms we'll call it a **thread**. You start threads like so:
 
-`start_thread`
+```ruby
+bind 'questionnaire', to: :start_questionnaire, start_thread: {
+  message: "Welcome to the sample questionnaire!",
+  quick_replies: UI::QuickReplies.build(%w[Yes YES], %w[No NO])
+}
+```
+`start_thread` keyword argument should be a hash: it contains a message that will be your bot's prompt to continue conversation and an (optional) set of quick replies.
+
+Then inside a command you point `to:` you can start by handling next `@message` from user. See more in **Threads**.
+
+### Setting a greeting
+
+It makes sense to send an introductory message when the user first comes in contact with your bot. Inside `rubotnik/bot_profile.rb` you define a postback to be triggered when the user clicks 'Get Started' button on your bot's welcome screen. Then you can handle it in your postback routing block.
+
+```ruby
+Rubotnik::PostbackDispatch.new(postback).route do
+  bind 'START' do
+    say 'First time, huh? Hello and welcome!'
+    say 'Here are some suggestions for you:', quick_replies: HINTS
+  end
+
+```  
+
+### Setting default response  
+
+You don't to leave your user's messages unanswered. It's not polite and makes a bad user experience. You can set a default behavior to be applied to any message that did not trigger any reactions defined with `bind`. That way you can nudge your user towards available interaction scenarios. Use the `default` call inside your message routing block that takes its own block.
+
+```ruby
+Rubotnik::MessageDispatch.new(message).route do
+  bind 'news', to: :latest_news
+  default do
+    say "I'm sorry, I did not recognize your command. Here's what you can do:"
+    # ... 
+  end
+end
+```
+
+**Note**: `default` block should always come last, just before the closing `end` of your routing block.  
 
 ## Threads
 
+It is recommended to script your threads in separate files, each containing a separate module inside `commands` folder and mix them into `Commands` module by using `require_relative` and `include` in `commands.rb`. The example is provided as part of the boilerplate, take a look at `questionnaire.rb`.
+
+`next_command`
+
+`stop_thread`
+
 ## UI convenience classes
+
+**Quick Replies**
+
+.location
+
+build from Hash
+
+build from Arrays
+
+**Button Template**
+
+**Generic Template**
+
+**Image Attachment***
+
+## Other events
+
+Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/docs/messenger-platform/webhook-reference/) specifies other types of callbacks that can be delivered to your webhook. Please refer directly to [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) README to catch `optin`, `referral` and `delivery` events.
 
 # Deployment
 
-## Missing and planned features
+## Missing feature planned features
 
-- [ ] Support for other types of Messenger Platform events like *optins* and *referrals*
 - [ ] Support for other Messenger UI elements like *List Template*
 - [ ] Integration with NLU services like Wit.ai and API.ai
 
-Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and **other grown-up things.**
+Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and **other grown-up things**.
 
-You're welcome to fork the project and create a PR or you can email me and I'll add you as a collaborator. Let's be friends.
+You're welcome to fork the project and create a PR or you can just email me and I'll add you as a collaborator. Let's be friends.
 
 ---
 

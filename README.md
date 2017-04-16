@@ -324,7 +324,7 @@ end
 
 ```
 
-Any message from any user containing 'hey' (case insensitive) OR 'hi' will trigger `hey_yourself` command **immediately** and reset user's state.
+Any message from any user containing *'hey'* (case insensitive) OR *'hi'* will trigger `hey_yourself` command **immediately** and reset user's state.
 
 In this particular case your command does not do much, so it's probably easier to define behavior directly inside the routing block. Any `bind` statement will also take a block.
 
@@ -365,7 +365,7 @@ Then inside a command you point `to:` you can start by handling next `@message` 
 
 ### Setting a greeting
 
-It makes sense to send an introductory message when the user first comes in contact with your bot. Inside `rubotnik/bot_profile.rb` you define a postback to be triggered when the user clicks 'Get Started' button on your bot's welcome screen. Then you can handle it in your postback routing block.
+It makes sense to send an introductory message when the user first comes in contact with your bot. Inside `rubotnik/bot_profile.rb` you define a postback to be triggered when the user clicks 'Get Started' button on your bot's welcome screen. Then you can handle it in your postback routing.
 
 ```ruby
 Rubotnik::PostbackDispatch.new(postback).route do
@@ -378,14 +378,14 @@ Rubotnik::PostbackDispatch.new(postback).route do
 
 ### Setting default response  
 
-You don't to leave your user's messages unanswered. It's not polite and makes a bad user experience. You can set a default behavior to be applied to any message that did not trigger any reactions defined with `bind`. That way you can nudge your user towards available interaction scenarios. Use the `default` call inside your message routing block that takes its own block.
+You don't want to leave your user's messages unanswered. It's not polite and makes a bad user experience. You can set a default behavior to be applied to any message that did not trigger any reactions defined with `bind`. That way you can nudge your user towards available interaction scenarios. Use the `default` call inside your message routing block that takes its own block.
 
 ```ruby
 Rubotnik::MessageDispatch.new(message).route do
   bind 'news', to: :latest_news
   default do
     say "I'm sorry, I did not recognize your command. Here's what you can do:"
-    # ... 
+    # ...
   end
 end
 ```
@@ -394,15 +394,54 @@ end
 
 ## Threads
 
-It is recommended to script your threads in separate files, each containing a separate module inside `commands` folder and mix them into `Commands` module by using `require_relative` and `include` in `commands.rb`. The example is provided as part of the boilerplate, take a look at `questionnaire.rb`.
+It is recommended to script each new thread in a separate file by containing its methods inside a module and mix it into `Commands` by using `require_relative` and `include` in `commands.rb`. The example is provided as part of the boilerplate, take a look at `questionnaire.rb`.
 
-`next_command`
+```ruby
+# bot.rb
+# ...
+bind 'QUESTIONNAIRE', to: :start_questionnaire, start_thread: {
+  message: questionnaire_welcome,
+  quick_replies: questionnaire_replies
+}
+# ...
 
-`stop_thread`
+# questionnaire.rb
+def start_questionnaire
+  if @message.quick_reply == 'START_QUESTIONNAIRE' || @message.text =~ /yes/i
+    say "Great! What's your name?"
+    say "(type 'Stop' at any point to exit)"
+    next_command :handle_name_and_ask_gender
+  else
+    say "No problem! Let's do it later"
+    stop_thread
+  end
+end
+
+def handle_name_and_ask_gender
+  # Fallback functionality if stop word used or user input is not text
+  fall_back && return
+  @user.answers[:name] = @message.text
+  replies = UI::QuickReplies.build(%w[Male MALE], %w[Female FEMALE])
+  say "What's your gender?", quick_replies: replies
+  next_command :handle_gender_and_ask_age
+end
+```
+
+The `start_questionnaire` command was pointed at in the routing block for postbacks inside `bot.rb` with a provided `start_thread` hash that already contained a starting message. So we begin `start_questionnaire` method by handling user's response. If it's not *'Yes'*, we stop the thread right away by calling a `stop_thread` helper method that resets user's state (commands queued up for execution are being added behind the scenes to `User`'s `@commands` property).
+
+If the user agreed to continue, we ask him his name and queue up the next command in the thread that will be called upon **next message received**. We do it by calling `next_command :handle_name_and_ask_gender`. It handles user's response to *"What's your name?"* message and stores the answer inside `User` model (you are free to choose your own mechanism to store data gathered from input). Then it asks the next question and queues up the next command.
+
+The process repeats until the thread is over and we stop it with `stop_thread`.
+
+This concept ensures that all user's actions are completely independent of each other and your bot is not bothered with tracking state until the user sends a next message (it may happen after a long interruption, for instance).
+
+Certainly, this approach breaks the Single Responsibility Principle in a way that each command actually does **two things**: handles a reaction to last message and moves the dialogue forward, but I would argue that in case with bot design, this particular logic is justified.
 
 ## UI convenience classes
 
 **Quick Replies**
+
+splat operator
 
 .location
 
@@ -418,7 +457,7 @@ build from Arrays
 
 ## Other events
 
-Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/docs/messenger-platform/webhook-reference/) specifies other types of callbacks that can be delivered to your webhook. Please refer directly to [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) README to catch `optin`, `referral` and `delivery` events.
+Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/docs/messenger-platform/webhook-reference/) specifies other types of callbacks that can be delivered to your bot's webhook. Please refer directly to [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) README to catch `optin`, `referral` and `delivery` events.
 
 # Deployment
 
@@ -427,9 +466,9 @@ Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/
 - [ ] Support for other Messenger UI elements like *List Template*
 - [ ] Integration with NLU services like Wit.ai and API.ai
 
-Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for folder structure and **other grown-up things**.
+Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for new projects and **other grown-up things**.
 
-You're welcome to fork the project and create a PR or you can just email me and I'll add you as a collaborator. Let's be friends.
+You're welcome to fork the project and create a PR or you can just email me and I'll add you as a collaborator. Let's be friends. Bot power!
 
 ---
 

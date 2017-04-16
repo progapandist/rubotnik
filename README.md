@@ -465,7 +465,29 @@ say "Here you go", quick_replies: replies
 
 ### Button Template
 
+![button template](./docs/button_template.png)
 
+`FBButtonTemplate` takes two arguments: string for the text message and an array of hashes for buttons. See the [type of buttons available](https://developers.facebook.com/docs/messenger-platform/send-api-reference/buttons) in Messenger Platform docs. Calling `.send(@user)` on the instance of `FBButtonTemplate` delivers the template to the
+
+**Example:**
+
+```ruby
+TEXT = "Look, I'm a message and I have some buttons attached!"
+BUTTONS = [
+  {
+    type: :web_url,
+    url: 'https://medium.com/@progapanda',
+    title: "Andy's Medium"
+  },
+  {
+    type: :postback,
+    payload: 'BUTTON_TEMPLATE_ACTION',
+    title: 'Useful Button'
+  }
+]
+# builds an element and sends it to the user
+UI::FBButtonTemplate.new(TEXT, BUTTONS).send(@user)
+```
 
 ### Generic Template
 
@@ -484,7 +506,7 @@ Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/
 
 Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for new projects and **other grown-up things**.
 
-You're welcome to fork the project and create a PR or you can just email me and I'll add you as a collaborator. Let's be friends. Bot power! 🤖
+You're welcome to fork the project and create a PR or you can just email me and I'll add you as collaborator.  
 
 ---
 

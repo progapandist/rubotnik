@@ -46,7 +46,7 @@ module SampleElements
     }
   ].freeze
 
-  BUTTON_TEMPLATE_TEXT = "Look, I'm a message and I have" \
+  BUTTON_TEMPLATE_TEXT = "Look, I'm a message and I have " \
                          'some buttons attached!'.freeze
   BUTTON_TEMPLATE_BUTTONS = [
     {

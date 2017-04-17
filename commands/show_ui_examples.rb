@@ -23,8 +23,8 @@ module ShowUIExamples
   def send_image
     say "Here's a nice random image for you:"
     img_url = 'https://unsplash.it/600/400?random'
-    @message.typing_on
+    @message.typing_on if @message
     UI::ImageAttachment.new(img_url).send(@user)
-    @message.typing_off
+    @message.typing_off if @message
   end
 end

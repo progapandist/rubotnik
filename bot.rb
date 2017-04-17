@@ -48,12 +48,7 @@ Bot.on :message do |message|
     # or its sub-modules.
     bind 'carousel', 'generic template', to: :show_carousel
     bind 'button', 'template', all: true, to: :show_button_template
-
-    # TODO: TESTING IMAGES. REPLACE WITH OTHER EXAMPLE
-    bind 'peppa' do
-      img = 'https://goo.gl/UTSH2g'
-      UI::ImageAttachment.new(img).send(@user)
-    end
+    bind 'image', to: :send_image
 
     # bind also takes regexps directly
     bind(/my name/i, /mon nom/i) do
@@ -107,6 +102,7 @@ Bot.on :postback do |postback|
 
     bind 'CAROUSEL', to: :show_carousel
     bind 'BUTTON_TEMPLATE', to: :show_button_template
+    bind 'IMAGE_ATTACHMENT', to: :send_image
 
     # Use block syntax when a command takes an argument rather
     # than 'message' or 'user' (which are accessible from everyhwere

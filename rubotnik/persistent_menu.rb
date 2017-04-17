@@ -1,4 +1,4 @@
-# rubocop:disable all 
+# rubocop:disable all
 module Rubotnik
   # Enables persistent menu for your bot
   class PersistentMenu
@@ -27,6 +27,11 @@ module Rubotnik
                     title: 'Button Template',
                     type: 'postback',
                     payload: 'BUTTON_TEMPLATE'
+                  },
+                  {
+                    title: 'Image Attachment',
+                    type: 'postback',
+                    payload: 'IMAGE_ATTACHMENT'
                   }
                 ]
               },

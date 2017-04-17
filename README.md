@@ -95,7 +95,7 @@ def handle_age_and_ask_smth_else
 end
 ```
 
-**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as a **self-contained web app** (primed for [Heroku](https://heroku.com)). It can work with your main project through the REST API and use its database for persistence. The default server is Puma, but you can use any other Rack webserver for production or development (note that the minimal in-memory user store and message dispatch does not support parallelism through processes, a Puma server can only run with **one "worker"**, multiple *threads* are fine).
+**Rubotnik** does not depend on any database out of the box and runs on Rack, so it functions as a **self-contained web app** (primed for [Heroku](https://heroku.com)). It can work with your main project through the REST API and use its database for persistence. The default server is Puma, but you can use any other Rack webserver for production or development (note that in-memory user store  does not support parallelism through processes and a Puma server can only run with **one "worker"**, multiple *threads* are fine).
 
 [Sinatra](http://www.sinatrarb.com/) is enabled inside the boilerplate by default, and you can use its familiar syntax to define new webhooks for incoming API calls.  
 
@@ -443,7 +443,7 @@ You can use classes defined inside the `UI` module to build common Messenger UI 
 
 ### Quick Replies
 
-`QuickReplies.build` takes either a list of hashes of the form `{ title: "string", payload: "STRING" }` or an list of two-element arrays, where the first item is a title and the second is a payload:
+`QuickReplies.build` takes either a list of hashes of the form `{ title: "string", payload: "STRING" }` or a list of two-element arrays, where the first item is a title and the second is a payload:
 
 ```ruby
 UI::QuickReplies.build ["Yes", "POSITIVE"], ["No", "NEGATIVE"]
@@ -465,7 +465,7 @@ say "Here you go", quick_replies: replies
 
 ### Button Template
 
-`FBButtonTemplate` takes two arguments: string for the text message and an array of hashes for buttons. See the [type of buttons available](https://developers.facebook.com/docs/messenger-platform/send-api-reference/buttons) in Messenger Platform docs. Calling `.send(@user)` on the instance of `FBButtonTemplate` delivers the template to the
+`FBButtonTemplate` takes two arguments: string for the text message and an array of hashes for buttons. See [types of buttons available](https://developers.facebook.com/docs/messenger-platform/send-api-reference/buttons) in Messenger Platform docs. Calling `.send(@user)` on the instance of `FBButtonTemplate` delivers the template to the connected user.
 
 **Example:**
 
@@ -492,7 +492,85 @@ UI::FBButtonTemplate.new(TEXT, BUTTONS).send(@user)
 
 ### Generic Template
 
+[Generic template](https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template) is a way to send the user a carousel of items, each consisting of an image, a title, a description and up to 3 action buttons. Each card can be made clickable and link to a website. Constructing Generic Template involves building a long nested JSON (refer to Facebook docs to see what keys are availalble) and **Rubotnik** tries to abstract it at least a little bit. You only need to build hashes for the `elements` array of the original documentation. Create your structure and save it in a constant:
+
+```ruby
+# A carousel with two items (platform supports up to 10)
+CAROUSEL = [
+  {
+    title: 'Random image',
+    # Horizontal image should have 1.91:1 ratio
+    image_url: 'https://unsplash.it/760/400?random',
+    subtitle: "That's a first card in a carousel",
+    default_action: {
+      type: 'web_url',
+      url: 'https://unsplash.it'
+    },
+    buttons: [
+      {
+        type: :web_url,
+        url: 'https://unsplash.it',
+        title: 'Website'
+      },
+      {
+        type: :postback,
+        title: 'Square Images',
+        payload: 'SQUARE_IMAGES'
+      }
+    ]
+  },
+  {
+    title: 'Another random image',
+    # Horizontal image should have 1.91:1 ratio
+    image_url: 'https://unsplash.it/600/315?random',
+    subtitle: "And here's a second card. You can add up to 10!",
+    default_action: {
+      type: 'web_url',
+      url: 'https://unsplash.it'
+    },
+    buttons: [
+      {
+        type: :web_url,
+        url: 'https://unsplash.it',
+        title: 'Website'
+      },
+      {
+        type: :postback,
+        title: 'Unsquare Images',
+        payload: 'HORIZONTAL_IMAGES'
+      }
+    ]
+  }
+]
+```
+
+Then you can create an instance of `FBCarousel` by passing your template to the constructor. Calling `.send(@user)` will send a carousel to the connected user.
+
+```ruby
+UI::FBCarousel.new(CAROUSEL).send(@user)
+```
+
+Here is the the result:
+
+![carousel](./docs/carousel.png)
+
+Calling `.square_images` on the fresh instance of `FBCarousel` will change the aspect ratio of your images from 'horizonal' (default) to 'square'. Note that horizontal images should have 1.91:1 aspect ratio.
+
+```ruby
+# sending square images
+UI::FBCarousel.new(CAROUSEL).square_images.send(@user)
+```
+
 ### Image Attachment
+
+You can send an image to the user. Note that image won't have any text, but you can send a regular message along with it.
+
+**Example:**
+
+```ruby
+img_url = 'https://unsplash.it/600/400?random'
+UI::ImageAttachment.new(img_url).send(@user)
+```
 
 ## Other events
 
@@ -503,6 +581,7 @@ Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/
 # Planned features
 
 - [ ] Support for other Messenger UI elements like *List Template*
+- [ ] Support for Messenger Platform's webviews
 - [ ] Integration with NLU services like Wit.ai and API.ai
 
 Most of all, I'll appreciate any help with turning **Rubotnik** into a proper gem with generators for new projects and **other grown-up things**.

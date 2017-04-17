@@ -19,4 +19,10 @@ module ShowUIExamples
       UI::FBCarousel.new(SampleElements::CAROUSEL).send(@user)
     end
   end
+
+  def send_image
+    say "Here's a nice random image for you:"
+    img_url = 'https://unsplash.it/600/400?random'
+    UI::ImageAttachment.new(img_url).send(@user)
+  end
 end

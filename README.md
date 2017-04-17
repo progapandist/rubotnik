@@ -587,9 +587,9 @@ heroku config:set VERIFY_TOKEN=your_own_verify_token
 git push heroku master
 ```
 
-Now don't forget to go back to your Facebook developer console and change the address of your webhook from your ngrok URL to Heroku one. That's it! 
+Now don't forget to go back to your Facebook developer console and change the address of your webhook from your ngrok URL to Heroku one. That's it!
 
-### You're live!
+### :tada: You're live! :tada:
 
 # Planned features
 

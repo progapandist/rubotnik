@@ -21,7 +21,7 @@ module ShowUIExamples
   end
 
   def send_image
-    say "Here's a nice random image for you:"
+    say "Wait a bit while I pick a nice random image for you"
     img_url = 'https://unsplash.it/600/400?random'
     @message.typing_on if @message
     UI::ImageAttachment.new(img_url).send(@user)

@@ -578,6 +578,19 @@ Facebook Messenger Platform [Webhook Reference](https://developers.facebook.com/
 
 # Deployment
 
+Once you have designed your bot and tested in on localhost, it's time to send it to the cloud, so it live its life without being tethered to your machine. Assuming you already have a Heroku account and Heroku CLI tools installed, here's pretty much the whole process:
+
+```bash
+heroku create YOUR_APP_NAME
+heroku config:set ACCESS_TOKEN=your_own_page_token
+heroku config:set VERIFY_TOKEN=your_own_verify_token
+git push heroku master
+```
+
+Now don't forget to go back to your Facebook developer console and change the address of your webhook from your ngrok URL to Heroku one. That's it! 
+
+### You're live!
+
 # Planned features
 
 - [ ] Support for other Messenger UI elements like *List Template*

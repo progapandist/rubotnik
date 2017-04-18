@@ -67,6 +67,10 @@ Bot.on :message do |message|
       say "Who's there?"
     end
 
+    bind 'hi', 'hello', 'yo', 'hey' do
+      say "Nice to meet you! Here's what I can do", quick_replies: HINTS
+    end
+
     # Use with 'to:' and 'start_thread:' to point to the first
     # command of a thread. Thread should be located in Commands
     # or a separate module mixed into Commands.

@@ -3,6 +3,8 @@
 # Rubotnik
 ### All you need to launch your own functional Ruby bot for Facebook Messenger FAST
 
+[Read on Medium](https://hackernoon.com/ya-tvoy-rubotnik-beginner-friendly-ruby-boilerplate-to-build-your-own-messenger-bot-9e5fc35ee53b) | [Talk to Demo Bot](http://m.me/455827908083164/)
+
 It's as easy as:
 
 1. Clone the boilerplate.

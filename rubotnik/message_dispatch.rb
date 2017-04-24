@@ -28,7 +28,7 @@ module Rubotnik
     end
 
     def bind(*regex_strings, all: false, to: nil, start_thread: {})
-      regexps = regex_strings.map { |rs| /^#{rs}$/i }
+      regexps = regex_strings.map { |rs| /^#{rs}/i }
       proceed = regexps.any? { |regex| @message.text =~ regex }
       proceed = regexps.all? { |regex| @message.text =~ regex } if all
       return unless proceed

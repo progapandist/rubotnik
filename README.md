@@ -106,7 +106,7 @@ A built-in set of convenience classes makes working with Messenger Platform less
 _**DISCLAIMER:** I am a new programmer and a recent [Le Wagon](https://www.lewagon.com/) graduate, passionate about all things Ruby. This is my first attempt at framework design and OSS. I welcome any discussion that can either push this project forward (and turn it into a separate gem), or prove its worthlessness. Please, star this repo if you want me to carry on._
 
 ## Installation
-Assuming you are going to use this boilerplare as a starting point for your own bot:
+Assuming you are going to use this boilerplate as a starting point for your own bot:
 
 ```bash
 git clone git@github.com:progapandist/rubotnik-boilerplate.git
@@ -494,7 +494,7 @@ UI::FBButtonTemplate.new(TEXT, BUTTONS).send(@user)
 
 ### Generic Template
 
-[Generic template](https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template) is a way to send the user a carousel of items, each consisting of an image, a title, a description and up to 3 action buttons. Each card can be made clickable and link to a website. Constructing Generic Template involves building a long nested JSON (refer to Facebook docs to see what keys are availalble) and **Rubotnik** tries to abstract it at least a little bit. You only need to build hashes for the `elements` array of the original documentation. Create your structure and save it in a constant:
+[Generic template](https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template) is a way to send the user a carousel of items, each consisting of an image, a title, a description and up to 3 action buttons. Each card can be made clickable and link to a website. Constructing Generic Template involves building a long nested JSON (refer to Facebook docs to see what keys are available) and **Rubotnik** tries to abstract it at least a little bit. You only need to build hashes for the `elements` array of the original documentation. Create your structure and save it in a constant:
 
 ```ruby
 # A carousel with two items (platform supports up to 10)
@@ -556,7 +556,7 @@ Here is the the result:
 
 ![carousel](./docs/carousel.png)
 
-Calling `.square_images` on the fresh instance of `FBCarousel` will change the aspect ratio of your images from 'horizonal' (default) to 'square'. Note that horizontal images should have 1.91:1 aspect ratio.
+Calling `.square_images` on the fresh instance of `FBCarousel` will change the aspect ratio of your images from 'horizontal' (default) to 'square'. Note that horizontal images should have 1.91:1 aspect ratio.
 
 ```ruby
 # sending square images

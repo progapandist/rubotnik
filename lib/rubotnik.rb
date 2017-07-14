@@ -3,12 +3,12 @@ require 'rubotnik/message_dispatch'
 require 'rubotnik/user_store'
 require 'rubotnik/user'
 require 'rubotnik/cli'
-require 'facebook/messenger'
 require 'ui/fb_button_template'
 require 'ui/fb_carousel'
 require 'ui/image_attachment'
 require 'ui/quick_replies'
 require 'sinatra'
+require 'facebook/messenger'
 include Facebook::Messenger
 
 module Rubotnik
@@ -18,6 +18,7 @@ module Rubotnik
 
   # TODO: ROUTING FOR POSTBACKS
   def self.route(event, &block)
+    Bot.on(event, &block) unless [:message, :postback].include?(event) # TODO: Test 
     Bot.on event do |message|
       Rubotnik::MessageDispatch.new(message).route(&block)
     end
@@ -26,9 +27,5 @@ module Rubotnik
   # TESTING
   def self.root
     Dir.pwd
-  end
-
-  def self.ui_test
-    p UI.class
   end
 end

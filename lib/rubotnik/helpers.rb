@@ -1,6 +1,8 @@
 require 'httparty'
 require 'json'
 
+# TODO: Update README on say(quick_replies: []) simplified API
+
 # Place for methods that make your life easier.
 # They can be called from anywhere inside the common namespace.
 module Rubotnik
@@ -12,12 +14,15 @@ module Rubotnik
     GRAPH_URL = 'https://graph.facebook.com/v2.8/'.freeze
 
     # abstraction over Bot.deliver to send messages declaratively and directly
-    def say(text = 'What was I talking about?', quick_replies: nil, user: @user)
+    def say(text = 'What was I talking about?', quick_replies: [], user: @user)
       message_options = {
         recipient: { id: user.id },
         message: { text: text }
       }
-      message_options[:message][:quick_replies] = quick_replies if quick_replies
+      if quick_replies && !quick_replies.empty?
+        message_options[:message][:quick_replies] = UI::QuickReplies
+                                                      .build(*quick_replies)
+      end
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
     end
 

@@ -1,9 +1,10 @@
 require 'thor'
+
 module Rubotnik
   class CLI < Thor
     desc "test WORD", "Echos argument to console"
-    def test(word)
-      puts word
+    def test(*word)
+      puts word.join(' ')
     end
   end
 end

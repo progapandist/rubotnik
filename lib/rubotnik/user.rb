@@ -3,6 +3,7 @@ class User
   attr_reader :id
   attr_accessor :answers
 
+  # TODO: Use @session from WitBot instead of @answers
   def initialize(id)
     @id = id
     @commands = []

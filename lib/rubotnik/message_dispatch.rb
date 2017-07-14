@@ -1,6 +1,7 @@
 require 'rubotnik/helpers'
 require 'rubotnik/commands'
 
+# TODO: Remove debugging statements or enable some kind of global Logging toggle
 module Rubotnik
   # Routing for messages
   class MessageDispatch

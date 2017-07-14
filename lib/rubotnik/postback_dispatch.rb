@@ -1,6 +1,10 @@
+require 'rubotnik/helpers'
+require 'rubotnik/commands'
+
 module Rubotnik
   # Routing for postbacks
   class PostbackDispatch
+    include Rubotnik::Helpers
     include Commands
 
     def initialize(postback)

@@ -1,5 +1,6 @@
 require 'rubotnik/version'
 require 'rubotnik/message_dispatch'
+require 'rubotnik/postback_dispatch'
 require 'rubotnik/user_store'
 require 'rubotnik/user'
 require 'rubotnik/cli'
@@ -18,9 +19,14 @@ module Rubotnik
 
   # TODO: ROUTING FOR POSTBACKS
   def self.route(event, &block)
-    Bot.on(event, &block) unless [:message, :postback].include?(event) # TODO: Test 
-    Bot.on event do |message|
-      Rubotnik::MessageDispatch.new(message).route(&block)
+    Bot.on(event, &block) unless [:message, :postback].include?(event) # TODO: Test
+    Bot.on event do |e|
+      case e
+      when Facebook::Messenger::Incoming::Message
+        Rubotnik::MessageDispatch.new(e).route(&block)
+      when Facebook::Messenger::Incoming::Postback
+        Rubotnik::PostbackDispatch.new(e).route(&block)
+      end
     end
   end
 

@@ -26,6 +26,11 @@ module Rubotnik
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
     end
 
+    # TODO: Update readme
+    def show(ui_element, user: @user)
+      ui_element.send(user)
+    end
+
     def next_command(command)
       @user.assign_command(command)
     end

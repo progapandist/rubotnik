@@ -1,15 +1,14 @@
+# TODO: .send method that takes UI classes to do smth like @user.send(UI::ImageAttachment)
+
 # A model for the user
 class User
   attr_reader :id
-  attr_accessor :answers
+  attr_accessor :session
 
-  # TODO: Use @session from WitBot instead of @answers
   def initialize(id)
     @id = id
     @commands = []
-    # This hash is used for the sake of example.
-    # Use your own logic to collect data.
-    @answers = {}
+    @session = {}
   end
 
   def current_command
@@ -22,5 +21,9 @@ class User
 
   def reset_command
     @commands = []
+  end
+
+  def send(payload)
+    # TODO Probably have to require and include facebook/messenger here
   end
 end

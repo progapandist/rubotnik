@@ -32,7 +32,7 @@ module Rubotnik
       instance_eval(&block)
     end
 
-    def bind(*regex_strings, all: false, to: nil, start_thread: {})
+    def bind(*regex_strings, all: false, to: nil, send_message: {})
       regexps = regex_strings.map { |rs| /\b#{rs}/i }
       proceed = regexps.any? { |regex| @message.text =~ regex }
       proceed = regexps.all? { |regex| @message.text =~ regex } if all
@@ -42,18 +42,18 @@ module Rubotnik
         yield
         return
       end
-      handle_command(to, start_thread)
+      handle_command(to, send_message)
     end
 
-    def handle_command(to, start_thread)
-      if start_thread.empty?
+    # TODO: Update README to use send_message
+    def handle_command(to, send_message)
+      if send_message.empty?
         puts "Command #{to} is executed for user #{@user.id}"
         execute(to)
         @user.reset_command
         puts "Command is reset for user #{@user.id}"
       else
-        # say definition is located in Helpers module mixed into bot.rb
-        say(start_thread[:message], quick_replies: start_thread[:quick_replies])
+        say(send_message[:text], quick_replies: send_message[:quick_replies])
         @user.assign_command(to)
         puts "Command #{to} is set for user #{@user.id}"
       end

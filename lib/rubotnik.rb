@@ -12,6 +12,7 @@ require 'sinatra'
 require 'facebook/messenger'
 include Facebook::Messenger
 
+
 module Rubotnik
   def self.subscribe(token)
     Facebook::Messenger::Subscriptions.subscribe(access_token: token)
@@ -30,7 +31,10 @@ module Rubotnik
     end
   end
 
-  # TESTING
+  def self.set_profile(payload)
+    Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])
+  end
+
   def self.root
     Dir.pwd
   end

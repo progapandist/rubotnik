@@ -31,8 +31,11 @@ module Rubotnik
     end
   end
 
-  def self.set_profile(payload)
-    Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])
+  # TODO
+  def self.set_profile(*payloads)
+    payloads.each do |payload|
+      Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])
+    end
   end
 
   def self.root

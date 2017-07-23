@@ -4,6 +4,7 @@ require 'rubotnik/postback_dispatch'
 require 'rubotnik/user_store'
 require 'rubotnik/user'
 require 'rubotnik/cli'
+require 'rubotnik/autoloader'
 require 'ui/fb_button_template'
 require 'ui/fb_carousel'
 require 'ui/image_attachment'
@@ -31,14 +32,10 @@ module Rubotnik
     end
   end
 
-  # TODO
+  # TODO seems to work, test again and update README
   def self.set_profile(*payloads)
     payloads.each do |payload|
       Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])
     end
-  end
-
-  def self.root
-    Dir.pwd
   end
 end

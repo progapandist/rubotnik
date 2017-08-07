@@ -3,12 +3,9 @@ require 'json'
 
 # TODO: Update README on say(quick_replies: []) simplified API
 
-# Place for methods that make your life easier.
-# They can be called from anywhere inside the common namespace.
 module Rubotnik
   module Helpers
-    # State 'module_function' before any method definitions so
-    # commands are mixed into Dispatch classes as private methods.
+    # Mixed-in methods become private
     module_function
 
     GRAPH_URL = 'https://graph.facebook.com/v2.8/'.freeze

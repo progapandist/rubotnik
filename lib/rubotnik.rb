@@ -4,6 +4,7 @@ require 'rubotnik/postback_dispatch'
 require 'rubotnik/user_store'
 require 'rubotnik/user'
 require 'rubotnik/cli'
+require 'rubotnik/generator'
 require 'rubotnik/autoloader'
 require 'ui/fb_button_template'
 require 'ui/fb_carousel'
@@ -12,7 +13,7 @@ require 'ui/quick_replies'
 require 'sinatra'
 require 'facebook/messenger'
 include Facebook::Messenger
-
+# TODO: Nest UI inside Rubotnik
 
 module Rubotnik
   def self.subscribe(token)

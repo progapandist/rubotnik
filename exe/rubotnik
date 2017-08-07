@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
 require 'rubotnik/cli'
+require 'rubotnik/generator'
 Rubotnik::CLI.start

@@ -1,6 +1,5 @@
 require 'thor'
 require 'rubotnik'
-require 'rubotnik/generator'
 
 module Rubotnik
   class CLI < Thor

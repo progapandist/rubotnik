@@ -13,12 +13,12 @@ class Rubotnik::Generator < Thor::Group
   # def create_config_file
   #   copy_file 'config.yml', 'config/mygem.yml'
   # end
-
-  def create_git_files
-    copy_file 'gitignore', '.gitignore'
-    create_file 'images/.gitkeep'
-    create_file 'text/.gitkeep'
-  end
+  #
+  # def create_git_files
+  #   copy_file 'gitignore', '.gitignore'
+  #   create_file 'images/.gitkeep'
+  #   create_file 'text/.gitkeep'
+  # end
 
   def create_output_directory
     empty_directory 'output'

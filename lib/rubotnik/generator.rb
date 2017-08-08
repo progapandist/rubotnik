@@ -14,13 +14,13 @@ class Rubotnik::Generator < Thor::Group
    copy_file 'config.ru', 'config.ru'
   end
 
-  def create_bot_directory
-    empty_directory 'bot'
-  end
-
-  def create_commands_directory
-    empty_directory 'bot/commands'
-  end
+  # def create_bot_directory
+  #   empty_directory 'bot'
+  # end
+  #
+  # def create_commands_directory
+  #   empty_directory 'bot/commands'
+  # end
 
   def create_commands_module
     copy_file 'commands.rb', 'bot/commands/commands.rb'

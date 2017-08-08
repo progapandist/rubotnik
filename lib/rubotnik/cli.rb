@@ -9,9 +9,9 @@ module Rubotnik
     end
 
     desc "generate", "Generate file structure"
-    def generate
+    def new(path = nil)
       generator = Rubotnik::Generator.new
-      generator.destination_root = '~/tmp/test'
+      generator.destination_root = path
       generator.invoke_all
     end
   end

@@ -10,9 +10,10 @@ class Rubotnik::Generator < Thor::Group
     File.dirname(__FILE__) + '/../../templates'
   end
 
-  # def create_config_file
-  #   copy_file 'config.yml', 'config/mygem.yml'
-  # end
+  def create_config_file
+   copy_file 'config.ru', 'config.ru'
+  end
+
   #
   # def create_git_files
   #   copy_file 'gitignore', '.gitignore'

@@ -14,6 +14,18 @@ class Rubotnik::Generator < Thor::Group
    copy_file 'config.ru', 'config.ru'
   end
 
+  def create_bot_directory
+    empty_directory 'bot'
+  end
+
+  def create_commands_directory
+    empty_directory 'bot/commands'
+  end
+
+  def create_commands_module
+    copy_file 'commands.rb', 'bot/commands/commands.rb'
+  end
+
   #
   # def create_git_files
   #   copy_file 'gitignore', '.gitignore'
@@ -21,7 +33,4 @@ class Rubotnik::Generator < Thor::Group
   #   create_file 'text/.gitkeep'
   # end
 
-  def create_output_directory
-    empty_directory 'output'
-  end
 end

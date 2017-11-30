@@ -14,6 +14,7 @@ class Rubotnik::Generator < Thor::Group
    copy_file 'config.ru', 'config.ru'
    copy_file 'Gemfile', 'Gemfile'
    copy_file '.env', '.env'
+   copy_file 'puma.rb', 'config/puma.rb'
    copy_file 'Procfile', 'Procfile'
    copy_file 'commands.rb', 'bot/commands/commands.rb'
    copy_file 'main.rb', 'bot/main.rb'

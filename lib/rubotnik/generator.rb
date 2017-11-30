@@ -10,20 +10,10 @@ class Rubotnik::Generator < Thor::Group
     File.dirname(__FILE__) + '/../../templates'
   end
 
-  def create_config_file
+  def create_file_structure
    copy_file 'config.ru', 'config.ru'
-  end
-
-  # def create_bot_directory
-  #   empty_directory 'bot'
-  # end
-  #
-  # def create_commands_directory
-  #   empty_directory 'bot/commands'
-  # end
-
-  def create_commands_module
-    copy_file 'commands.rb', 'bot/commands/commands.rb'
+   copy_file 'commands.rb', 'bot/commands/commands.rb'
+   copy_file 'main.rb', 'bot/main.rb'
   end
 
   #

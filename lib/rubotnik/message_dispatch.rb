@@ -8,6 +8,8 @@ module Rubotnik
     include Rubotnik::Helpers
     include Commands
 
+    attr_reader :message
+
     def initialize(message)
       @message = message
       p @message.class

@@ -7,6 +7,8 @@ module Rubotnik
     include Rubotnik::Helpers
     include Commands
 
+    attr_reader :postback
+
     def initialize(postback)
       @postback = postback
       p @postback.class
@@ -23,7 +25,7 @@ module Rubotnik
 
     def bind(regex_string, to: nil, opening_message: {})
       return unless @postback.payload == regex_string.upcase
-      clear_user_state # TODO: DO I NEED IT? 
+      clear_user_state # TODO: DO I NEED IT?
       @matched = true
       puts "Matched #{regex_string} to #{to.nil? ? 'block' : to}"
       if block_given?

@@ -1,11 +1,12 @@
 # require 'dotenv/load' # Use this if you want plain 'rackup' over 'heroku local'
-require 'sinatra'
 require 'facebook/messenger'
-require 'rubotnik/autoloader'
+require 'sinatra'
+
+require_relative './bot/main.rb'
 
 map('/webhook') do
   run Facebook::Messenger::Server
 end
 
-# run regular sinatra too
+# run regular Sinatra too
 run Sinatra::Application

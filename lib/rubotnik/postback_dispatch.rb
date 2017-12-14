@@ -29,7 +29,7 @@ module Rubotnik
 
     def bind(regex_string, to: nil, reply_with: {})
       return unless @postback.payload == regex_string.upcase
-      clear_user_state # TODO: DO I NEED IT?
+      clear_user_state
       @matched = true
       puts "Matched #{regex_string} to #{to.nil? ? 'block' : to}"
       if block_given?

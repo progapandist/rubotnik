@@ -50,7 +50,6 @@ module Rubotnik
       handle_command(to, reply_with)
     end
 
-    # TODO: Update README to use reply_with
     def handle_command(to, reply_with)
       if reply_with.empty?
         puts "Command #{to} is executed for user #{@user.id}"

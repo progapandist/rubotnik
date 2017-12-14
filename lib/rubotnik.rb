@@ -13,7 +13,6 @@ require 'ui/quick_replies'
 require 'sinatra'
 require 'facebook/messenger'
 include Facebook::Messenger
-# TODO: Nest UI inside Rubotnik
 
 module Rubotnik
   def self.subscribe(token)
@@ -32,7 +31,6 @@ module Rubotnik
     end
   end
 
-  # TODO seems to work, test again and update README
   def self.set_profile(*payloads)
     payloads.each do |payload|
       Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])

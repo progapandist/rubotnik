@@ -1,8 +1,6 @@
 require 'httparty'
 require 'json'
 
-# TODO: Update README on say(quick_replies: []) simplified API
-
 module Rubotnik
   module Helpers
     # Mixed-in methods become private
@@ -23,7 +21,6 @@ module Rubotnik
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
     end
 
-    # TODO: Update readme
     def show(ui_element, user: @user)
       ui_element.send(user)
     end

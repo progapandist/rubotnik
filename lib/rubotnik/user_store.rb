@@ -4,6 +4,7 @@ require_relative 'user'
 class UserStore
   include Singleton
   attr_reader :users
+  
   def initialize
     @users = []
   end
@@ -11,8 +12,6 @@ class UserStore
   def find_or_create_user(id)
     find(id) || add(User.new(id))
   end
-
-  # TODO: Remove debug statements
 
   def add(user)
     @users << user

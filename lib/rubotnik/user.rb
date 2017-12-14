@@ -1,6 +1,3 @@
-# TODO: .send method that takes UI classes to do smth like @user.send(UI::ImageAttachment)
-
-# A model for the user
 class User
   attr_reader :id
   attr_accessor :session
@@ -21,9 +18,5 @@ class User
 
   def reset_command
     @commands = []
-  end
-
-  def send(payload)
-    # TODO Probably have to require and include facebook/messenger here
   end
 end

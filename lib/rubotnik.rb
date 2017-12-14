@@ -21,7 +21,7 @@ module Rubotnik
   end
 
   # TODO: ROUTING FOR POSTBACKS
-  def self.route(event, &block)
+  def self.route(event, debug: false, &block)
     Bot.on(event, &block) unless [:message, :postback].include?(event) # TODO: Test
     Bot.on event do |e|
       case e
@@ -31,6 +31,9 @@ module Rubotnik
         Rubotnik::PostbackDispatch.new(e).route(&block)
       end
     end
+  rescue StandardError => error
+    raise unless debug
+    say "There was an error: #{error}"
   end
 
   # TODO seems to work, test again and update README

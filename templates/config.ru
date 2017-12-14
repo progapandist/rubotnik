@@ -2,7 +2,7 @@
 require 'facebook/messenger'
 require 'sinatra'
 
-require_relative './bot/main.rb'
+require_relative './bot/bot.rb'
 
 map('/webhook') do
   run Facebook::Messenger::Server

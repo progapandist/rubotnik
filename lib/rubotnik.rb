@@ -20,9 +20,8 @@ module Rubotnik
     Facebook::Messenger::Subscriptions.subscribe(access_token: token)
   end
 
-  # TODO: ROUTING FOR POSTBACKS
-  def self.route(event, debug: false, &block)
-    Bot.on(event, &block) unless [:message, :postback].include?(event) # TODO: Test
+  def self.route(event, &block)
+    Bot.on(event, &block) unless [:message, :postback].include?(event)
     Bot.on event do |e|
       case e
       when Facebook::Messenger::Incoming::Message
@@ -31,9 +30,6 @@ module Rubotnik
         Rubotnik::PostbackDispatch.new(e).route(&block)
       end
     end
-  rescue StandardError => error
-    raise unless debug
-    say "There was an error: #{error}"
   end
 
   # TODO seems to work, test again and update README

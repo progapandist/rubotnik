@@ -19,6 +19,10 @@ module Rubotnik
     def route(&block)
       @matched = false
       instance_eval(&block)
+    rescue StandardError => error
+      raise unless ENV["DEBUG"] == "true"
+      stop_thread
+      say "There was an error: #{error}"
     end
 
     private

@@ -16,7 +16,7 @@ module Rubotnik
       @user = UserStore.instance.find_or_create_user(@message.sender['id'])
     end
 
-    def route(debug: false, &block)
+    def route(&block)
       if @user.current_command
         command = @user.current_command
         execute(command)
@@ -24,6 +24,10 @@ module Rubotnik
       else
         bind_commands(&block)
       end
+    rescue StandardError => error
+      raise unless ENV["DEBUG"] == "true"
+      stop_thread
+      say "There was an error: #{error}"
     end
 
     private

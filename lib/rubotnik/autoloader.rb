@@ -8,7 +8,7 @@ module Rubotnik
       Dir[
         File.expand_path(
           File.join(root, folder)
-        )
+        ) + "/**/*.rb"
       ].each do |file|
         require_relative file
       end

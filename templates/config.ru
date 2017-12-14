@@ -2,7 +2,6 @@
 require 'sinatra'
 require 'facebook/messenger'
 require 'rubotnik/autoloader'
-Rubotnik::Autoloader.load('bot') # all files inside 'bot' folder are loaded at launch
 
 map('/webhook') do
   run Facebook::Messenger::Server

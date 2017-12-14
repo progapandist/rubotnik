@@ -25,6 +25,8 @@ module Rubotnik
       else
         bind_commands(&block)
       end
+    rescue StandardError => error
+      say "There was an error: #{error}"
     end
 
     private

@@ -37,9 +37,9 @@ Rubotnik.route :message do
     say 'Hello from your new bot!'
   end
 
-  # TODO: open_thread_with instead of opening_message?
+  # TODO: open_thread_with instead of reply_with?
   # Start a thread (you have to provide an opening message, optionally quick replies)
-  bind 'ask', to: :gauge_affection, opening_message: {
+  bind 'ask', to: :gauge_affection, reply_with: {
      text: "Do you like me?",
      quick_replies: ['Yes', 'No'] # payloads "YES" and "NO" are inferred
    }

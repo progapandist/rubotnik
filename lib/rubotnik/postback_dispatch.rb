@@ -27,7 +27,7 @@ module Rubotnik
 
     private
 
-    def bind(regex_string, to: nil, opening_message: {})
+    def bind(regex_string, to: nil, reply_with: {})
       return unless @postback.payload == regex_string.upcase
       clear_user_state # TODO: DO I NEED IT?
       @matched = true
@@ -36,17 +36,17 @@ module Rubotnik
         yield
         return
       end
-      handle_commands(to, opening_message)
+      handle_commands(to, reply_with)
     end
 
-    def handle_commands(to, opening_message)
-      if opening_message.empty?
+    def handle_commands(to, reply_with)
+      if reply_with.empty?
         execute(to)
         puts "Command #{to} is executed for user #{@user.id}"
         @user.reset_command
         puts "Command is reset for user #{@user.id}"
       else
-        say(opening_message[:message], quick_replies: opening_message[:quick_replies])
+        say(reply_with[:message], quick_replies: reply_with[:quick_replies])
         @user.assign_command(to)
         puts "Command #{to} is set for user #{@user.id}"
       end

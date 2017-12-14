@@ -37,7 +37,7 @@ module Rubotnik
       instance_eval(&block)
     end
 
-    def bind(*regex_strings, all: false, to: nil, opening_message: {})
+    def bind(*regex_strings, all: false, to: nil, reply_with: {})
       regexps = regex_strings.map { |rs| /\b#{rs}/i }
       proceed = regexps.any? { |regex| @message.text =~ regex }
       proceed = regexps.all? { |regex| @message.text =~ regex } if all
@@ -47,18 +47,18 @@ module Rubotnik
         yield
         return
       end
-      handle_command(to, opening_message)
+      handle_command(to, reply_with)
     end
 
-    # TODO: Update README to use opening_message
-    def handle_command(to, opening_message)
-      if opening_message.empty?
+    # TODO: Update README to use reply_with
+    def handle_command(to, reply_with)
+      if reply_with.empty?
         puts "Command #{to} is executed for user #{@user.id}"
         execute(to)
         @user.reset_command
         puts "Command is reset for user #{@user.id}"
       else
-        say(opening_message[:text], quick_replies: opening_message[:quick_replies])
+        say(reply_with[:text], quick_replies: reply_with[:quick_replies])
         @user.assign_command(to)
         puts "Command #{to} is set for user #{@user.id}"
       end

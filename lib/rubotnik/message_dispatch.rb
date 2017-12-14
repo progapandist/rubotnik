@@ -7,7 +7,7 @@ module Rubotnik
     include Rubotnik::Helpers
     include Commands
 
-    attr_reader :message
+    attr_reader :message, :user
 
     def initialize(message)
       @message = message

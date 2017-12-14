@@ -7,7 +7,7 @@ module Rubotnik
     include Rubotnik::Helpers
     include Commands
 
-    attr_reader :postback
+    attr_reader :postback, :user
 
     def initialize(postback)
       @postback = postback

@@ -1,7 +1,6 @@
 require 'rubotnik/helpers'
 require 'rubotnik/commands'
 
-# TODO: Remove debugging statements or enable some kind of global Logging toggle
 module Rubotnik
   # Routing for messages
   class MessageDispatch
@@ -17,7 +16,7 @@ module Rubotnik
       @user = UserStore.instance.find_or_create_user(@message.sender['id'])
     end
 
-    def route(&block)
+    def route(debug: false, &block)
       if @user.current_command
         command = @user.current_command
         execute(command)
@@ -26,6 +25,7 @@ module Rubotnik
         bind_commands(&block)
       end
     rescue StandardError => error
+      raise unless debug
       say "There was an error: #{error}"
     end
 

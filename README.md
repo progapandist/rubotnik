@@ -68,7 +68,6 @@ A project generated with `rubotnik new` will have a following simple structure:
 ```
 .
 ├── Gemfile # contains a single dependency on "rubotnik" gem
-├── Gemfile.lock
 ├── Procfile # ready for Heroku
 ├── bot
 │   ├── bot.rb # <-- YOUR STARTING POINT  
@@ -84,7 +83,7 @@ A project generated with `rubotnik new` will have a following simple structure:
 
 All the magic happens inside `Rubotnik.route :message` and `Rubotnik.route :postback` blocks, this is where you can use Rubotnik's DSL to bind user messages to "commands" that your bot is going to execute.
 
-A "command" is just plain Ruby _method_ inside the `Commands` module that has access to `message`, `postback` and `user` objects. This is how you match incoming message to a command:
+A "command" is just a plain Ruby _method_ inside the `Commands` module that has access to `message` (or `postback`) and `user` objects. This is how you match incoming message to a command:
 
 ```ruby
 
@@ -122,7 +121,7 @@ end
 
 * Select a product _"Messenger"_
 
-* Under _Token Generation_ in _Products > Messenger > Settings_ select a page for your bot, or create a new one. Copy the __Page Access Token__ and insert in in `.env` in the Rubotnik-generated project under `ACESS_TOKEN`
+* Under _Token Generation_ in _Products > Messenger > Settings_ select a page for your bot, or create a new one. Copy the __Page Access Token__ and insert it in `.env` in the Rubotnik-generated project under `ACESS_TOKEN`
 
 * While still in `.env`, come up with any string for `VERIFY_TOKEN` variable (or leave the default `verify_me`)
 
@@ -301,6 +300,8 @@ template = UI::FBButtonTemplate.new(TEXT, BUTTONS)
 show(template)
 ```
 
+If you have a button of type 'postback', you will be responsible to implementing the trigger for that action under `Rubotnik.route :postback` as `bind 'BUTTON_TEMPLATE_ACTION', to: :do_smth_on_button_click`. 
+
 ![button template](./docs/button_template.png)
 
 ### Generic Template
@@ -346,11 +347,6 @@ CAROUSEL = [
         type: :web_url,
         url: 'https://unsplash.it',
         title: 'Website'
-      },
-      {
-        type: :postback,
-        title: 'Unsquare Images',
-        payload: 'HORIZONTAL_IMAGES'
       }
     ]
   }
@@ -367,13 +363,6 @@ show(carousel)
 Here is the the result:
 
 ![carousel](./docs/carousel.png)
-
-Calling `.square_images` on the fresh instance of `UI::FBCarousel` will change the aspect ratio of your images from 'horizontal' (default) to 'square'. Note that horizontal images should have 1.91:1 aspect ratio.
-
-```ruby
-square_carousel = UI::FBCarousel.new(CAROUSEL).square_images
-show(square_carousel)
-```
 
 ### Image Attachment
 

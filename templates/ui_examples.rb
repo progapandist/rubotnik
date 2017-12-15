@@ -38,11 +38,6 @@ module Commands
           type: :web_url,
           url: 'https://unsplash.it',
           title: 'Website'
-        },
-        {
-          type: :postback,
-          title: 'Unsquare Images',
-          payload: 'HORIZONTAL_IMAGES'
         }
       ]
     }
@@ -55,11 +50,6 @@ module Commands
       type: :web_url,
       url: 'https://medium.com/@progapanda',
       title: "Andy's Medium"
-    },
-    {
-      type: :postback,
-      payload: 'BUTTON_TEMPLATE_ACTION',
-      title: 'Useful Button'
     }
   ].freeze
 
@@ -71,12 +61,8 @@ module Commands
     show(button_template)
   end
 
-  def show_carousel(image_ratio: nil)
-    if image_ratio == :square
-      show(UI::FBCarousel.new(SampleElements::CAROUSEL).square_images)
-    else
-      show(UI::FBCarousel.new(SampleElements::CAROUSEL))
-    end
+  def show_carousel
+    show(UI::FBCarousel.new(CAROUSEL))
   end
 
   def show_image

@@ -300,7 +300,7 @@ template = UI::FBButtonTemplate.new(TEXT, BUTTONS)
 show(template)
 ```
 
-If you have a button of type 'postback', you will be responsible to implementing the trigger for that action under `Rubotnik.route :postback` as `bind 'BUTTON_TEMPLATE_ACTION', to: :do_smth_on_button_click`. 
+If you have a button of type 'postback', you will be responsible to implementing the trigger for that action under `Rubotnik.route :postback` as `bind 'BUTTON_TEMPLATE_ACTION', to: :do_smth_on_button_click`.
 
 ![button template](./docs/button_template.png)
 
@@ -325,11 +325,6 @@ CAROUSEL = [
         type: :web_url,
         url: 'https://unsplash.it',
         title: 'Website'
-      },
-      {
-        type: :postback,
-        title: 'Square Images',
-        payload: 'SQUARE_IMAGES'
       }
     ]
   },
@@ -398,7 +393,7 @@ Now don't forget to go back to your Facebook developer console and change the ad
 
 ## Coming next
 
-* Proper implementation of logging (for now this a `p` and `puts` statements) with ability to choose a logging level.
+* Proper implementation of logging (for now it's just `p` and `puts` statements sprinkled around the code) with ability to choose a logging level.
 
 * More powerful DSL for parsing user input and binding it to commands.   
 

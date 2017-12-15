@@ -16,11 +16,6 @@ module Commands
           type: :web_url,
           url: 'https://unsplash.it',
           title: 'Website'
-        },
-        {
-          type: :postback,
-          title: 'Square Images',
-          payload: 'SQUARE_IMAGES'
         }
       ]
     },

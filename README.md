@@ -195,7 +195,7 @@ end
 
 Any message from user that has any combination of words "how", "do" and "you" (e.g. "How are you doing?", "How do  you do?") will trigger a response defined under `reply_with`. `text` is a text of the response and `quick_replies` is an optional array of quick replies (maximum 11) that will be attached to your bot's message like this:
 
-![quick replies](./docs/quick_replies.png)
+![quick replies](./docs/quick_replies.PNG)
 
 Any further user action will now be handled by `start_conversation` command under Commands module. If the user chooses to ignore "quick replies" hints and just types something in the message box, that will be a regular `message.text`, if he clicks on one of supplied quick replies, that will result in a received `message` with two properties: `message.text # => "Good!"` and `message.quick_reply # => "OK"`. Now you can handle it in `start_conversation`:
 

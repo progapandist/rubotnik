@@ -88,7 +88,7 @@ A "command" is just a plain Ruby _method_ inside the `Commands` module that has 
 ```ruby
 
 # Will match any of the words and their variations
-bind "hello", "hi", "bonjour", "привет" to: :my_method_for_greeting
+bind "hello", "hi", "bonjour", "привет", to: :my_method_for_greeting
 
 # Will match only if all words are present (ignoring order)
 bind "what", "time", "is", all: true, to: :tell_time

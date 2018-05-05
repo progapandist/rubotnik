@@ -1,5 +1,7 @@
 require "bundler/setup"
 require "rubotnik"
+require "factory_bot"
+require "pry"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -7,5 +9,11 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.include FactoryBot::Syntax::Methods
+
+  config.before(:suite) do
+    FactoryBot.find_definitions
   end
 end

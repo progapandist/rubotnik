@@ -4,7 +4,7 @@ require_relative 'user'
 class UserStore
   include Singleton
   attr_reader :users
-  
+
   def initialize
     @users = []
   end

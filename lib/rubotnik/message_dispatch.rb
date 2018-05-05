@@ -38,6 +38,8 @@ module Rubotnik
     end
 
     def bind(*regex_strings, all: false, to: nil, reply_with: {})
+      return if @matched
+
       regexps = regex_strings.map { |rs| /\b#{rs}/i }
       proceed = regexps.any? { |regex| @message.text =~ regex }
       proceed = regexps.all? { |regex| @message.text =~ regex } if all

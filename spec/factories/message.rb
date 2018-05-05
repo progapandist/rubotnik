@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :message, class: Facebook::Messenger::Incoming::Message do
     skip_create
@@ -5,10 +7,10 @@ FactoryBot.define do
 
     transient do
       sender_id 1
-      text "bla"
+      text 'bla'
     end
 
-    sender { { "id" => sender_id } }
-    message { { "text" => text } }
+    sender { { 'id' => sender_id } }
+    message { { 'text' => text } }
   end
 end

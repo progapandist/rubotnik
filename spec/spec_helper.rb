@@ -1,7 +1,7 @@
-require "bundler/setup"
-require "rubotnik"
-require "factory_bot"
-require "pry"
+require 'bundler/setup'
+require 'rubotnik'
+require 'factory_bot'
+require 'pry'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

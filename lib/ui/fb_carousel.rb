@@ -2,7 +2,9 @@
 module UI
   ################## GENERIC TEMPLATE (aka CAROUSEL) #######################
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template
-  class FBCarousel
+  class FBCarousel < UI::BaseUiElement
+    include Common::HasButtons
+
     def initialize(elements)
       @template = {
         recipient: { id: nil },
@@ -17,18 +19,6 @@ module UI
           }
         }
       }
-    end
-
-    # Sends the valid JSON to Messenger API
-    def send(user)
-      template = build(user)
-      Bot.deliver(template, access_token: ENV['ACCESS_TOKEN'])
-    end
-
-    # Use this method to return a valid hash and save it for later
-    def build(user)
-      @template[:recipient][:id] = user.id
-      @template
     end
 
     # set image aspect ratio to 'square'
@@ -51,14 +41,6 @@ module UI
       elements.map do |elt|
         elt[:buttons] = parse_buttons(elt[:buttons])
         elt
-      end
-    end
-
-    def parse_buttons(buttons)
-      return [] if buttons.nil? || buttons.empty?
-      buttons.map do |button|
-        button[:type] = button[:type].to_s
-        button
       end
     end
   end

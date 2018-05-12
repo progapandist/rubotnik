@@ -370,6 +370,21 @@ image = UI::ImageAttachment.new(img_url)
 show(image)
 ```
 
+### Open Graph Attachment
+
+The Open Graph template allows you to send a structured message with an Open Graph URL, plus an optional button. Currently, only sharing songs is supported. The song will appear in a bubble that allows the message recipient to see album art and preview the song.
+
+
+```ruby
+song_url = 'https://open.spotify.com/track/5qqabIl2vWzo9ApSC317sa'
+open_graph_element = UI::FBOpenGraphTemplate.new(song_url, [{title: 'Button', url: 'https://github.com/progapandist/rubotnik', type: 'web_url' }])
+show(open_graph_element)
+```
+
+here's the result:
+
+![opengraph](./docs/open_graph.png)
+
 ## Other events
 
 Events other then `message` and `postback` are currently not supported.

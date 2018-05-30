@@ -23,15 +23,4 @@ RSpec.describe UI::BaseUiElement do
       expect(recipient_id).to eq(user.id)
     end
   end
-
-  describe 'send' do
-    it 'sends the element' do
-      expect(Bot).to receive(:deliver).with(
-        { recipient: { id: user.id } },
-        access_token: anything
-      )
-
-      DummyElement.new.send(user)
-    end
-  end
 end

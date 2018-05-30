@@ -9,7 +9,7 @@ module Rubotnik
     GRAPH_URL = 'https://graph.facebook.com/v2.8/'.freeze
 
     # abstraction over Bot.deliver to send messages declaratively and directly
-    def say(text = 'What was I talking about?', quick_replies: [], user: @user)
+    def say(text, quick_replies: [], user: @user)
       message_options = {
         recipient: { id: user.id },
         message: { text: text }

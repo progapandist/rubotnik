@@ -20,7 +20,7 @@ module Rubotnik
       if @user.current_command
         command = @user.current_command
         execute(command)
-        puts "Command #{command} is executed for user #{@user.id}" # log
+        puts "Command #{command} is executed for user #{@user.id}"
       else
         bind_commands(&block)
       end
@@ -56,8 +56,8 @@ module Rubotnik
       if reply_with.empty?
         puts "Command #{to} is executed for user #{@user.id}"
         execute(to)
-        @user.reset_command
-        puts "Command is reset for user #{@user.id}"
+        # WHY?? @user.reset_command
+        # puts "Command is reset for user #{@user.id}"
       else
         say(reply_with[:text], quick_replies: reply_with[:quick_replies])
         @user.assign_command(to)

@@ -23,7 +23,8 @@ module Rubotnik
   end
 
   def self.route(event, &block)
-    Bot.on(event, &block) unless [:message, :postback].include?(event)
+    return Bot.on(event, &block) unless [:message, :postback].include?(event)
+
     Bot.on event do |e|
       case e
       when Facebook::Messenger::Incoming::Message

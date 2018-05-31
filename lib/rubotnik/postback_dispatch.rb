@@ -13,7 +13,7 @@ module Rubotnik
       @postback = postback
       p @postback.class
       p @postback
-      @user = UserStore.instance.find_or_create_user(@postback.sender['id'])
+      @user = Rubotnik::UserStore.instance.find_or_create_user(@postback.sender['id'])
     end
 
     def route(&block)

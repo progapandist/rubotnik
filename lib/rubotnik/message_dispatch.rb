@@ -13,7 +13,7 @@ module Rubotnik
       @message = message
       p @message.class
       p @message
-      @user = UserStore.instance.find_or_create_user(@message.sender['id'])
+      @user = Rubotnik::UserStore.instance.find_or_create_user(@message.sender['id'])
     end
 
     def route(&block)

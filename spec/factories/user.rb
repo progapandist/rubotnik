@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :user, class: User do
+  factory :user, class: Rubotnik::User do
     skip_create
     initialize_with { new(attributes[:id].to_s) }
 

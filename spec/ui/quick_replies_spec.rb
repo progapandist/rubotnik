@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe UI::QuickReplies do
   let(:user) { FactoryBot.create(:user) }
@@ -70,7 +70,7 @@ RSpec.describe UI::QuickReplies do
 
       context 'when array of wrong format passed' do
         let(:arguments) do
-          [[1,2,3]]
+          [[1, 2, 3]]
         end
 
         it 'raises ArgumentError' do

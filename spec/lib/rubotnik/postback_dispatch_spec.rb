@@ -15,9 +15,9 @@ RSpec.describe Rubotnik::PostbackDispatch do
   let(:dispatch) { described_class.new(postback) }
   let(:commands_module) do
     Module.new do
-      def command1;end
+      def command1; end
 
-      def command2;end
+      def command2; end
     end
   end
 
@@ -85,7 +85,9 @@ RSpec.describe Rubotnik::PostbackDispatch do
           end
 
           it 'says given text' do
-            expect(dispatch).to receive(:say).with('abc', quick_replies: quick_replies)
+            expect(dispatch).to receive(:say).with(
+              'abc', quick_replies: quick_replies
+            )
 
             call
           end

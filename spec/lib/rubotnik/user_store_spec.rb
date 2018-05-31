@@ -6,7 +6,7 @@ RSpec.describe UserStore do
   describe 'find_or_create_user' do
     let(:store) { described_class.send(:new) }
     let(:result) { store.find_or_create_user(id) }
-    let(:id) { "5" }
+    let(:id) { '5' }
 
     context 'when user exists in store' do
       let(:existing_user) { FactoryBot.create(:user, id: id) }

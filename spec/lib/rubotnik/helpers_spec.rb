@@ -138,9 +138,10 @@ RSpec.describe Rubotnik::Helpers do
     end
 
     it 'calls graph api with correct url' do
-      expected_url = "https://graph.facebook.com/v2.8/#{user.id}?fields=email,last_name&access_token=token"
-      expect(HTTParty).
-        to receive(:get).with(expected_url).and_return(response)
+      expected_url = "https://graph.facebook.com/v2.8"\
+                      "/#{user.id}?fields=email,last_name&access_token=token"
+      expect(HTTParty)
+        .to receive(:get).with(expected_url).and_return(response)
 
       instance.send(:get_user_info, :email, :last_name)
     end

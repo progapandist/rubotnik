@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe UI::FBCarousel do
   let(:user) { FactoryBot.create(:user) }

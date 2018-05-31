@@ -31,7 +31,7 @@ module Rubotnik
       return unless @postback.payload == regex_string.upcase
       clear_user_state
       @matched = true
-      puts "Matched #{regex_string} to #{to.nil? ? 'block' : to}"
+      Rubotnik.logger.info "Matched #{regex_string} to #{to.nil? ? 'block' : to}"
       if block_given?
         yield
         return
@@ -42,13 +42,13 @@ module Rubotnik
     def handle_command(to, reply_with)
       if reply_with.empty?
         execute(to)
-        puts "Command #{to} is executed for user #{@user.id}"
+        Rubotnik.logger.info "Command #{to} is executed for user #{@user.id}"
         @user.reset_command
-        puts "Command is reset for user #{@user.id}"
+        Rubotnik.logger.info "Command is reset for user #{@user.id}"
       else
         say(reply_with[:message], quick_replies: reply_with[:quick_replies])
         @user.assign_command(to)
-        puts "Command #{to} is set for user #{@user.id}"
+        Rubotnik.logger.info "Command #{to} is set for user #{@user.id}"
       end
     end
 

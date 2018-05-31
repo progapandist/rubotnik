@@ -5,6 +5,19 @@ RSpec.describe Rubotnik do
     expect(Rubotnik::VERSION).not_to be nil
   end
 
+  describe 'logger' do
+    it 'allows logging' do
+      described_class.logger.info 'aaaa'
+    end
+
+    it 'allows overriding the logger' do
+      logger_double = double(:logger)
+      described_class.logger = logger_double
+      expect(logger_double).to receive(:info)
+      described_class.logger.info 'xxx'
+    end
+  end
+
   describe 'subscribe' do
     it 'subscribes to a fb page' do
       token = 'xxx'

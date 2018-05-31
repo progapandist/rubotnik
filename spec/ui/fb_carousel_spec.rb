@@ -25,14 +25,30 @@ RSpec.describe UI::FBCarousel do
       }
     ]
   end
+  let(:payload) { result[:message][:attachment][:payload] }
 
   describe 'build' do
     let(:result) { described_class.new(elements).build(user) }
-    let(:payload) { result[:message][:attachment][:payload] }
 
     it 'renders elements correctly' do
       expect(payload[:elements].length).to eq(1)
       expect(payload[:elements].first[:buttons].first[:type]).to eq('web_url')
+    end
+  end
+
+  describe 'square images' do
+    let(:result) { described_class.new(elements).square_images.build(user) }
+
+    it 'sets aspect ratio to square and returns self' do
+      expect(payload[:image_aspect_ratio]).to eq('square')
+    end
+  end
+
+  describe 'horizontal images' do
+    let(:result) { described_class.new(elements).horizontal_images.build(user) }
+
+    it 'sets aspect ratio to horizontal and returns self' do
+      expect(payload[:image_aspect_ratio]).to eq('horizontal')
     end
   end
 end

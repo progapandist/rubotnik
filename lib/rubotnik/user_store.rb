@@ -1,7 +1,7 @@
 require 'singleton'
 require_relative 'user'
 # In-memory storage for users
-class UserStore
+class Rubotnik::UserStore
   include Singleton
   attr_reader :users
 

@@ -4,6 +4,8 @@ module UI
   ########################### BUTTON TEMPLATE #############################
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/button-template
   class FBButtonTemplate < UI::BaseUiElement
+    include UI::Common::HasButtons
+
     def initialize(text, buttons)
       @template = {
         recipient: {

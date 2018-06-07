@@ -23,18 +23,21 @@ module UI
 
     # set image aspect ratio to 'square'
     def square_images
-      @template[:message][:attachment][:payload][:image_aspect_ratio] = 'square'
+      self.image_aspect_ratio = 'square'
       self
     end
 
-    # set image aspect ratio to 'square'
+    # set image aspect ratio to 'horizontal'
     def horizontal_images
-      hrz = 'horizontal'
-      @template[:message][:attachment][:payload][:image_aspect_ratio] = hrz
+      self.image_aspect_ratio = 'horizontal'
       self
     end
 
     private
+
+    def image_aspect_ratio=(type)
+      @template[:message][:attachment][:payload][:image_aspect_ratio] = type
+    end
 
     def parse_elements(elements)
       elements = [elements] if elements.class == Hash

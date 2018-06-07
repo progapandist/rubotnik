@@ -20,8 +20,7 @@ module UI
     private_class_method def self.build_from_hash(reply)
       unless reply.key?(:content_type)
         reply[:content_type] = 'text'
-        error_msg = "type 'text' should have a payload"
-        raise ArgumentError, error_msg unless reply.key?(:payload)
+        raise ArgumentError, "type 'text' should have a payload" unless reply.key?(:payload)
       end
       reply
     end

@@ -36,10 +36,10 @@ module Rubotnik
         yield
         return
       end
-      handle_commands(to, reply_with)
+      handle_command(to, reply_with)
     end
 
-    def handle_commands(to, reply_with)
+    def handle_command(to, reply_with)
       if reply_with.empty?
         execute(to)
         puts "Command #{to} is executed for user #{@user.id}"

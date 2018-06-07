@@ -12,5 +12,16 @@ FactoryBot.define do
 
     sender { { 'id' => sender_id } }
     message { { 'text' => text } }
+
+    trait :with_location do
+      message do
+        {
+          'text' => text,
+          'attachments' => [
+            { 'type' => 'location' }
+          ]
+        }
+      end
+    end
   end
 end

@@ -20,7 +20,7 @@ module Rubotnik
       if @user.current_command
         command = @user.current_command
         execute(command)
-        puts "Command #{command} is executed for user #{@user.id}" # log
+        puts "Command #{command} is executed for user #{@user.id}"
       else
         bind_commands(&block)
       end

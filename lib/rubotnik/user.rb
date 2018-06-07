@@ -1,4 +1,4 @@
-class User
+class Rubotnik::User
   attr_reader :id
   attr_accessor :session
 

@@ -17,18 +17,18 @@ class Rubotnik::UserStore
     @users << user
     user = @users.last
     if user
-      p "user #{user.inspect} added to store"
-      p "we got #{@users.count} users: #{@users}"
+      Rubotnik.logger.info "user #{user.inspect} added to store"
+      Rubotnik.logger.info "we got #{@users.count} users: #{@users}"
     else
-      p 'user not found in store yet'
+      Rubotnik.logger.info 'user not found in store yet'
     end
     user
   end
 
   def find(id)
     user = @users.find { |u| u.id == id }
-    p "user #{user} found in store" if user
-    p "we got #{@users.count} users: #{@users}" if user
+    Rubotnik.logger.info "user #{user} found in store" if user
+    Rubotnik.logger.info "we got #{@users.count} users: #{@users}" if user
     user
   end
 end

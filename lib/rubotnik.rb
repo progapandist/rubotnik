@@ -15,31 +15,43 @@ require 'ui/image_attachment'
 require 'ui/quick_replies'
 require 'sinatra'
 require 'facebook/messenger'
+require 'logger'
+
 include Facebook::Messenger
 
 module Rubotnik
-  def self.subscribe(token)
-    Facebook::Messenger::Subscriptions.subscribe(access_token: token)
-  end
+  class << self
+    attr_writer :logger
 
-  def self.route(event, &block)
-    if [:message, :postback].include?(event)
-      Bot.on event do |e|
-        case e
-        when Facebook::Messenger::Incoming::Message
-          Rubotnik::MessageDispatch.new(e).route(&block)
-        when Facebook::Messenger::Incoming::Postback
-          Rubotnik::PostbackDispatch.new(e).route(&block)
-        end
+    def logger
+      @logger ||= Logger.new($stdout).tap do |log|
+        log.progname = self.name
       end
-    else
-      Bot.on(event, &block)
     end
-  end
 
-  def self.set_profile(*payloads)
-    payloads.each do |payload|
-      Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])
+    def route(event, &block)
+      if [:message, :postback].include?(event)
+        Bot.on event do |e|
+          case e
+          when Facebook::Messenger::Incoming::Message
+            Rubotnik::MessageDispatch.new(e).route(&block)
+          when Facebook::Messenger::Incoming::Postback
+            Rubotnik::PostbackDispatch.new(e).route(&block)
+          end
+        end
+      else
+        Bot.on(event, &block)
+      end
+    end
+
+    def subscribe(token)
+      Facebook::Messenger::Subscriptions.subscribe(access_token: token)
+    end
+
+    def set_profile(*payloads)
+      payloads.each do |payload|
+        Facebook::Messenger::Profile.set(payload, access_token: ENV['ACCESS_TOKEN'])
+      end
     end
   end
 end

@@ -408,9 +408,7 @@ Now don't forget to go back to your Facebook developer console and change the ad
 
 ## Coming next
 
-* Proper implementation of logging (for now it's just `p` and `puts` statements sprinkled around the code) with ability to choose a logging level.
-
-* More powerful DSL for parsing user input and binding it to commands.   
+* More powerful DSL for parsing user input and binding it to commands.
 
 * NLP integration with Wit.AI (that allow for more things then the built-in NLP capabilities of Messenger platform, including a wrapper around Wit's interactive learning methods) is in the works and will be added to the gem some time in 2018...
 

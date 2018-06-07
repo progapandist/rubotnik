@@ -20,7 +20,7 @@ module Rubotnik
       if @user.current_command
         command = @user.current_command
         execute(command)
-        puts "Command #{command} is executed for user #{@user.id}"
+        Rubotnik.logger.info "Command #{command} is executed for user #{@user.id}"
       else
         bind_commands(&block)
       end
@@ -54,20 +54,20 @@ module Rubotnik
 
     def handle_command(to, reply_with)
       if reply_with.empty?
-        puts "Command #{to} is executed for user #{@user.id}"
+        Rubotnik.logger.info "Command #{to} is executed for user #{@user.id}"
         execute(to)
         @user.reset_command
-        puts "Command is reset for user #{@user.id}"
+        Rubotnik.logger.info "Command is reset for user #{@user.id}"
       else
         say(reply_with[:text], quick_replies: reply_with[:quick_replies])
         @user.assign_command(to)
-        puts "Command #{to} is set for user #{@user.id}"
+        Rubotnik.logger.info "Command #{to} is set for user #{@user.id}"
       end
     end
 
     def default
       return if @matched
-      puts 'None of the commands were recognized' # log
+      Rubotnik.logger.info 'None of the commands were recognized'
       yield
       @user.reset_command
     end

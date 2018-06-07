@@ -63,10 +63,10 @@ module Rubotnik
       @message.typing_off
       case response.code
       when 200
-        puts "Data received from Graph API: #{response.body}" # logging
+        Rubotnik.logger.info "Data received from Graph API: #{response.body}" # logging
         return JSON.parse(response.body, symbolize_names: true)
       else
-        puts "Request failed: #{response.body}"
+        Rubotnik.logger.info "Request failed: #{response.body}"
         return false
       end
     end

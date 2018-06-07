@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe User do
+RSpec.describe Rubotnik::User do
   let(:user) { described_class.new(123) }
 
   describe 'command manipulation' do

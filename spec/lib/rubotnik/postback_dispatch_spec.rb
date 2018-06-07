@@ -22,7 +22,7 @@ RSpec.describe Rubotnik::PostbackDispatch do
   end
 
   before do
-    allow(UserStore.instance)
+    allow(Rubotnik::UserStore.instance)
       .to receive(:find_or_create_user)
         .with(sender_id) { user }
     dispatch.extend(commands_module)

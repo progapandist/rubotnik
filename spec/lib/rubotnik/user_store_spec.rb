@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe UserStore do
+RSpec.describe Rubotnik::UserStore do
   describe 'find_or_create_user' do
     let(:store) { described_class.send(:new) }
     let(:result) { store.find_or_create_user(id) }

@@ -10,7 +10,7 @@ class Rubotnik::UserStore
   end
 
   def find_or_create_user(id)
-    find(id) || add(User.new(id))
+    find(id) || add(Rubotnik::User.new(id))
   end
 
   def add(user)

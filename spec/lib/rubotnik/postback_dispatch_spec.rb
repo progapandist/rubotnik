@@ -55,7 +55,7 @@ RSpec.describe Rubotnik::PostbackDispatch do
 
         it 'clears user\'s commands and session' do
           user.session[:key] = 'test'
-          expect(user).to receive(:reset_command).and_call_original
+          expect(user).to receive(:reset_command).twice.and_call_original
 
           expect { call }.to change { user.session }.to({})
         end

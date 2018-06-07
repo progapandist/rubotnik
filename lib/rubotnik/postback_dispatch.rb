@@ -43,8 +43,8 @@ module Rubotnik
       if reply_with.empty?
         execute(to)
         puts "Command #{to} is executed for user #{@user.id}"
-        # WHY?? @user.reset_command
-        # puts "Command is reset for user #{@user.id}"
+        @user.reset_command
+        puts "Command is reset for user #{@user.id}"
       else
         say(reply_with[:message], quick_replies: reply_with[:quick_replies])
         @user.assign_command(to)

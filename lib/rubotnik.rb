@@ -25,12 +25,12 @@ module Rubotnik
 
     def logger
       @logger ||= Logger.new($stdout).tap do |log|
-        log.progname = self.name
+        log.progname = name
       end
     end
 
     def route(event, &block)
-      if [:message, :postback].include?(event)
+      if %i[message postback].include?(event)
         Bot.on event do |e|
           case e
           when Facebook::Messenger::Incoming::Message
@@ -45,7 +45,10 @@ module Rubotnik
     end
 
     def subscribe(token)
-      Facebook::Messenger::Subscriptions.subscribe(access_token: token)
+      Facebook::Messenger::Subscriptions.subscribe(
+        access_token: token,
+        subscribed_fields: %w[messages messaging_postbacks]
+      )
     end
 
     def set_profile(*payloads)

@@ -20,9 +20,13 @@ RSpec.describe Rubotnik do
 
   describe 'subscribe' do
     it 'subscribes to a fb page' do
+      subscribed_fields = %w[messages messaging_postbacks]
       token = 'xxx'
       expect(Facebook::Messenger::Subscriptions)
-        .to receive(:subscribe).with(access_token: token)
+        .to receive(:subscribe).with(
+          access_token: token,
+          subscribed_fields: subscribed_fields
+        )
 
       described_class.subscribe(token)
     end
